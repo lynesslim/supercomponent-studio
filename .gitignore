@@ -1,0 +1,15 @@
+# WordPress uploads and temporary files
+/wp-uploads/
+/wp-data/
+/wp-db/
+
+# Docker and local environment files
+docker-compose.yml
+worker.sh
+DEEPSEEK_FINISHED.txt
+
+# OS and IDE files
+.DS_Store
+.idea/
+.vscode/
+*.log
