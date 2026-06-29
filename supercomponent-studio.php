@@ -45,7 +45,7 @@ final class SuperComponent_Studio {
 			// Replace 'your-github-username' with your actual GitHub username/organization.
 			// The update checker will look for releases and tags in this repository.
 			\YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
-				'https://github.com/your-github-username/supercomponent-studio/',
+				'https://github.com/lynesslim/supercomponent-studio/',
 				__FILE__,
 				'supercomponent-studio'
 			);
