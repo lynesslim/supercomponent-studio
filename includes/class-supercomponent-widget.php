@@ -5,6 +5,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class SuperComponent_Widget extends \Elementor\Widget_Base {
 
+	/**
+	 * Track registered section IDs and control IDs across multiple register_dynamic_controls calls.
+	 * Prevents duplicate registration errors when multiple schemas share section/control names.
+	 */
+	private static $registered_sections = [];
+	private static $registered_controls = [];
+
 	public function get_name() {
 		return 'supercomponent';
 	}
@@ -28,82 +35,27 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 	// ponytail: Naive JSON decode + basic array check for schema validation
 	// Ceiling: Does not validate nested property types or detect circular dependency conditions
 	// Upgrade path: Replace with a full JSON Schema validator (e.g., justinrainbow/json-schema)
+	// ponytail: Try multiple sources to get the schema JSON, in priority order.
+	// 1. Direct instance data (works on frontend render with real instances)
+	// 2. AJAX POST data (works when Elementor is saving/updating via AJAX)
+	// 3. Database lookup via post ID + widget ID
 	protected function register_controls() {
 		$this->register_developer_controls();
 
-		// ponytail: Try multiple sources to get the schema JSON, in priority order.
-		// 1. Direct instance data (works on frontend render with real instances)
-		// 2. AJAX POST data (works when Elementor is saving/updating via AJAX)
-		// 3. Database lookup via post ID (works in editor panel initialization)
-		$schema_json = $this->get_schema_for_controls();
+		// Collect ALL schemas from ALL supercomponent instances on this page
+		$all_schemas = $this->get_all_schemas_for_page();
 
-		if ( empty( $schema_json ) ) {
-			return;
-		}
-
-		$schema = json_decode( $schema_json, true );
-
-		if ( ! $schema || ! isset( $schema['settings'] ) || ! is_array( $schema['settings'] ) ) {
-			return;
-		}
-
-		$this->register_dynamic_controls( $schema['settings'] );
-	}
-
-	/**
-	 * Get the schema JSON for control registration.
-	 * Tries multiple sources to handle editor, AJAX, and frontend contexts.
-	 */
-	private function get_schema_for_controls() {
-		// 1. Direct instance data
-		if ( ! empty( $this->data ) && isset( $this->data['settings']['schema'] ) ) {
-			return $this->data['settings']['schema'];
-		}
-
-		// 2. AJAX request (Elementor saving/updating)
-		if ( wp_doing_ajax() && isset( $_POST['actions'] ) ) {
-			$actions = json_decode( wp_unslash( $_POST['actions'] ), true );
-			if ( is_array( $actions ) ) {
-				foreach ( $actions as $action ) {
-					if ( isset( $action['data']['settings']['schema'] ) ) {
-						return $action['data']['settings']['schema'];
-					}
-					if ( isset( $action['data']['model']['settings']['schema'] ) ) {
-						return $action['data']['model']['settings']['schema'];
-					}
-				}
+		foreach ( $all_schemas as $schema_json ) {
+			if ( empty( $schema_json ) ) {
+				continue;
 			}
-		}
-
-		// 3. Database lookup via post ID + widget ID
-		$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
-		if ( ! $post_id && wp_doing_ajax() ) {
-			if ( isset( $_POST['post_id'] ) ) {
-				$post_id = absint( $_POST['post_id'] );
-			} elseif ( isset( $_POST['editor_post_id'] ) ) {
-				$post_id = absint( $_POST['editor_post_id'] );
+			$schema = json_decode( $schema_json, true );
+			if ( ! $schema || ! isset( $schema['settings'] ) || ! is_array( $schema['settings'] ) ) {
+				continue;
 			}
+			$schema_id = isset( $schema['id'] ) ? $schema['id'] : 'default';
+			$this->register_dynamic_controls( $schema['settings'], $schema_id );
 		}
-		if ( ! $post_id ) {
-			$post_id = get_the_ID();
-		}
-
-		$widget_id = $this->get_id();
-
-		if ( $post_id && $widget_id ) {
-			$elementor_data = get_post_meta( $post_id, '_elementor_data', true );
-			if ( ! empty( $elementor_data ) ) {
-				$data = is_string( $elementor_data ) ? json_decode( $elementor_data, true ) : $elementor_data;
-				if ( is_array( $data ) ) {
-					$widget = $this->find_widget_by_id( $data, $widget_id );
-					if ( $widget && isset( $widget['settings']['schema'] ) ) {
-						return $widget['settings']['schema'];
-					}
-				}
-			}
-		}
-
-		return '';
 	}
 
 	private function register_developer_controls() {
@@ -174,10 +126,99 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'active_schema_id',
+			[
+				'type' => \Elementor\Controls_Manager::TEXT,
+				'default' => '',
+				'label_block' => true,
+				'classes' => 'elementor-hidden-control', // Hides it from the panel UI
+			]
+		);
+
 		$this->end_controls_section();
 	}
 
-	private function register_dynamic_controls( array $controls ) {
+	/**
+	 * Collect schemas from ALL supercomponent widget instances on the current page.
+	 * This ensures that when two widgets have different schemas, BOTH sets of controls
+	 * are registered in PHP. The Elementor editor will display only the controls that
+	 * have matching setting keys for the currently selected widget.
+	 */
+	private function get_all_schemas_for_page() {
+		$schemas = [];
+
+		// 1. Direct instance data (works on frontend render)
+		if ( ! empty( $this->data ) && isset( $this->data['settings']['schema'] ) ) {
+			return [ $this->data['settings']['schema'] ];
+		}
+
+		// 2. AJAX request — collect schemas from the POST payload
+		if ( wp_doing_ajax() && isset( $_POST['actions'] ) ) {
+			$actions = json_decode( wp_unslash( $_POST['actions'] ), true );
+			if ( is_array( $actions ) ) {
+				foreach ( $actions as $action ) {
+					if ( isset( $action['data']['settings']['schema'] ) ) {
+						$schemas[] = $action['data']['settings']['schema'];
+					}
+					if ( isset( $action['data']['model']['settings']['schema'] ) ) {
+						$schemas[] = $action['data']['model']['settings']['schema'];
+					}
+				}
+			}
+			if ( ! empty( $schemas ) ) {
+				return $schemas;
+			}
+		}
+
+		// 3. Database lookup — walk ALL elements on the page and collect every supercomponent's schema
+		$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
+		if ( ! $post_id && wp_doing_ajax() ) {
+			if ( isset( $_POST['post_id'] ) ) {
+				$post_id = absint( $_POST['post_id'] );
+			} elseif ( isset( $_POST['editor_post_id'] ) ) {
+				$post_id = absint( $_POST['editor_post_id'] );
+			}
+		}
+		if ( ! $post_id ) {
+			$post_id = get_the_ID();
+		}
+
+		if ( $post_id ) {
+			$elementor_data = get_post_meta( $post_id, '_elementor_data', true );
+			if ( ! empty( $elementor_data ) ) {
+				$data = is_string( $elementor_data ) ? json_decode( $elementor_data, true ) : $elementor_data;
+				if ( is_array( $data ) ) {
+					$widgets = $this->find_all_supercomponent_widgets( $data );
+					foreach ( $widgets as $widget ) {
+						if ( isset( $widget['settings']['schema'] ) && ! empty( $widget['settings']['schema'] ) ) {
+							$schemas[] = $widget['settings']['schema'];
+						}
+					}
+				}
+			}
+		}
+
+		return $schemas;
+	}
+
+	/**
+	 * Recursively find ALL supercomponent widget instances in the Elementor data tree.
+	 */
+	private function find_all_supercomponent_widgets( $elements ) {
+		$results = [];
+		foreach ( $elements as $element ) {
+			if ( isset( $element['widgetType'] ) && 'supercomponent' === $element['widgetType'] ) {
+				$results[] = $element;
+			}
+			if ( ! empty( $element['elements'] ) && is_array( $element['elements'] ) ) {
+				$results = array_merge( $results, $this->find_all_supercomponent_widgets( $element['elements'] ) );
+			}
+		}
+		return $results;
+	}
+
+	private function register_dynamic_controls( array $controls, $schema_id ) {
 		$tab_map = [
 			'content'  => \Elementor\Controls_Manager::TAB_CONTENT,
 			'style'    => \Elementor\Controls_Manager::TAB_STYLE,
@@ -201,10 +242,14 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 
 			$group_key = $tab . '||' . $section_label;
 
+			// Elementor's image, url, and dimensions controls require an array default value
+			$array_types = [ 'image', 'url', 'dimensions' ];
+			$default_fallback = in_array( $control['type'], $array_types, true ) ? [] : '';
+
 			$control_args = [
 				'label'   => $control['label'],
 				'type'    => $elementor_type,
-				'default' => isset( $control['default'] ) ? $control['default'] : '',
+				'default' => isset( $control['default'] ) ? $control['default'] : $default_fallback,
 			];
 
 			// Native Elementor real-time CSS variable injection
@@ -284,10 +329,14 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 							if ( ! $field_type ) {
 								continue;
 							}
+							
+							$field_array_types = [ 'image', 'url', 'dimensions' ];
+							$field_default_fallback = in_array( $field['type'], $field_array_types, true ) ? [] : '';
+
 							$field_args = [
 								'label'   => $field['label'],
 								'type'    => $field_type,
-								'default' => isset( $field['default'] ) ? $field['default'] : '',
+								'default' => isset( $field['default'] ) ? $field['default'] : $field_default_fallback,
 							];
 							if ( isset( $field['description'] ) ) {
 								$field_args['description'] = $field['description'];
@@ -308,14 +357,10 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 					}
 					break;
 			}
-			// Content-affecting controls need a full server-side re-render.
-			// Style controls use CSS variable injection and don't need re-rendering.
-			$content_types = [ 'text', 'textarea', 'richtext', 'repeater', 'switcher', 'select', 'url', 'image' ];
-			$render_type = in_array( $control['type'], $content_types, true ) ? 'template' : 'none';
-
+			// Set render_type to 'template' for all controls to guarantee real-time JS and HTML updates
 			$grouped_controls[ $group_key ][] = [
 				'id'       => $control['id'],
-				'args'     => array_merge( $control_args, [ 'render_type' => $render_type ] ),
+				'args'     => array_merge( $control_args, [ 'render_type' => 'template' ] ),
 				'is_group' => ( 'typography' === $control['type'] ),
 			];
 
@@ -329,17 +374,22 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 
 		foreach ( $grouped_controls as $group_key => $group ) {
 			$meta = $group['_meta'];
-			$section_id = 'sc_' . sanitize_title( $meta['label'] ) . '_' . sanitize_title( $meta['tab'] );
+			$schema_id_clean = sanitize_title( $schema_id );
+			$section_id = 'sc_' . $schema_id_clean . '_' . sanitize_title( $meta['label'] ) . '_' . sanitize_title( $meta['tab'] );
 
 			$this->start_controls_section( $section_id, [
 				'label' => $meta['label'],
 				'tab'   => $meta['tab'],
+				'condition' => [
+					'active_schema_id' => $schema_id,
+				],
 			] );
 
 			foreach ( $group as $item ) {
-				if ( ! isset( $item['id'] ) ) {
+				if ( ! isset( $item['id'] ) || in_array( $item['id'], self::$registered_controls, true ) ) {
 					continue;
 				}
+				self::$registered_controls[] = $item['id'];
 				if ( isset( $item['is_group'] ) && $item['is_group'] ) {
 					$this->add_group_control(
 						\Elementor\Group_Control_Typography::get_type(),
@@ -347,6 +397,17 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 							'name'     => $item['id'],
 							'label'    => $item['args']['label'],
 							'selector' => '{{WRAPPER}} .sc-' . $item['id'],
+							'fields_options' => [
+								'font_family'     => [ 'render_type' => 'template' ],
+								'font_size'       => [ 'render_type' => 'template' ],
+								'font_weight'     => [ 'render_type' => 'template' ],
+								'text_transform'  => [ 'render_type' => 'template' ],
+								'font_style'      => [ 'render_type' => 'template' ],
+								'text_decoration' => [ 'render_type' => 'template' ],
+								'line_height'     => [ 'render_type' => 'template' ],
+								'letter_spacing'  => [ 'render_type' => 'template' ],
+								'word_spacing'    => [ 'render_type' => 'template' ],
+							],
 						]
 					);
 				} else {
@@ -743,41 +804,77 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 
 		$output = $template;
 
-		// Handle block constructs: {{#var}}...{{/var}}
-		// - If var is an array -> repeater loop
-		// - If var is scalar -> conditional block
+		// Handle block constructs: {{#var}}...{{/var}} and {{^var}}...{{/var}}
+		// - If var is a list of arrays -> repeater loop
+		// - If var is scalar -> conditional block (positive or negative)
 		$output = preg_replace_callback(
-			'/\{\{#(\w+)\}\}(.*?)\{\{\/\1\}\}/s',
+			'/\{\{([#^])([\w\.]+)\}\}(.*?)\{\{\/\2\}\}/s',
 			function ( $matches ) use ( $values ) {
-				$var_id = $matches[1];
-				$inner = $matches[2];
+				$type = $matches[1]; // '#' (positive) or '^' (negative/inverted)
+				$expression = $matches[2]; // e.g. 'center_image.url' or 'nodes'
+				$inner = $matches[3];
 
-				if ( ! isset( $values[ $var_id ] ) ) {
-					return '';
+				// Resolve the value (supporting dot-notation)
+				$val = null;
+				if ( strpos( $expression, '.' ) !== false ) {
+					$parts = explode( '.', $expression );
+					$var_id = $parts[0];
+					$key = $parts[1];
+					if ( isset( $values[ $var_id ] ) && is_array( $values[ $var_id ] ) && isset( $values[ $var_id ][ $key ] ) ) {
+						$val = $values[ $var_id ][ $key ];
+					}
+				} else {
+					$val = isset( $values[ $expression ] ) ? $values[ $expression ] : null;
 				}
 
-				if ( is_array( $values[ $var_id ] ) ) {
+				// If it's a repeater loop (only for positive '#' and if value is a list of arrays)
+				if ( '#' === $type && is_array( $val ) && ! empty( $val ) && isset( $val[0] ) && is_array( $val[0] ) ) {
 					$result = '';
-					foreach ( $values[ $var_id ] as $item ) {
-						if ( ! is_array( $item ) ) {
-							continue;
-						}
+					foreach ( $val as $item ) {
 						$item_output = $inner;
-						foreach ( $item as $key => $val ) {
-							if ( is_string( $val ) || is_numeric( $val ) ) {
-								$item_output = str_replace( '{{' . $key . '}}', esc_html( $val ), $item_output );
-							} elseif ( is_array( $val ) ) {
-								if ( isset( $val['url'] ) ) {
-									$item_output = str_replace( '{{' . $key . '.url}}', esc_url( $val['url'] ), $item_output );
+						
+						// 1. Process nested conditional/inverted blocks inside this repeater item
+						$item_output = preg_replace_callback(
+							'/\{\{([#^])([\w\.]+)\}\}(.*?)\{\{\/\2\}\}/s',
+							// Use $item instead of $values for context inside the repeater item
+							function ( $sub_matches ) use ( $item ) {
+								$sub_type = $sub_matches[1];
+								$sub_expr = $sub_matches[2];
+								$sub_inner = $sub_matches[3];
+
+								$sub_val = null;
+								if ( strpos( $sub_expr, '.' ) !== false ) {
+									$parts = explode( '.', $sub_expr );
+									$var_id = $parts[0];
+									$key = $parts[1];
+									if ( isset( $item[ $var_id ] ) && is_array( $item[ $var_id ] ) && isset( $item[ $var_id ][ $key ] ) ) {
+										$sub_val = $item[ $var_id ][ $key ];
+									}
+								} else {
+									$sub_val = isset( $item[ $sub_expr ] ) ? $item[ $sub_expr ] : null;
 								}
-								if ( isset( $val['alt'] ) ) {
-									$item_output = str_replace( '{{' . $key . '.alt}}', esc_attr( $val['alt'] ), $item_output );
+
+								$is_truthy = ! empty( $sub_val ) && 'false' !== $sub_val;
+								if ( is_array( $sub_val ) && empty( $sub_val ) ) {
+									$is_truthy = false;
 								}
-								if ( isset( $val['width'] ) ) {
-									$item_output = str_replace( '{{' . $key . '.width}}', esc_attr( $val['width'] ), $item_output );
+
+								$show = ( '#' === $sub_type ) ? $is_truthy : ! $is_truthy;
+								return $show ? $sub_inner : '';
+							},
+							$item_output
+						);
+
+						// 2. Replace simple variables
+						foreach ( $item as $key => $item_val ) {
+							if ( is_string( $item_val ) || is_numeric( $item_val ) ) {
+								$item_output = str_replace( '{{' . $key . '}}', esc_html( $item_val ), $item_output );
+							} elseif ( is_array( $item_val ) ) {
+								if ( isset( $item_val['url'] ) ) {
+									$item_output = str_replace( '{{' . $key . '.url}}', esc_url( $item_val['url'] ), $item_output );
 								}
-								if ( isset( $val['is_external'] ) ) {
-									$item_output = str_replace( '{{' . $key . '.is_external ? \'_blank\' : \'_self\'}}', $val['is_external'] ? '_blank' : '_self', $item_output );
+								if ( isset( $item_val['alt'] ) ) {
+									$item_output = str_replace( '{{' . $key . '.alt}}', esc_attr( $item_val['alt'] ), $item_output );
 								}
 							}
 						}
@@ -786,7 +883,13 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 					return $result;
 				}
 
-				$show = ! empty( $values[ $var_id ] ) && 'false' !== $values[ $var_id ];
+				// For standard conditionals (empty arrays are considered falsy)
+				$is_truthy = ! empty( $val ) && 'false' !== $val;
+				if ( is_array( $val ) && empty( $val ) ) {
+					$is_truthy = false;
+				}
+
+				$show = ( '#' === $type ) ? $is_truthy : ! $is_truthy;
 				return $show ? $inner : '';
 			},
 			$output

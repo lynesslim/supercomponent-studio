@@ -143,4 +143,4 @@ function supercomponent_admin_menu() {
 		);
 	}
 }
-add_action( 'admin_menu', 'supercomponent_admin_menu' );
+add_action( 'admin_menu', 'supercomponent_admin_menu', 20 );
