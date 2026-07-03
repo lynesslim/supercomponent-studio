@@ -30,6 +30,8 @@ final class SuperComponent_Studio {
 	}
 
 	public function __construct() {
+		require_once( __DIR__ . '/includes/validation.php' );
+		require_once( __DIR__ . '/includes/admin.php' );
 		add_action( 'plugins_loaded', [ $this, 'init' ] );
 		$this->init_update_checker();
 	}
@@ -113,11 +115,17 @@ final class SuperComponent_Studio {
 	}
 
 	public function register_widgets( $widgets_manager ) {
+		if ( ! supercomponent_is_validated() ) {
+			return;
+		}
 		require_once( __DIR__ . '/includes/class-supercomponent-widget.php' );
 		$widgets_manager->register( new \SuperComponent_Widget() );
 	}
 
 	public function enqueue_editor_scripts() {
+		if ( ! supercomponent_is_validated() ) {
+			return;
+		}
 		wp_enqueue_script(
 			'supercomponent-editor-helper',
 			plugins_url( '/assets/js/editor-helper.js', __FILE__ ),
