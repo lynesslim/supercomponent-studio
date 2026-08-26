@@ -148,26 +148,31 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 	private function get_all_schemas_for_page() {
 		$schemas = [];
 
-		// 1. Direct instance data (works on frontend render)
-		if ( ! empty( $this->data ) && isset( $this->data['settings']['schema'] ) ) {
-			return [ $this->data['settings']['schema'] ];
+		// 1. Direct instance data
+		if ( ! empty( $this->data ) && isset( $this->data['settings']['schema'] ) && ! empty( $this->data['settings']['schema'] ) ) {
+			$schemas[] = $this->data['settings']['schema'];
 		}
 
 		// 2. AJAX request — collect schemas from the POST payload
-		if ( wp_doing_ajax() && isset( $_POST['actions'] ) ) {
-			$actions = json_decode( wp_unslash( $_POST['actions'] ), true );
-			if ( is_array( $actions ) ) {
-				foreach ( $actions as $action ) {
-					if ( isset( $action['data']['settings']['schema'] ) ) {
-						$schemas[] = $action['data']['settings']['schema'];
-					}
-					if ( isset( $action['data']['model']['settings']['schema'] ) ) {
-						$schemas[] = $action['data']['model']['settings']['schema'];
+		if ( wp_doing_ajax() ) {
+			if ( isset( $_POST['actions'] ) ) {
+				$actions = json_decode( wp_unslash( $_POST['actions'] ), true );
+				if ( is_array( $actions ) ) {
+					foreach ( $actions as $action ) {
+						if ( isset( $action['data']['settings']['schema'] ) && ! empty( $action['data']['settings']['schema'] ) ) {
+							$schemas[] = $action['data']['settings']['schema'];
+						}
+						if ( isset( $action['data']['model']['settings']['schema'] ) && ! empty( $action['data']['model']['settings']['schema'] ) ) {
+							$schemas[] = $action['data']['model']['settings']['schema'];
+						}
 					}
 				}
 			}
-			if ( ! empty( $schemas ) ) {
-				return $schemas;
+			if ( isset( $_POST['data']['settings']['schema'] ) && ! empty( $_POST['data']['settings']['schema'] ) ) {
+				$schemas[] = wp_unslash( $_POST['data']['settings']['schema'] );
+			}
+			if ( isset( $_POST['settings']['schema'] ) && ! empty( $_POST['settings']['schema'] ) ) {
+				$schemas[] = wp_unslash( $_POST['settings']['schema'] );
 			}
 		}
 
@@ -199,7 +204,7 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 			}
 		}
 
-		return $schemas;
+		return array_values( array_unique( array_filter( $schemas ) ) );
 	}
 
 	/**
@@ -225,6 +230,7 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 			'advanced' => \Elementor\Controls_Manager::TAB_ADVANCED,
 		];
 
+		$schema_id_clean = sanitize_title( $schema_id );
 		$grouped_controls = [];
 
 		foreach ( $controls as $control ) {
@@ -237,7 +243,7 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 				continue;
 			}
 
-			$tab   = isset( $control['tab'] ) && isset( $tab_map[ $control['tab'] ] ) ? $tab_map[ $control['tab'] ] : \Elementor\Controls_Manager::TAB_CONTENT;
+			$tab           = isset( $control['tab'] ) && isset( $tab_map[ $control['tab'] ] ) ? $tab_map[ $control['tab'] ] : \Elementor\Controls_Manager::TAB_CONTENT;
 			$section_label = isset( $control['section'] ) ? $control['section'] : 'Component Settings';
 
 			$group_key = $tab . '||' . $section_label;
@@ -245,6 +251,8 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 			// Elementor's image, url, and dimensions controls require an array default value
 			$array_types = [ 'image', 'url', 'dimensions' ];
 			$default_fallback = in_array( $control['type'], $array_types, true ) ? [] : '';
+
+			$scoped_control_id = 'sc_' . $schema_id_clean . '_' . $control['id'];
 
 			$control_args = [
 				'label'   => $control['label'],
@@ -274,7 +282,11 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 			}
 
 			if ( isset( $control['condition'] ) && is_array( $control['condition'] ) ) {
-				$control_args['condition'] = $control['condition'];
+				$scoped_condition = [];
+				foreach ( $control['condition'] as $c_key => $c_val ) {
+					$scoped_condition[ 'sc_' . $schema_id_clean . '_' . $c_key ] = $c_val;
+				}
+				$control_args['condition'] = $scoped_condition;
 			}
 
 			switch ( $control['type'] ) {
@@ -357,9 +369,11 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 					}
 					break;
 			}
+
 			// Set render_type to 'template' for all controls to guarantee real-time JS and HTML updates
 			$grouped_controls[ $group_key ][] = [
-				'id'       => $control['id'],
+				'id'       => $scoped_control_id,
+				'raw_id'   => $control['id'],
 				'args'     => array_merge( $control_args, [ 'render_type' => 'template' ] ),
 				'is_group' => ( 'typography' === $control['type'] ),
 			];
@@ -374,21 +388,28 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 
 		foreach ( $grouped_controls as $group_key => $group ) {
 			$meta = $group['_meta'];
-			$schema_id_clean = sanitize_title( $schema_id );
 			$section_id = 'sc_' . $schema_id_clean . '_' . sanitize_title( $meta['label'] ) . '_' . sanitize_title( $meta['tab'] );
 
+			$items_to_register = [];
+			foreach ( $group as $item ) {
+				if ( isset( $item['id'] ) && ! in_array( $item['id'], self::$registered_controls, true ) ) {
+					$items_to_register[] = $item;
+				}
+			}
+
+			if ( empty( $items_to_register ) ) {
+				continue;
+			}
+
 			$this->start_controls_section( $section_id, [
-				'label' => $meta['label'],
-				'tab'   => $meta['tab'],
+				'label'     => $meta['label'],
+				'tab'       => $meta['tab'],
 				'condition' => [
-					'active_schema_id' => $schema_id,
+					'active_schema_id' => $schema_id_clean,
 				],
 			] );
 
-			foreach ( $group as $item ) {
-				if ( ! isset( $item['id'] ) || in_array( $item['id'], self::$registered_controls, true ) ) {
-					continue;
-				}
+			foreach ( $items_to_register as $item ) {
 				self::$registered_controls[] = $item['id'];
 				if ( isset( $item['is_group'] ) && $item['is_group'] ) {
 					$this->add_group_control(
@@ -396,7 +417,7 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 						[
 							'name'     => $item['id'],
 							'label'    => $item['args']['label'],
-							'selector' => '{{WRAPPER}} .sc-' . $item['id'],
+							'selector' => '{{WRAPPER}} .sc-' . $item['raw_id'],
 							'fields_options' => [
 								'font_family'     => [ 'render_type' => 'template' ],
 								'font_size'       => [ 'render_type' => 'template' ],
@@ -625,6 +646,8 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 
 		$id = 'supercomponent-' . $this->get_id();
 
+		$schema_id_clean = sanitize_title( isset( $schema['id'] ) ? $schema['id'] : 'default' );
+
 		$css_vars = [];
 		$control_values = [];
 
@@ -633,7 +656,9 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 				continue;
 			}
 			$var_id = $control_def['id'];
-			$value = isset( $settings[ $var_id ] ) ? $settings[ $var_id ] : ( isset( $control_def['default'] ) ? $control_def['default'] : '' );
+			$scoped_id = 'sc_' . $schema_id_clean . '_' . $var_id;
+
+			$value = isset( $settings[ $scoped_id ] ) ? $settings[ $scoped_id ] : ( isset( $settings[ $var_id ] ) ? $settings[ $var_id ] : ( isset( $control_def['default'] ) ? $control_def['default'] : '' ) );
 
 			$control_values[ $var_id ] = $value;
 
@@ -670,49 +695,64 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 					continue;
 				}
 				$base = $control_def['id'];
+				$scoped_base = 'sc_' . $schema_id_clean . '_' . $base;
 				$typo_rules = '';
 
+				$get_typo_val = function( $prop ) use ( $settings, $scoped_base, $base ) {
+					if ( isset( $settings[ $scoped_base . '_' . $prop ] ) && '' !== $settings[ $scoped_base . '_' . $prop ] ) {
+						return $settings[ $scoped_base . '_' . $prop ];
+					}
+					if ( isset( $settings[ $base . '_' . $prop ] ) && '' !== $settings[ $base . '_' . $prop ] ) {
+						return $settings[ $base . '_' . $prop ];
+					}
+					return null;
+				};
+
 				// font-family
-				if ( ! empty( $settings[ $base . '_font_family' ] ) ) {
-					$font = esc_attr( $settings[ $base . '_font_family' ] );
-					$typo_rules .= "\tfont-family: \"{$font}\", sans-serif;\n";
+				$font = $get_typo_val( 'font_family' );
+				if ( ! empty( $font ) ) {
+					$typo_rules .= "\tfont-family: \"" . esc_attr( $font ) . "\", sans-serif;\n";
 				}
 				// font-size
-				if ( ! empty( $settings[ $base . '_font_size' ] ) ) {
-					$fs = $settings[ $base . '_font_size' ];
-					if ( is_array( $fs ) && isset( $fs['size'] ) ) {
+				$fs = $get_typo_val( 'font_size' );
+				if ( ! empty( $fs ) ) {
+					if ( is_array( $fs ) && isset( $fs['size'] ) && '' !== $fs['size'] ) {
 						$unit = isset( $fs['unit'] ) ? $fs['unit'] : 'px';
 						$typo_rules .= "\tfont-size: {$fs['size']}{$unit};\n";
 					}
 				}
 				// font-weight
-				if ( ! empty( $settings[ $base . '_font_weight' ] ) ) {
-					$typo_rules .= "\tfont-weight: " . esc_attr( $settings[ $base . '_font_weight' ] ) . ";\n";
+				$fw = $get_typo_val( 'font_weight' );
+				if ( ! empty( $fw ) ) {
+					$typo_rules .= "\tfont-weight: " . esc_attr( $fw ) . ";\n";
 				}
 				// text-transform
-				if ( ! empty( $settings[ $base . '_text_transform' ] ) ) {
-					$typo_rules .= "\ttext-transform: " . esc_attr( $settings[ $base . '_text_transform' ] ) . ";\n";
+				$tt = $get_typo_val( 'text_transform' );
+				if ( ! empty( $tt ) ) {
+					$typo_rules .= "\ttext-transform: " . esc_attr( $tt ) . ";\n";
 				}
 				// font-style
-				if ( ! empty( $settings[ $base . '_font_style' ] ) ) {
-					$typo_rules .= "\tfont-style: " . esc_attr( $settings[ $base . '_font_style' ] ) . ";\n";
+				$fst = $get_typo_val( 'font_style' );
+				if ( ! empty( $fst ) ) {
+					$typo_rules .= "\tfont-style: " . esc_attr( $fst ) . ";\n";
 				}
 				// text-decoration
-				if ( ! empty( $settings[ $base . '_text_decoration' ] ) ) {
-					$typo_rules .= "\ttext-decoration: " . esc_attr( $settings[ $base . '_text_decoration' ] ) . ";\n";
+				$td = $get_typo_val( 'text_decoration' );
+				if ( ! empty( $td ) ) {
+					$typo_rules .= "\ttext-decoration: " . esc_attr( $td ) . ";\n";
 				}
 				// line-height
-				if ( ! empty( $settings[ $base . '_line_height' ] ) ) {
-					$lh = $settings[ $base . '_line_height' ];
-					if ( is_array( $lh ) && isset( $lh['size'] ) ) {
+				$lh = $get_typo_val( 'line_height' );
+				if ( ! empty( $lh ) ) {
+					if ( is_array( $lh ) && isset( $lh['size'] ) && '' !== $lh['size'] ) {
 						$unit = isset( $lh['unit'] ) ? $lh['unit'] : '';
 						$typo_rules .= "\tline-height: {$lh['size']}{$unit};\n";
 					}
 				}
 				// letter-spacing
-				if ( ! empty( $settings[ $base . '_letter_spacing' ] ) ) {
-					$ls = $settings[ $base . '_letter_spacing' ];
-					if ( is_array( $ls ) && isset( $ls['size'] ) ) {
+				$ls = $get_typo_val( 'letter_spacing' );
+				if ( ! empty( $ls ) ) {
+					if ( is_array( $ls ) && isset( $ls['size'] ) && '' !== $ls['size'] ) {
 						$unit = isset( $ls['unit'] ) ? $ls['unit'] : 'px';
 						$typo_rules .= "\tletter-spacing: {$ls['size']}{$unit};\n";
 					}

@@ -1,0 +1,30 @@
+<div class="dial-demo-wrapper">
+  <section class="dial-stage">
+    {{#show_bg_image}}
+    <div class="dial-bg" style="background-image: url('{{bg_image.url}}');">
+      <div class="dial-bg-overlay"></div>
+    </div>
+    {{/show_bg_image}}
+    <div class="dial" aria-hidden="true">
+      <svg class="dial__circle" viewBox="0 0 1000 1000">
+        <circle class="dial__base" cx="500" cy="500" r="430"></circle>
+        <circle class="dial__dot" cx="0" cy="0" r="5"></circle>
+      </svg>
+
+      <div class="dial__labels"></div>
+    </div>
+
+    <div class="dial-content">
+      {{#show_eyebrow}}
+      <p class="dial-content__eyebrow">{{eyebrow_text}}</p>
+      {{/show_eyebrow}}
+      <h2 class="dial-content__title"></h2>
+      <p class="dial-content__body"></p>
+      {{#show_counter}}
+      <div class="dial-content__counter">
+        <span class="current">01</span><span>/</span><span class="total">05</span>
+      </div>
+      {{/show_counter}}
+    </div>
+  </section>
+</div>

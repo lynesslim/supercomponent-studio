@@ -1,0 +1,75 @@
+<div class="service-tabs">
+  <div class="service-tabs-inner">
+    {{#services}}
+    <article class="service-tab">
+      <!-- COLLAPSED -->
+      <div class="service-tab-collapsed">
+        <div class="service-number">
+          {{number}}
+        </div>
+        <div class="service-vertical-title">
+          {{vertical_title}}
+        </div>
+      </div>
+
+      <!-- ACTIVE -->
+      <div class="service-active">
+        {{#artwork_image.url}}
+        <div class="service-artwork">
+          <img src="{{artwork_image.url}}" alt="{{artwork_image.alt}}">
+        </div>
+        {{/artwork_image.url}}
+
+        <div class="service-active-number">
+          {{number}}
+        </div>
+
+        <div class="service-copy">
+          {{#heading}}
+          <h3 class="service-heading">{{heading}}</h3>
+          {{/heading}}
+          {{#description}}
+          <p class="service-description">{{description}}</p>
+          {{/description}}
+        </div>
+
+        <div class="service-offer">
+          {{#offer_label}}
+          <div class="service-offer-label">{{offer_label}}</div>
+          {{/offer_label}}
+
+          <div class="service-offer-list">
+            {{#offer_item_1}}
+            <div class="service-offer-item">
+              <span class="service-plus"></span>
+              <span>{{offer_item_1}}</span>
+            </div>
+            {{/offer_item_1}}
+
+            {{#offer_item_2}}
+            <div class="service-offer-item">
+              <span class="service-plus"></span>
+              <span>{{offer_item_2}}</span>
+            </div>
+            {{/offer_item_2}}
+
+            {{#offer_item_3}}
+            <div class="service-offer-item">
+              <span class="service-plus"></span>
+              <span>{{offer_item_3}}</span>
+            </div>
+            {{/offer_item_3}}
+
+            {{#offer_item_4}}
+            <div class="service-offer-item">
+              <span class="service-plus"></span>
+              <span>{{offer_item_4}}</span>
+            </div>
+            {{/offer_item_4}}
+          </div>
+        </div>
+      </div>
+    </article>
+    {{/services}}
+  </div>
+</div>

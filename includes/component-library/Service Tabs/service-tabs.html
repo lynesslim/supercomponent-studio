@@ -1,0 +1,1448 @@
+<style>
+/* =========================================================
+   FRAMER SERVICE TABS
+   Screenshot-matched light version
+   Elementor HTML Widget
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&display=swap');
+
+
+/* =========================================================
+   ROOT
+   ========================================================= */
+
+.service-tabs {
+    --outer-bg: #f2eee2;
+    --panel-bg: #faf6ed;
+    --text: #283746;
+    --muted: #607080;
+    --soft-border: rgba(90, 86, 76, .16);
+    --pill-border: rgba(90, 86, 76, .20);
+
+    width: 100%;
+    box-sizing: border-box;
+
+    background: var(--outer-bg);
+
+    padding: 12px;
+
+    border-radius: 27px;
+
+    overflow: hidden;
+
+    font-family: Inter, Arial, sans-serif;
+}
+
+
+/* =========================================================
+   TABS WRAPPER
+   ========================================================= */
+
+.service-tabs-inner {
+
+    width: 100%;
+
+    height: 520px;
+
+    display: flex;
+
+    gap: 8px;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   INDIVIDUAL TAB
+   ========================================================= */
+
+.service-tab {
+
+    position: relative;
+
+    height: 100%;
+
+    flex: 0 0 76px;
+
+    min-width: 76px;
+
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    background: var(--panel-bg);
+
+    border: 1px solid rgba(90,86,76,.035);
+
+    cursor: pointer;
+
+    transition:
+        flex-basis 850ms cubic-bezier(.16,1,.3,1),
+        min-width 850ms cubic-bezier(.16,1,.3,1),
+        background-color 450ms ease;
+
+    box-sizing: border-box;
+
+    isolation: isolate;
+}
+
+
+/* =========================================================
+   ACTIVE TAB
+   ========================================================= */
+
+.service-tab.active {
+
+    flex: 1 1 auto;
+
+    min-width: 0;
+
+    cursor: default;
+}
+
+
+/* =========================================================
+   COLLAPSED RAIL
+   ========================================================= */
+
+.service-tab-collapsed {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    padding-top: 17px;
+
+    box-sizing: border-box;
+
+    opacity: 1;
+
+    visibility: visible;
+
+    transition:
+        opacity 260ms ease,
+        visibility 0s linear 0s;
+}
+
+
+.service-tab.active .service-tab-collapsed {
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity 180ms ease,
+        visibility 0s linear 850ms;
+}
+
+
+/* =========================================================
+   COLLAPSED NUMBER
+   ========================================================= */
+
+.service-number {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 43px;
+    height: 31px;
+
+    border: 1px solid var(--pill-border);
+
+    border-radius: 999px;
+
+    color: #526170;
+
+    font-family: Inter, sans-serif;
+
+    font-size: 12px;
+
+    line-height: 1;
+
+    font-weight: 400;
+
+    letter-spacing: -.02em;
+
+    background: rgba(255,255,255,.18);
+}
+
+
+/* =========================================================
+   COLLAPSED VERTICAL TITLE
+   ========================================================= */
+
+.service-vertical-title {
+
+    position: absolute;
+
+    left: 50%;
+    bottom: 31px;
+
+    transform:
+        translateX(-50%)
+        rotate(-90deg);
+
+    transform-origin: center;
+
+    white-space: nowrap;
+
+    color: #263544;
+
+    font-family: "Instrument Serif", Georgia, serif;
+
+    font-size: 20px;
+
+    line-height: 1;
+
+    font-weight: 400;
+
+    letter-spacing: -.025em;
+}
+
+
+/* =========================================================
+   ACTIVE CONTENT
+   ========================================================= */
+
+.service-active {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity 300ms ease,
+        visibility 0s linear 850ms;
+}
+
+
+.service-tab.active .service-active {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+    transition:
+        opacity 450ms ease 180ms,
+        visibility 0s linear 0s;
+}
+
+
+/* =========================================================
+   ACTIVE IMAGE
+   ========================================================= */
+
+.service-artwork {
+
+    position: absolute;
+
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    width: 55%;
+
+    overflow: hidden;
+
+    z-index: 1;
+
+    opacity: 0;
+
+    transform: translateX(30px);
+
+    transition:
+        opacity 650ms ease 180ms,
+        transform 850ms cubic-bezier(.16,1,.3,1);
+}
+
+
+.service-tab.active .service-artwork {
+
+    opacity: 1;
+
+    transform: translateX(0);
+}
+
+
+/* IMAGE */
+
+.service-artwork img {
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position: center center;
+}
+
+
+/* =========================================================
+   EXACT LEFT FADE FROM SCREENSHOT
+   ========================================================= */
+
+.service-artwork::before {
+
+    content: "";
+
+    position: absolute;
+
+    z-index: 2;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 55%;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            90deg,
+            #faf6ed 0%,
+            rgba(250,246,237,.96) 10%,
+            rgba(250,246,237,.72) 30%,
+            rgba(250,246,237,.30) 58%,
+            rgba(250,246,237,0) 100%
+        );
+}
+
+
+/* subtle overall image wash */
+
+.service-artwork::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(250,246,237,.03),
+            rgba(250,246,237,.08)
+        );
+}
+
+
+/* =========================================================
+   ACTIVE NUMBER
+   ========================================================= */
+
+.service-active-number {
+
+    position: absolute;
+
+    z-index: 10;
+
+    top: 31px;
+    right: 31px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 43px;
+    height: 31px;
+
+    border-radius: 999px;
+
+    background: #faf6ed;
+
+    color: #445361;
+
+    font-family: Inter, sans-serif;
+
+    font-size: 12px;
+
+    line-height: 1;
+
+    border: 1px solid rgba(90,86,76,.12);
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   ACTIVE TEXT
+   ========================================================= */
+
+.service-copy {
+
+    position: absolute;
+
+    z-index: 8;
+
+    left: 43px;
+
+    top: 34px;
+
+    width: 370px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADING
+   ========================================================= */
+
+.service-heading {
+
+    margin: 0;
+
+    padding: 0;
+
+    color: #273847;
+
+    font-family: "Instrument Serif", Georgia, serif;
+
+    font-size: 28px;
+
+    line-height: 1.12;
+
+    font-weight: 400;
+
+    letter-spacing: -.035em;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.service-description {
+
+    margin: 12px 0 0;
+
+    width: 320px;
+
+    color: #607080;
+
+    font-family: Inter, Arial, sans-serif;
+
+    font-size: 15px;
+
+    line-height: 1.58;
+
+    font-weight: 400;
+
+    letter-spacing: -.018em;
+}
+
+
+/* =========================================================
+   OFFER AREA
+   ========================================================= */
+
+.service-offer {
+
+    position: absolute;
+
+    z-index: 10;
+
+    left: 43px;
+
+    bottom: 34px;
+
+    width: 360px;
+}
+
+
+/* LABEL */
+
+.service-offer-label {
+
+    margin-bottom: 13px;
+
+    color: #899097;
+
+    font-family: Inter, Arial, sans-serif;
+
+    font-size: 11px;
+
+    line-height: 1;
+
+    font-weight: 400;
+
+    text-transform: uppercase;
+
+    letter-spacing: .07em;
+}
+
+
+/* =========================================================
+   OFFER ITEMS
+   ========================================================= */
+
+.service-offer-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+.service-offer-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    color: #607080;
+
+    font-family: Inter, Arial, sans-serif;
+
+    font-size: 13px;
+
+    line-height: 1.2;
+
+    font-weight: 400;
+}
+
+
+/* PLUS CIRCLE */
+
+.service-plus {
+
+    position: relative;
+
+    flex: 0 0 12px;
+
+    width: 12px;
+    height: 12px;
+
+    border: 1px solid #aeb4b7;
+
+    border-radius: 50%;
+
+    box-sizing: border-box;
+}
+
+
+.service-plus::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 3px;
+    right: 3px;
+
+    top: 5px;
+
+    height: 1px;
+
+    background: #9ba3a8;
+}
+
+
+.service-plus::after {
+
+    content: "";
+
+    position: absolute;
+
+    top: 3px;
+    bottom: 3px;
+
+    left: 5px;
+
+    width: 1px;
+
+    background: #9ba3a8;
+}
+
+
+/* =========================================================
+   DESKTOP LARGE SCREEN
+   ========================================================= */
+
+@media (min-width: 1400px) {
+
+    .service-tabs {
+
+        padding: 12px;
+    }
+
+    .service-tabs-inner {
+
+        height: 520px;
+
+        gap: 8px;
+    }
+
+    .service-tab {
+
+        flex-basis: 76px;
+
+        min-width: 76px;
+    }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .service-tabs {
+
+        padding: 10px;
+
+        border-radius: 24px;
+    }
+
+    .service-tabs-inner {
+
+        height: 470px;
+
+        gap: 6px;
+    }
+
+    .service-tab {
+
+        flex-basis: 68px;
+
+        min-width: 68px;
+
+        border-radius: 19px;
+    }
+
+    .service-copy {
+
+        left: 28px;
+
+        top: 28px;
+
+        width: 320px;
+    }
+
+    .service-heading {
+
+        font-size: 25px;
+    }
+
+    .service-description {
+
+        width: 280px;
+
+        font-size: 14px;
+    }
+
+    .service-offer {
+
+        left: 28px;
+
+        bottom: 28px;
+
+        width: 300px;
+    }
+
+    .service-artwork {
+
+        width: 56%;
+    }
+
+    .service-active-number {
+
+        top: 25px;
+        right: 25px;
+    }
+
+    .service-vertical-title {
+
+        font-size: 18px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+    .service-tabs {
+
+        padding: 7px;
+
+        border-radius: 20px;
+
+        overflow: visible;
+    }
+
+    .service-tabs-inner {
+
+        height: auto;
+
+        flex-direction: column;
+
+        gap: 6px;
+
+        overflow: visible;
+    }
+
+    .service-tab {
+
+        width: 100%;
+
+        height: 62px;
+
+        min-width: 0;
+
+        flex: 0 0 62px;
+
+        border-radius: 17px;
+
+        transition:
+            height 800ms cubic-bezier(.16,1,.3,1),
+            flex-basis 800ms cubic-bezier(.16,1,.3,1);
+    }
+
+    .service-tab.active {
+
+        height: 510px;
+
+        flex: 0 0 510px;
+    }
+
+
+    /* mobile collapsed */
+
+    .service-tab-collapsed {
+
+        padding: 0 18px;
+
+        flex-direction: row;
+
+        align-items: center;
+
+        justify-content: space-between;
+    }
+
+    .service-number {
+
+        width: 42px;
+
+        height: 29px;
+    }
+
+    .service-vertical-title {
+
+        position: static;
+
+        transform: none;
+
+        margin-left: auto;
+
+        font-size: 18px;
+    }
+
+
+    /* active */
+
+    .service-copy {
+
+        left: 22px;
+
+        top: 23px;
+
+        width: calc(100% - 44px);
+    }
+
+    .service-heading {
+
+        font-size: 25px;
+
+        max-width: 300px;
+    }
+
+    .service-description {
+
+        width: 100%;
+
+        max-width: 310px;
+
+        font-size: 13px;
+
+        line-height: 1.5;
+    }
+
+
+    /* number */
+
+    .service-active-number {
+
+        top: 21px;
+
+        right: 21px;
+
+        width: 42px;
+
+        height: 29px;
+    }
+
+
+    /* artwork */
+
+    .service-artwork {
+
+        top: 170px;
+
+        left: 15px;
+
+        right: 15px;
+
+        bottom: auto;
+
+        width: auto;
+
+        height: 190px;
+    }
+
+    .service-artwork::before {
+
+        width: 100%;
+
+        height: 45%;
+
+        bottom: auto;
+
+        background:
+            linear-gradient(
+                180deg,
+                #faf6ed 0%,
+                rgba(250,246,237,.7) 30%,
+                rgba(250,246,237,0) 100%
+            );
+    }
+
+
+    /* offer */
+
+    .service-offer {
+
+        left: 22px;
+
+        bottom: 22px;
+
+        width: calc(100% - 44px);
+    }
+
+    .service-offer-list {
+
+        gap: 8px;
+    }
+
+    .service-offer-item {
+
+        font-size: 12px;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .service-tab.active {
+
+        height: 495px;
+
+        flex-basis: 495px;
+    }
+
+    .service-heading {
+
+        font-size: 23px;
+    }
+
+    .service-description {
+
+        font-size: 12.5px;
+    }
+
+    .service-artwork {
+
+        top: 160px;
+
+        height: 175px;
+    }
+
+    .service-offer {
+
+        bottom: 19px;
+    }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .service-tab,
+    .service-active,
+    .service-tab-collapsed,
+    .service-artwork {
+
+        transition: none !important;
+    }
+}
+</style>
+
+
+<div class="service-tabs">
+
+    <div class="service-tabs-inner">
+
+
+        <!-- =================================================
+             001 — ADVISORY
+             ================================================= -->
+
+        <article class="service-tab active" data-service="0">
+
+            <!-- COLLAPSED -->
+
+            <div class="service-tab-collapsed">
+
+                <div class="service-number">
+                    001
+                </div>
+
+                <div class="service-vertical-title">
+                    Advisory
+                </div>
+
+            </div>
+
+
+            <!-- ACTIVE -->
+
+            <div class="service-active">
+
+                <div class="service-artwork">
+
+                    <img
+                        src="https://framerusercontent.com/images/8MITd7rBK6FeU5zOAiglFzibYuc.png?width=1024&height=790"
+                        alt="Advisory"
+                    >
+
+                </div>
+
+
+                <div class="service-active-number">
+                    001
+                </div>
+
+
+                <div class="service-copy">
+
+                    <h3 class="service-heading">
+                        A steady hand in the room.
+                    </h3>
+
+                    <p class="service-description">
+                        Standing counsel to chairs, chief executives
+                        and founders — the outside read on the
+                        decision in front of you, given plainly.
+                    </p>
+
+                </div>
+
+
+                <div class="service-offer">
+
+                    <div class="service-offer-label">
+                        What we offer
+                    </div>
+
+                    <div class="service-offer-list">
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Board and committee counsel</span>
+                        </div>
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Succession planning</span>
+                        </div>
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Investment cases</span>
+                        </div>
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Governance reviews</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             002 — STRATEGY
+             ================================================= -->
+
+        <article class="service-tab" data-service="1">
+
+            <div class="service-tab-collapsed">
+
+                <div class="service-number">
+                    002
+                </div>
+
+                <div class="service-vertical-title">
+                    Strategy
+                </div>
+
+            </div>
+
+
+            <div class="service-active">
+
+                <div class="service-artwork">
+
+                    <img
+                        src="https://framerusercontent.com/images/8MITd7rBK6FeU5zOAiglFzibYuc.png?width=1024&height=790"
+                        alt="Strategy"
+                    >
+
+                </div>
+
+
+                <div class="service-active-number">
+                    002
+                </div>
+
+
+                <div class="service-copy">
+
+                    <h3 class="service-heading">
+                        Strategy with a clear point of view.
+                    </h3>
+
+                    <p class="service-description">
+                        Clear strategic counsel for leaders making
+                        consequential decisions in uncertain conditions.
+                    </p>
+
+                </div>
+
+
+                <div class="service-offer">
+
+                    <div class="service-offer-label">
+                        What we offer
+                    </div>
+
+                    <div class="service-offer-list">
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Strategic reviews</span>
+                        </div>
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Market positioning</span>
+                        </div>
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Decision support</span>
+                        </div>
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Growth planning</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             003 — OPERATIONS
+             ================================================= -->
+
+        <article class="service-tab" data-service="2">
+
+            <div class="service-tab-collapsed">
+
+                <div class="service-number">
+                    003
+                </div>
+
+                <div class="service-vertical-title">
+                    Operations
+                </div>
+
+            </div>
+
+
+            <div class="service-active">
+
+                <div class="service-artwork">
+
+                    <img
+                        src="https://framerusercontent.com/images/8MITd7rBK6FeU5zOAiglFzibYuc.png?width=1024&height=790"
+                        alt="Operations"
+                    >
+
+                </div>
+
+
+                <div class="service-active-number">
+                    003
+                </div>
+
+
+                <div class="service-copy">
+
+                    <h3 class="service-heading">
+                        Make the operation work harder.
+                    </h3>
+
+                    <p class="service-description">
+                        Practical operating counsel focused on the
+                        systems, decisions and structures behind performance.
+                    </p>
+
+                </div>
+
+
+                <div class="service-offer">
+
+                    <div class="service-offer-label">
+                        What we offer
+                    </div>
+
+                    <div class="service-offer-list">
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Operating models</span>
+                        </div>
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Performance reviews</span>
+                        </div>
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Process improvement</span>
+                        </div>
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Operational planning</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             004 — GROWTH
+             ================================================= -->
+
+        <article class="service-tab" data-service="3">
+
+            <div class="service-tab-collapsed">
+
+                <div class="service-number">
+                    004
+                </div>
+
+                <div class="service-vertical-title">
+                    Growth
+                </div>
+
+            </div>
+
+
+            <div class="service-active">
+
+                <div class="service-artwork">
+
+                    <img
+                        src="https://framerusercontent.com/images/8MITd7rBK6FeU5zOAiglFzibYuc.png?width=1024&height=790"
+                        alt="Growth"
+                    >
+
+                </div>
+
+
+                <div class="service-active-number">
+                    004
+                </div>
+
+
+                <div class="service-copy">
+
+                    <h3 class="service-heading">
+                        Growth with intent.
+                    </h3>
+
+                    <p class="service-description">
+                        Building sustainable growth around the choices,
+                        capabilities and relationships that matter most.
+                    </p>
+
+                </div>
+
+
+                <div class="service-offer">
+
+                    <div class="service-offer-label">
+                        What we offer
+                    </div>
+
+                    <div class="service-offer-list">
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Growth strategy</span>
+                        </div>
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Value creation</span>
+                        </div>
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Expansion planning</span>
+                        </div>
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Growth opportunities</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             005 — ORGANISATION
+             ================================================= -->
+
+        <article class="service-tab" data-service="4">
+
+            <div class="service-tab-collapsed">
+
+                <div class="service-number">
+                    005
+                </div>
+
+                <div class="service-vertical-title">
+                    Organisation
+                </div>
+
+            </div>
+
+
+            <div class="service-active">
+
+                <div class="service-artwork">
+
+                    <img
+                        src="https://framerusercontent.com/images/8MITd7rBK6FeU5zOAiglFzibYuc.png?width=1024&height=790"
+                        alt="Organisation"
+                    >
+
+                </div>
+
+
+                <div class="service-active-number">
+                    005
+                </div>
+
+
+                <div class="service-copy">
+
+                    <h3 class="service-heading">
+                        Organisations built to last.
+                    </h3>
+
+                    <p class="service-description">
+                        Aligning leadership, people and structure around
+                        the future the organisation is building.
+                    </p>
+
+                </div>
+
+
+                <div class="service-offer">
+
+                    <div class="service-offer-label">
+                        What we offer
+                    </div>
+
+                    <div class="service-offer-list">
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Organisation design</span>
+                        </div>
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Leadership advisory</span>
+                        </div>
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>Culture reviews</span>
+                        </div>
+
+                        <div class="service-offer-item">
+                            <span class="service-plus"></span>
+                            <span>People strategy</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+    </div>
+
+</div>
+
+
+<script>
+(function () {
+
+    function initServiceTabs() {
+
+        const sections =
+            document.querySelectorAll('.service-tabs');
+
+        sections.forEach(function (section) {
+
+            const tabs =
+                section.querySelectorAll('.service-tab');
+
+            if (!tabs.length) return;
+
+
+            tabs.forEach(function (tab) {
+
+                tab.addEventListener('click', function () {
+
+                    if (tab.classList.contains('active')) {
+                        return;
+                    }
+
+                    tabs.forEach(function (item) {
+                        item.classList.remove('active');
+                    });
+
+                    requestAnimationFrame(function () {
+                        tab.classList.add('active');
+                    });
+
+                });
+
+            });
+
+        });
+
+    }
+
+
+    if (document.readyState === 'loading') {
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            initServiceTabs
+        );
+
+    } else {
+
+        initServiceTabs();
+
+    }
+
+})();
+</script>

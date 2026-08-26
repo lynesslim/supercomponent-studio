@@ -1,0 +1,195 @@
+{
+  "id": "circular-dial-scroll",
+  "name": "Circular Dial Scroll",
+  "settings": [
+    {
+      "id": "show_eyebrow",
+      "type": "switcher",
+      "label": "Show Eyebrow",
+      "default": "yes",
+      "tab": "content",
+      "section": "Header Content"
+    },
+    {
+      "id": "eyebrow_text",
+      "type": "text",
+      "label": "Eyebrow Text",
+      "default": "Process",
+      "tab": "content",
+      "section": "Header Content",
+      "condition": {
+        "show_eyebrow": "yes"
+      }
+    },
+    {
+      "id": "stages",
+      "type": "repeater",
+      "label": "Process Stages",
+      "tab": "content",
+      "section": "Stages List",
+      "title_field": "{{{ number }}} - {{{ title }}}",
+      "fields": [
+        {
+          "id": "number",
+          "type": "text",
+          "label": "Stage Number",
+          "default": "01"
+        },
+        {
+          "id": "title",
+          "type": "text",
+          "label": "Stage Title",
+          "default": "Stage Title"
+        },
+        {
+          "id": "body",
+          "type": "textarea",
+          "label": "Stage Description",
+          "default": "Stage description content goes here."
+        }
+      ],
+      "default": [
+        {
+          "number": "01",
+          "title": "Material selection",
+          "body": "We begin by choosing materials for performance, tactility and long-term durability."
+        },
+        {
+          "number": "02",
+          "title": "Precision shaping",
+          "body": "Each component is formed with controlled tolerances to preserve the intended geometry."
+        },
+        {
+          "number": "03",
+          "title": "Surface refinement",
+          "body": "Textures and finishes are developed to create depth, grip and a distinctive visual rhythm."
+        },
+        {
+          "number": "04",
+          "title": "System assembly",
+          "body": "Individual parts are aligned and assembled into one coherent, high-performance structure."
+        },
+        {
+          "number": "05",
+          "title": "Final validation",
+          "body": "The complete product is tested, adjusted and approved before it reaches its final form."
+        }
+      ]
+    },
+    {
+      "id": "show_counter",
+      "type": "switcher",
+      "label": "Show Counter",
+      "default": "yes",
+      "tab": "content",
+      "section": "Counter Settings"
+    },
+    {
+      "id": "title_color",
+      "type": "color",
+      "label": "Title Color",
+      "default": "#ffffff",
+      "tab": "style",
+      "section": "Typography & Colors"
+    },
+    {
+      "id": "eyebrow_color",
+      "type": "color",
+      "label": "Eyebrow Color",
+      "default": "rgba(255, 255, 255, 0.62)",
+      "tab": "style",
+      "section": "Typography & Colors"
+    },
+    {
+      "id": "body_color",
+      "type": "color",
+      "label": "Body Color",
+      "default": "rgba(255, 255, 255, 0.7)",
+      "tab": "style",
+      "section": "Typography & Colors"
+    },
+    {
+      "id": "counter_color",
+      "type": "color",
+      "label": "Counter Color",
+      "default": "rgba(255, 255, 255, 0.48)",
+      "tab": "style",
+      "section": "Typography & Colors"
+    },
+    {
+      "id": "active_label_color",
+      "type": "color",
+      "label": "Active Dial Label Color",
+      "default": "#ffffff",
+      "tab": "style",
+      "section": "Dial Colors"
+    },
+    {
+      "id": "inactive_label_color",
+      "type": "color",
+      "label": "Inactive Dial Label Color",
+      "default": "rgba(255, 255, 255, 0.28)",
+      "tab": "style",
+      "section": "Dial Colors"
+    },
+    {
+      "id": "dial_line_color",
+      "type": "color",
+      "label": "Dial Line Color",
+      "default": "rgba(255, 255, 255, 0.62)",
+      "tab": "style",
+      "section": "Dial Colors"
+    },
+    {
+      "id": "dial_dot_color",
+      "type": "color",
+      "label": "Dial Dot Color",
+      "default": "#ffffff",
+      "tab": "style",
+      "section": "Dial Colors"
+    },
+    {
+      "id": "scrub_distance",
+      "type": "slider",
+      "label": "Scroll Distance per Stage (px)",
+      "default": {
+        "size": 900,
+        "unit": "px"
+      },
+      "min": 300,
+      "max": 2000,
+      "step": 50,
+      "tab": "style",
+      "section": "Scroll Settings"
+    },
+    {
+      "id": "show_bg_image",
+      "type": "switcher",
+      "label": "Enable Background Image",
+      "default": "no",
+      "tab": "style",
+      "section": "Background Settings"
+    },
+    {
+      "id": "bg_image",
+      "type": "image",
+      "label": "Background Image",
+      "tab": "style",
+      "section": "Background Settings",
+      "condition": {
+        "show_bg_image": "yes"
+      }
+    },
+    {
+      "id": "bg_overlay_color",
+      "type": "color",
+      "label": "Background Overlay Color",
+      "default": "rgba(0, 0, 0, 0.4)",
+      "tab": "style",
+      "section": "Background Settings",
+      "condition": {
+        "show_bg_image": "yes"
+      }
+    }
+  ]
+}

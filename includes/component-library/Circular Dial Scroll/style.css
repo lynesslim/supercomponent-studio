@@ -1,0 +1,275 @@
+.dial-demo-wrapper {
+  position: relative;
+  min-height: 100vh;
+  background: transparent;
+}
+
+.dial-stage {
+  position: relative;
+  height: 100vh;
+  min-height: 720px;
+  overflow: hidden;
+  isolation: isolate;
+  background: transparent;
+}
+
+.dial-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.dial-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: var(--bg_overlay_color, rgba(0, 0, 0, 0.4));
+}
+
+.dial {
+  position: absolute;
+  width: var(--dial-size, min(148vw, 1500px));
+  aspect-ratio: 1;
+  left: var(--dial-left, calc(min(148vw, 1500px) * -0.70));
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.dial__circle {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.dial__base {
+  fill: none;
+  stroke: var(--dial_line_color, rgba(255, 255, 255, 0.62));
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.dial__dot {
+  fill: var(--dial_dot_color, #ffffff);
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.75));
+}
+
+.dial__label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  user-select: none;
+  will-change: transform, opacity;
+  font-size: clamp(34px, 4.4vw, 78px);
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: -.06em;
+  color: var(--inactive_label_color, rgba(255, 255, 255, 0.28));
+}
+
+.dial__label.is-active {
+  color: var(--active_label_color, #ffffff);
+}
+
+.dial-content {
+  position: absolute;
+  z-index: 5;
+  left: clamp(28px, 40vw, 680px);
+  top: 50%;
+  width: min(480px, calc(100vw - 80px));
+  transform: translateY(-50%);
+}
+
+.dial-content__eyebrow {
+  margin: 0 0 18px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  color: var(--eyebrow_color, rgba(255, 255, 255, 0.62));
+}
+
+.dial-content__title {
+  margin: 0;
+  max-width: 11ch;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(42px, 6vw, 92px);
+  line-height: .95;
+  font-weight: 400;
+  letter-spacing: -.055em;
+  color: var(--title_color, #ffffff);
+}
+
+.dial-content__body {
+  margin: 28px 0 0;
+  max-width: 39ch;
+  color: var(--body_color, rgba(255, 255, 255, 0.7));
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.dial-content__counter {
+  display: flex;
+  gap: 8px;
+  margin-top: 28px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: var(--counter_color, rgba(255, 255, 255, 0.48));
+}
+
+/* Tablet Layout */
+@media (max-width: 1024px) {
+  .dial {
+    width: 168vw;
+    left: calc(168vw * -0.855);
+  }
+
+  .dial-stage {
+    height: 100svh;
+    min-height: 680px;
+  }
+
+  .dial-content {
+    left: 22vw;
+    top: calc(50% + 76px);
+    width: min(520px, 70vw);
+    transform: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dial-content__eyebrow {
+    display: none;
+  }
+
+  .dial-content__counter {
+    order: 1;
+    margin: 0 0 18px;
+    font-size: 10px;
+    letter-spacing: .14em;
+  }
+
+  .dial-content__title {
+    order: 2;
+    max-width: none;
+    font-family: inherit;
+    font-size: clamp(20px, 3vw, 30px);
+    line-height: 1.15;
+    font-weight: 500;
+    letter-spacing: -.025em;
+  }
+
+  .dial-content__body {
+    order: 3;
+    margin-top: 12px;
+    max-width: 48ch;
+    font-size: clamp(13px, 1.7vw, 16px);
+    line-height: 1.55;
+  }
+
+  .dial__label {
+    font-size: clamp(34px, 6vw, 62px);
+  }
+}
+
+/* Mobile Layout */
+@media (max-width: 767px) {
+  .dial {
+    width: 190vw;
+    left: calc(190vw * -0.895);
+  }
+
+  .dial-stage {
+    height: 100svh;
+    min-height: 620px;
+  }
+
+  .dial-content {
+    left: 16vw;
+    top: calc(50% + 64px);
+    width: calc(100vw - 25vw);
+  }
+
+  .dial-content__counter {
+    margin-bottom: 17px;
+    font-size: 9px;
+  }
+
+  .dial-content__title {
+    font-size: clamp(17px, 4.8vw, 21px);
+    line-height: 1.2;
+  }
+
+  .dial-content__body {
+    margin-top: 10px;
+    max-width: 34ch;
+    font-size: clamp(12px, 3.5vw, 15px);
+    line-height: 1.5;
+  }
+
+  .dial__label {
+    font-size: clamp(36px, 11vw, 50px);
+  }
+
+  .dial__base {
+    stroke-width: .8;
+  }
+
+  .dial__dot {
+    r: 4;
+  }
+}
+
+@media (max-width: 390px) {
+  .dial {
+    width: 205vw;
+    left: calc(205vw * -0.91);
+  }
+
+  .dial-content {
+    left: 14vw;
+    top: calc(50% + 58px);
+    width: 80vw;
+  }
+
+  .dial-content__body {
+    font-size: 12px;
+  }
+}
+
+@media (max-height: 700px) and (max-width: 767px) {
+  .dial-content {
+    top: calc(50% + 50px);
+  }
+
+  .dial-content__counter {
+    margin-bottom: 10px;
+  }
+
+  .dial-content__body {
+    margin-top: 7px;
+    line-height: 1.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dial,
+  .dial__label,
+  .dial__dot,
+  .dial-content__title,
+  .dial-content__body {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -1,0 +1,35 @@
+<section class="interior-stack">
+  <div class="interior-stack__track">
+    {{#cards}}
+    <article class="interior-card">
+      <div class="interior-card__inner">
+        <div class="interior-card__content">
+          <div>
+            {{#number}}
+            <div class="interior-card__number">{{number}}</div>
+            {{/number}}
+
+            {{#title}}
+            <h2 class="interior-card__title">{{title}}</h2>
+            {{/title}}
+
+            {{#description}}
+            <p class="interior-card__description">{{description}}</p>
+            {{/description}}
+          </div>
+
+          {{#services}}
+          <div class="interior-card__services">{{services}}</div>
+          {{/services}}
+        </div>
+
+        {{#image.url}}
+        <div class="interior-card__image">
+          <img src="{{image.url}}" alt="{{image.alt}}">
+        </div>
+        {{/image.url}}
+      </div>
+    </article>
+    {{/cards}}
+  </div>
+</section>

@@ -1,0 +1,598 @@
+<section class="interior-stack">
+
+    <div class="interior-stack__track">
+
+        <!-- =================================
+             CARD 01
+        ================================== -->
+
+        <article class="interior-card">
+
+            <div class="interior-card__inner">
+
+                <div class="interior-card__content">
+
+                    <div>
+
+                        <div class="interior-card__number">
+                            /01
+                        </div>
+
+                        <h2 class="interior-card__title">
+                            Interior Design
+                        </h2>
+
+                        <p class="interior-card__description">
+                            We design interiors that are simple, functional,
+                            and aligned with how the space is used every day.
+                        </p>
+
+                    </div>
+
+                    <div class="interior-card__services">
+                        Layout planning · Material selection · Furniture guidance
+                    </div>
+
+                </div>
+
+                <div class="interior-card__image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=90"
+                        alt="Interior Design"
+                    >
+
+                </div>
+
+            </div>
+
+        </article>
+
+        <!-- =================================
+             CARD 02
+        ================================== -->
+
+        <article class="interior-card">
+
+            <div class="interior-card__inner">
+
+                <div class="interior-card__content">
+
+                    <div>
+
+                        <div class="interior-card__number">
+                            /02
+                        </div>
+
+                        <h2 class="interior-card__title">
+                            Architecture
+                        </h2>
+
+                        <p class="interior-card__description">
+                            Thoughtful architecture shaped around people,
+                            light, materials, and the way spaces are experienced.
+                        </p>
+
+                    </div>
+
+                    <div class="interior-card__services">
+                        Concept development · Spatial planning · Design direction
+                    </div>
+
+                </div>
+
+                <div class="interior-card__image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=90"
+                        alt="Architecture"
+                    >
+
+                </div>
+
+            </div>
+
+        </article>
+
+        <!-- =================================
+             CARD 03
+        ================================== -->
+
+        <article class="interior-card">
+
+            <div class="interior-card__inner">
+
+                <div class="interior-card__content">
+
+                    <div>
+
+                        <div class="interior-card__number">
+                            /03
+                        </div>
+
+                        <h2 class="interior-card__title">
+                            Furniture
+                        </h2>
+
+                        <p class="interior-card__description">
+                            Furniture pieces selected and designed to bring
+                            balance, comfort, and character into every room.
+                        </p>
+
+                    </div>
+
+                    <div class="interior-card__services">
+                        Custom pieces · Material selection · Styling guidance
+                    </div>
+
+                </div>
+
+                <div class="interior-card__image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=90"
+                        alt="Furniture Design"
+                    >
+
+                </div>
+
+            </div>
+
+        </article>
+
+        <!-- =================================
+             CARD 04
+        ================================== -->
+
+        <article class="interior-card">
+
+            <div class="interior-card__inner">
+
+                <div class="interior-card__content">
+
+                    <div>
+
+                        <div class="interior-card__number">
+                            /04
+                        </div>
+
+                        <h2 class="interior-card__title">
+                            Styling
+                        </h2>
+
+                        <p class="interior-card__description">
+                            The final layer of detail that brings materials,
+                            objects, textures, and atmosphere together.
+                        </p>
+
+                    </div>
+
+                    <div class="interior-card__services">
+                        Art direction · Accessories · Final styling
+                    </div>
+
+                </div>
+
+                <div class="interior-card__image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=90"
+                        alt="Interior Styling"
+                    >
+
+                </div>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+<style>
+/* =========================================
+   INTERIOR STACKING CARDS
+   Elementor HTML Widget
+========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+.interior-stack {
+    --bg: #0F0F0F;
+    --text: #f4f4f2;
+    --muted: #9b9b9b;
+    --card-radius: 0px;
+
+    width: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", sans-serif;
+    position: relative;
+}
+
+/* =========================================
+   MAIN STACKING AREA
+========================================= */
+
+.interior-stack__track {
+    width: 100%;
+    position: relative;
+}
+
+/* =========================================
+   CARD
+========================================= */
+
+.interior-card {
+    width: 100%;
+    height: auto;
+
+    position: sticky;
+    top: 0;
+
+    display: flex;
+    align-items: center;
+
+    background: var(--bg);
+
+    padding: 20px 4.5vw;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    margin-bottom: 0;
+}
+
+/* Card stacking order */
+
+.interior-card:nth-child(1) {
+    z-index: 1;
+}
+
+.interior-card:nth-child(2) {
+    z-index: 2;
+}
+
+.interior-card:nth-child(3) {
+    z-index: 3;
+}
+
+.interior-card:nth-child(4) {
+    z-index: 4;
+}
+
+/* =========================================
+   INNER CARD
+========================================= */
+
+.interior-card__inner {
+    width: 100%;
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns: 48% 52%;
+
+    /* IMPORTANT:\n       Makes both sides equal height */
+    align-items: stretch;
+
+    gap: 0;
+}
+
+/* =========================================
+   LEFT SIDE
+========================================= */
+
+.interior-card__content {
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    padding: 4px 7vw 4px 0;
+
+    box-sizing: border-box;
+}
+
+.interior-card__number {
+    font-size: 16px;
+
+    line-height: 1;
+
+    font-weight: 500;
+
+    color: #eeeeee;
+
+    margin-bottom: 48px;
+}
+
+.interior-card__title {
+    margin: 0 0 24px 0;
+
+    font-size: 32px;
+
+    line-height: 1.08;
+
+    letter-spacing: -0.055em;
+
+    font-weight: 500;
+
+    color: #f5f5f3;
+}
+
+.interior-card__description {
+    max-width: 540px;
+
+    margin: 0;
+
+    font-size: 16px;
+
+    line-height: 1.42;
+
+    letter-spacing: -0.025em;
+
+    font-weight: 400;
+
+    color: #9c9c9c;
+}
+
+.interior-card__services {
+    margin-top: auto;
+
+    padding-top: 90px;
+
+    max-width: 600px;
+
+    font-size: 16px;
+
+    line-height: 1.45;
+
+    letter-spacing: -0.035em;
+
+    font-weight: 500;
+
+    color: #eeeeee;
+}
+
+/* =========================================
+   IMAGE
+   DESKTOP = EXACT SAME HEIGHT AS LEFT
+========================================= */
+
+.interior-card__image {
+    width: 100%;
+
+    /*
+       Remove fixed aspect ratio on desktop.
+       Grid will stretch this to the exact
+       height of the left content.
+    */
+    height: 100%;
+
+    min-height: 100%;
+
+    overflow: hidden;
+
+    background: #191919;
+}
+
+.interior-card__image img {
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition:
+        transform 0.8s cubic-bezier(.2,.7,.2,1);
+}
+
+/* Subtle image movement */
+
+.interior-card:hover .interior-card__image img {
+    transform: scale(1.025);
+}
+
+/* =========================================
+   OPTIONAL TOP
+========================================= */
+
+.interior-card__top {
+    display: flex;
+    align-items: center;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1024px) {
+
+    .interior-card {
+        padding: 40px 4vw;
+    }
+
+    .interior-card__inner {
+        grid-template-columns: 48% 52%;
+    }
+
+    .interior-card__content {
+        padding-right: 5vw;
+    }
+
+    .interior-card__number {
+        font-size: 15px;
+        margin-bottom: 38px;
+    }
+
+    .interior-card__title {
+        font-size: 29px;
+    }
+
+    .interior-card__description {
+        font-size: 15px;
+    }
+
+    .interior-card__services {
+        padding-top: 70px;
+        font-size: 15px;
+    }
+
+    /*
+       Keep image equal to left side on tablet
+    */
+    .interior-card__image {
+        height: 100%;
+        min-height: 100%;
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 767px) {
+
+    .interior-card {
+        min-height: 100svh;
+
+        height: auto;
+
+        padding: 28px 20px 35px;
+
+        align-items: flex-start;
+
+        overflow: hidden;
+    }
+
+    .interior-card__inner {
+        display: flex;
+
+        flex-direction: column;
+
+        justify-content: flex-start;
+
+        align-items: stretch;
+
+        gap: 28px;
+    }
+
+    .interior-card__content {
+        height: auto;
+
+        padding: 0;
+
+        display: block;
+    }
+
+    .interior-card__number {
+        font-size: 15px;
+
+        margin-bottom: 30px;
+    }
+
+    .interior-card__title {
+        font-size: 34px;
+
+        line-height: 1.08;
+
+        margin-bottom: 18px;
+    }
+
+    .interior-card__description {
+        font-size: 16px;
+
+        line-height: 1.45;
+
+        max-width: 100%;
+    }
+
+    .interior-card__services {
+        padding-top: 30px;
+
+        font-size: 15px;
+
+        line-height: 1.45;
+
+        max-width: 100%;
+    }
+
+    /*
+       Mobile image gets its own responsive height.
+       It does NOT stretch to desktop content height.
+    */
+
+    .interior-card__image {
+        width: 100%;
+
+        height: auto;
+
+        min-height: 0;
+
+        aspect-ratio: 1.25 / 1;
+
+        overflow: hidden;
+    }
+
+    .interior-card__image img {
+        width: 100%;
+
+        height: 100%;
+
+        object-fit: cover;
+    }
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+    .interior-card {
+        padding: 24px 17px 30px;
+    }
+
+    .interior-card__inner {
+        gap: 24px;
+    }
+
+    .interior-card__number {
+        font-size: 14px;
+
+        margin-bottom: 26px;
+    }
+
+    .interior-card__title {
+        font-size: 30px;
+
+        line-height: 1.08;
+
+        margin-bottom: 16px;
+    }
+
+    .interior-card__description {
+        font-size: 15px;
+
+        line-height: 1.45;
+    }
+
+    .interior-card__services {
+        font-size: 14px;
+
+        padding-top: 28px;
+    }
+
+    .interior-card__image {
+        aspect-ratio: 1.15 / 1;
+    }
+}
+</style>

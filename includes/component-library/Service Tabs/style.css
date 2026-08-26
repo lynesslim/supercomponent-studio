@@ -1,0 +1,563 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&display=swap');
+
+/* =========================================================
+   ROOT & CONTAINER
+   ========================================================= */
+
+.service-tabs {
+    --outer-bg: var(--outer_bg, #f2eee2);
+    --panel-bg: var(--panel_bg, #faf6ed);
+    --text: var(--text_color, #283746);
+    --muted: var(--muted_color, #607080);
+    --soft-border: rgba(90, 86, 76, .16);
+    --pill-border: var(--pill_border_color, rgba(90, 86, 76, .20));
+
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--outer-bg);
+    padding: 12px;
+    border-radius: 27px;
+    overflow: hidden;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* =========================================================
+   TABS WRAPPER
+   ========================================================= */
+
+.service-tabs-inner {
+    width: 100%;
+    height: var(--tab_height, 520px);
+    display: flex;
+    gap: 8px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   INDIVIDUAL TAB
+   ========================================================= */
+
+.service-tab {
+    position: relative;
+    height: 100%;
+    flex: 0 0 var(--tab_collapsed_width, 76px);
+    min-width: var(--tab_collapsed_width, 76px);
+    border-radius: 22px;
+    overflow: hidden;
+    background: var(--panel-bg);
+    border: 1px solid rgba(90, 86, 76, .035);
+    cursor: pointer;
+    transition:
+        flex-basis 850ms cubic-bezier(.16, 1, .3, 1),
+        min-width 850ms cubic-bezier(.16, 1, .3, 1),
+        background-color 450ms ease;
+    box-sizing: border-box;
+    isolation: isolate;
+}
+
+/* =========================================================
+   ACTIVE TAB
+   ========================================================= */
+
+.service-tab.active {
+    flex: 1 1 auto;
+    min-width: 0;
+    cursor: default;
+}
+
+/* =========================================================
+   COLLAPSED RAIL
+   ========================================================= */
+
+.service-tab-collapsed {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 17px;
+    box-sizing: border-box;
+    opacity: 1;
+    visibility: visible;
+    transition:
+        opacity 260ms ease,
+        visibility 0s linear 0s;
+}
+
+.service-tab.active .service-tab-collapsed {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+        opacity 180ms ease,
+        visibility 0s linear 850ms;
+}
+
+/* =========================================================
+   COLLAPSED NUMBER BADGE
+   ========================================================= */
+
+.service-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 43px;
+    height: 31px;
+    border: 1px solid var(--pill-border);
+    border-radius: 999px;
+    color: #526170;
+    font-family: Inter, sans-serif;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: -.02em;
+    background: rgba(255, 255, 255, .18);
+}
+
+/* =========================================================
+   COLLAPSED VERTICAL TITLE
+   ========================================================= */
+
+.service-vertical-title {
+    position: absolute;
+    left: 50%;
+    bottom: 31px;
+    transform: translateX(-50%) rotate(-90deg);
+    transform-origin: center;
+    white-space: nowrap;
+    color: var(--text);
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: 20px;
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: -.025em;
+}
+
+/* =========================================================
+   ACTIVE CONTENT
+   ========================================================= */
+
+.service-active {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+        opacity 300ms ease,
+        visibility 0s linear 850ms;
+}
+
+.service-tab.active .service-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+        opacity 450ms ease 180ms,
+        visibility 0s linear 0s;
+}
+
+/* =========================================================
+   ACTIVE ARTWORK / IMAGE
+   ========================================================= */
+
+.service-artwork {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 55%;
+    overflow: hidden;
+    z-index: 1;
+    opacity: 0;
+    transform: translateX(30px);
+    transition:
+        opacity 650ms ease 180ms,
+        transform 850ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.service-tab.active .service-artwork {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.service-artwork img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+}
+
+/* FADE GRADIENT OVER ARTWORK */
+.service-artwork::before {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 55%;
+    pointer-events: none;
+    background: linear-gradient(
+        90deg,
+        var(--panel-bg) 0%,
+        rgba(250, 246, 237, .96) 10%,
+        rgba(250, 246, 237, .72) 30%,
+        rgba(250, 246, 237, .30) 58%,
+        rgba(250, 246, 237, 0) 100%
+    );
+}
+
+.service-artwork::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+        180deg,
+        rgba(250, 246, 237, .03),
+        rgba(250, 246, 237, .08)
+    );
+}
+
+/* =========================================================
+   ACTIVE NUMBER
+   ========================================================= */
+
+.service-active-number {
+    position: absolute;
+    z-index: 10;
+    top: 31px;
+    right: 31px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 43px;
+    height: 31px;
+    border-radius: 999px;
+    background: var(--panel-bg);
+    color: #445361;
+    font-family: Inter, sans-serif;
+    font-size: 12px;
+    line-height: 1;
+    border: 1px solid rgba(90, 86, 76, .12);
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   ACTIVE TEXT & HEADINGS
+   ========================================================= */
+
+.service-copy {
+    position: absolute;
+    z-index: 8;
+    left: 43px;
+    top: 34px;
+    width: 370px;
+    box-sizing: border-box;
+}
+
+.service-heading {
+    margin: 0;
+    padding: 0;
+    color: var(--text);
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: 28px;
+    line-height: 1.12;
+    font-weight: 400;
+    letter-spacing: -.035em;
+}
+
+.service-description {
+    margin: 12px 0 0;
+    width: 320px;
+    color: var(--muted);
+    font-family: Inter, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.58;
+    font-weight: 400;
+    letter-spacing: -.018em;
+}
+
+/* =========================================================
+   OFFER SECTION
+   ========================================================= */
+
+.service-offer {
+    position: absolute;
+    z-index: 10;
+    left: 43px;
+    bottom: 34px;
+    width: 360px;
+}
+
+.service-offer-label {
+    margin-bottom: 13px;
+    color: #899097;
+    font-family: Inter, Arial, sans-serif;
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+}
+
+.service-offer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.service-offer-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--muted);
+    font-family: Inter, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.2;
+    font-weight: 400;
+}
+
+/* PLUS CIRCLE */
+.service-plus {
+    position: relative;
+    flex: 0 0 12px;
+    width: 12px;
+    height: 12px;
+    border: 1px solid #aeb4b7;
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+
+.service-plus::before {
+    content: "";
+    position: absolute;
+    left: 3px;
+    right: 3px;
+    top: 5px;
+    height: 1px;
+    background: #9ba3a8;
+}
+
+.service-plus::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 5px;
+    width: 1px;
+    background: #9ba3a8;
+}
+
+/* =========================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================= */
+
+@media (min-width: 1400px) {
+    .service-tabs {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 1100px) {
+    .service-tabs {
+        padding: 10px;
+        border-radius: 24px;
+    }
+
+    .service-tabs-inner {
+        height: 470px;
+        gap: 6px;
+    }
+
+    .service-tab {
+        flex-basis: 68px;
+        min-width: 68px;
+        border-radius: 19px;
+    }
+
+    .service-copy {
+        left: 28px;
+        top: 28px;
+        width: 320px;
+    }
+
+    .service-heading {
+        font-size: 25px;
+    }
+
+    .service-description {
+        width: 280px;
+        font-size: 14px;
+    }
+
+    .service-offer {
+        left: 28px;
+        bottom: 28px;
+        width: 300px;
+    }
+
+    .service-artwork {
+        width: 56%;
+    }
+
+    .service-active-number {
+        top: 25px;
+        right: 25px;
+    }
+
+    .service-vertical-title {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 767px) {
+    .service-tabs {
+        padding: 7px;
+        border-radius: 20px;
+        overflow: visible;
+    }
+
+    .service-tabs-inner {
+        height: auto;
+        flex-direction: column;
+        gap: 6px;
+        overflow: visible;
+    }
+
+    .service-tab {
+        width: 100%;
+        height: 62px;
+        min-width: 0;
+        flex: 0 0 62px;
+        border-radius: 17px;
+        transition:
+            height 800ms cubic-bezier(.16, 1, .3, 1),
+            flex-basis 800ms cubic-bezier(.16, 1, .3, 1);
+    }
+
+    .service-tab.active {
+        height: 510px;
+        flex: 0 0 510px;
+    }
+
+    .service-tab-collapsed {
+        padding: 0 18px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .service-number {
+        width: 42px;
+        height: 29px;
+    }
+
+    .service-vertical-title {
+        position: static;
+        transform: none;
+        margin-left: auto;
+        font-size: 18px;
+    }
+
+    .service-copy {
+        left: 22px;
+        top: 23px;
+        width: calc(100% - 44px);
+    }
+
+    .service-heading {
+        font-size: 25px;
+        max-width: 300px;
+    }
+
+    .service-description {
+        width: 100%;
+        max-width: 310px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .service-active-number {
+        top: 21px;
+        right: 21px;
+        width: 42px;
+        height: 29px;
+    }
+
+    .service-artwork {
+        top: 170px;
+        left: 15px;
+        right: 15px;
+        bottom: auto;
+        width: auto;
+        height: 190px;
+    }
+
+    .service-artwork::before {
+        width: 100%;
+        height: 45%;
+        bottom: auto;
+        background: linear-gradient(
+            180deg,
+            var(--panel-bg) 0%,
+            rgba(250, 246, 237, .7) 30%,
+            rgba(250, 246, 237, 0) 100%
+        );
+    }
+
+    .service-offer {
+        left: 22px;
+        bottom: 22px;
+        width: calc(100% - 44px);
+    }
+
+    .service-offer-list {
+        gap: 8px;
+    }
+
+    .service-offer-item {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .service-tab.active {
+        height: 495px;
+        flex-basis: 495px;
+    }
+
+    .service-heading {
+        font-size: 23px;
+    }
+
+    .service-description {
+        font-size: 12.5px;
+    }
+
+    .service-artwork {
+        top: 160px;
+        height: 175px;
+    }
+
+    .service-offer {
+        bottom: 19px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .service-tab,
+    .service-active,
+    .service-tab-collapsed,
+    .service-artwork {
+        transition: none !important;
+    }
+}

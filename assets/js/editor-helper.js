@@ -13,25 +13,18 @@
         // Hook into the Elementor panel opening event for our widget
         hookPanelOpen: function () {
             var self = this;
-            console.log('SuperComponent: Initializing hookPanelOpen...');
             elementor.hooks.addAction('panel/open_editor/widget/supercomponent', function (panel, model, view) {
-                console.log('SuperComponent: Hook panel/open_editor/widget/supercomponent fired for model ID:', model.id);
-                if (view && view.container && !view.container._controlsRebuilt) {
-                    // Mark as rebuilt to prevent infinite loop
-                    view.container._controlsRebuilt = true;
-                    
-                    // Rebuild the controls list in JS
+                if (view && view.container) {
+                    if (view.container._isRebuildingPanel) {
+                        view.container._isRebuildingPanel = false;
+                        return;
+                    }
+                    view.container._isRebuildingPanel = true;
                     self.rebuildContainerControls(view.container);
-                    
-                    // Force the panel to reload with the newly built controls
                     panel.setPage('editor', {
                         model: model,
                         container: view.container
                     });
-                } else if (view && view.container) {
-                    console.log('SuperComponent: Skipping rebuild (already rebuilt or second pass).');
-                    // Reset the flag for the next time the panel opens
-                    view.container._controlsRebuilt = false;
                 }
             });
         },
@@ -211,8 +204,19 @@
                                     'typography': 'typography'
                                 };
 
+                                var scopedControlId = 'sc_' + schemaIdClean + '_' + control.id;
+
+                                // Auto-migrate past unscoped setting value if scoped key isn't set yet
+                                if (container.settings) {
+                                    var currentScopedVal = container.settings.get(scopedControlId);
+                                    var currentUnscopedVal = container.settings.get(control.id);
+                                    if (currentScopedVal === undefined && currentUnscopedVal !== undefined) {
+                                        container.settings.set(scopedControlId, currentUnscopedVal);
+                                    }
+                                }
+
                                 var controlDef = {
-                                    name: control.id,
+                                    name: scopedControlId,
                                     type: typeMap[control.type] || 'text',
                                     label: control.label,
                                     tab: tab,
@@ -243,7 +247,8 @@
 
                                 // Map repeater fields
                                 if (control.type === 'repeater' && Array.isArray(control.fields)) {
-                                    var fields = {};
+                                    var fieldsArray = [];
+                                    var fieldsObj = {};
                                     control.fields.forEach(function (f) {
                                         var fDef = {
                                             name: f.id,
@@ -251,6 +256,7 @@
                                             label: f.label,
                                             'default': f['default'] !== undefined ? f['default'] : ''
                                         };
+                                        if (f.description) fDef.description = f.description;
                                         if (f.options) {
                                             if (Array.isArray(f.options)) {
                                                 var fOpts = {};
@@ -262,12 +268,15 @@
                                                 fDef.options = f.options;
                                             }
                                         }
-                                        fields[f.id] = fDef;
+                                        fieldsArray.push(fDef);
+                                        fieldsObj[f.id] = fDef;
                                     });
-                                    controlDef.fields = fields;
+                                    // Set fields array for Elementor CollectionView
+                                    controlDef.fields = fieldsArray;
+                                    controlDef.title_field = control.title_field || (control.fields[0] ? '{{{ ' + control.fields[0].id + ' }}}' : '');
                                 }
 
-                                controls[control.id] = controlDef;
+                                controls[scopedControlId] = controlDef;
                             });
                         }
                     }
@@ -276,27 +285,29 @@
                 }
             }
 
-            // 3. Apply the controls to the container
+            // 3. Build controls array
+            var controlsArray = [];
+            Object.keys(controls).forEach(function (key) {
+                controlsArray.push(controls[key]);
+            });
+
+            // 4. Apply the controls to the container
             container.controls = controls;
 
-            // 4. Apply to the widget instance model
+            // 5. Apply to the widget instance model
             if (container.model) {
                 container.model.controls = controls;
+                if (container.model.get && container.model.get('controls') && typeof container.model.get('controls').reset === 'function') {
+                    container.model.get('controls').reset(controlsArray);
+                }
             }
 
-            // 5. Apply directly to the global widget type's Backbone Collection
+            // 6. Apply directly to the global widget type's Backbone Collection
             var widgetType = elementor.widgets.get('supercomponent');
             if (widgetType && widgetType.get('controls')) {
-                var controlsArray = [];
-                Object.keys(controls).forEach(function (key) {
-                    controlsArray.push(controls[key]);
-                });
-
                 if (typeof widgetType.get('controls').reset === 'function') {
-                    // Correctly reset the Backbone Collection with the new controls list!
                     widgetType.get('controls').reset(controlsArray);
                 } else {
-                    // Fallback
                     widgetType.set('controls', controls);
                     widgetType.attributes.controls = controls;
                 }
@@ -339,11 +350,26 @@
                     var instanceId = model.get('id');
                     if (instanceId) {
                         var settings = model.toJSON();
+                        var schemaJson = model.get('schema');
+                        var normalizedSettings = {};
+                        if (schemaJson) {
+                            try {
+                                var schemaObj = JSON.parse(schemaJson);
+                                var schemaIdClean = schemaObj.id ? schemaObj.id.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'default';
+                                if (schemaObj.settings && Array.isArray(schemaObj.settings)) {
+                                    schemaObj.settings.forEach(function(s) {
+                                        var scoped = 'sc_' + schemaIdClean + '_' + s.id;
+                                        normalizedSettings[s.id] = settings[scoped] !== undefined ? settings[scoped] : settings[s.id];
+                                    });
+                                }
+                            } catch(e){}
+                        }
+                        var merged = Object.assign({}, settings, normalizedSettings);
                         var event = new CustomEvent('supercomponent:update', {
                             detail: {
                                 instanceId: instanceId,
-                                settings: settings
-                              }
+                                settings: merged
+                            }
                         });
                         window.dispatchEvent(event);
                     }

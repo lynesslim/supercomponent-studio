@@ -1,0 +1,218 @@
+{
+  "id": "service-tabs",
+  "name": "Service Tabs",
+  "settings": [
+    {
+      "id": "services",
+      "type": "repeater",
+      "label": "Services / Tabs",
+      "tab": "content",
+      "section": "Services List",
+      "title_field": "{{{ number }}} - {{{ vertical_title }}}",
+      "fields": [
+        {
+          "id": "number",
+          "type": "text",
+          "label": "Number Badge",
+          "default": "001"
+        },
+        {
+          "id": "vertical_title",
+          "type": "text",
+          "label": "Tab Title",
+          "default": "Advisory"
+        },
+        {
+          "id": "artwork_image",
+          "type": "image",
+          "label": "Artwork / Image",
+          "default": {
+            "url": "https://framerusercontent.com/images/8MITd7rBK6FeU5zOAiglFzibYuc.png?width=1024&height=790"
+          }
+        },
+        {
+          "id": "heading",
+          "type": "text",
+          "label": "Heading",
+          "default": "A steady hand in the room."
+        },
+        {
+          "id": "description",
+          "type": "textarea",
+          "label": "Description",
+          "default": "Standing counsel to chairs, chief executives and founders — the outside read on the decision in front of you, given plainly."
+        },
+        {
+          "id": "offer_label",
+          "type": "text",
+          "label": "Offer Label",
+          "default": "What we offer"
+        },
+        {
+          "id": "offer_item_1",
+          "type": "text",
+          "label": "Offer Item 1",
+          "default": "Board and committee counsel"
+        },
+        {
+          "id": "offer_item_2",
+          "type": "text",
+          "label": "Offer Item 2",
+          "default": "Succession planning"
+        },
+        {
+          "id": "offer_item_3",
+          "type": "text",
+          "label": "Offer Item 3",
+          "default": "Investment cases"
+        },
+        {
+          "id": "offer_item_4",
+          "type": "text",
+          "label": "Offer Item 4",
+          "default": "Governance reviews"
+        }
+      ],
+      "default": [
+        {
+          "number": "001",
+          "vertical_title": "Advisory",
+          "artwork_image": {
+            "url": "https://framerusercontent.com/images/8MITd7rBK6FeU5zOAiglFzibYuc.png?width=1024&height=790"
+          },
+          "heading": "A steady hand in the room.",
+          "description": "Standing counsel to chairs, chief executives and founders — the outside read on the decision in front of you, given plainly.",
+          "offer_label": "What we offer",
+          "offer_item_1": "Board and committee counsel",
+          "offer_item_2": "Succession planning",
+          "offer_item_3": "Investment cases",
+          "offer_item_4": "Governance reviews"
+        },
+        {
+          "number": "002",
+          "vertical_title": "Strategy",
+          "artwork_image": {
+            "url": "https://framerusercontent.com/images/8MITd7rBK6FeU5zOAiglFzibYuc.png?width=1024&height=790"
+          },
+          "heading": "Strategy with a clear point of view.",
+          "description": "Clear strategic counsel for leaders making consequential decisions in uncertain conditions.",
+          "offer_label": "What we offer",
+          "offer_item_1": "Strategic reviews",
+          "offer_item_2": "Market positioning",
+          "offer_item_3": "Decision support",
+          "offer_item_4": "Growth planning"
+        },
+        {
+          "number": "003",
+          "vertical_title": "Operations",
+          "artwork_image": {
+            "url": "https://framerusercontent.com/images/8MITd7rBK6FeU5zOAiglFzibYuc.png?width=1024&height=790"
+          },
+          "heading": "Make the operation work harder.",
+          "description": "Practical operating counsel focused on the systems, decisions and structures behind performance.",
+          "offer_label": "What we offer",
+          "offer_item_1": "Operating models",
+          "offer_item_2": "Performance reviews",
+          "offer_item_3": "Process improvement",
+          "offer_item_4": "Operational planning"
+        },
+        {
+          "number": "004",
+          "vertical_title": "Growth",
+          "artwork_image": {
+            "url": "https://framerusercontent.com/images/8MITd7rBK6FeU5zOAiglFzibYuc.png?width=1024&height=790"
+          },
+          "heading": "Growth with intent.",
+          "description": "Building sustainable growth around the choices, capabilities and relationships that matter most.",
+          "offer_label": "What we offer",
+          "offer_item_1": "Growth strategy",
+          "offer_item_2": "Value creation",
+          "offer_item_3": "Expansion planning",
+          "offer_item_4": "Growth opportunities"
+        },
+        {
+          "number": "005",
+          "vertical_title": "Organisation",
+          "artwork_image": {
+            "url": "https://framerusercontent.com/images/8MITd7rBK6FeU5zOAiglFzibYuc.png?width=1024&height=790"
+          },
+          "heading": "Organisations built to last.",
+          "description": "Aligning leadership, people and structure around the future the organisation is building.",
+          "offer_label": "What we offer",
+          "offer_item_1": "Organisation design",
+          "offer_item_2": "Leadership advisory",
+          "offer_item_3": "Culture reviews",
+          "offer_item_4": "People strategy"
+        }
+      ]
+    },
+    {
+      "id": "outer_bg",
+      "type": "color",
+      "label": "Outer Container Background",
+      "default": "#f2eee2",
+      "tab": "style",
+      "section": "Colors & Backgrounds"
+    },
+    {
+      "id": "panel_bg",
+      "type": "color",
+      "label": "Tab Panel Background",
+      "default": "#faf6ed",
+      "tab": "style",
+      "section": "Colors & Backgrounds"
+    },
+    {
+      "id": "text_color",
+      "type": "color",
+      "label": "Heading & Text Color",
+      "default": "#283746",
+      "tab": "style",
+      "section": "Typography & Colors"
+    },
+    {
+      "id": "muted_color",
+      "type": "color",
+      "label": "Muted Description Color",
+      "default": "#607080",
+      "tab": "style",
+      "section": "Typography & Colors"
+    },
+    {
+      "id": "pill_border_color",
+      "type": "color",
+      "label": "Badge Border Color",
+      "default": "rgba(90, 86, 76, 0.20)",
+      "tab": "style",
+      "section": "Dial & Borders"
+    },
+    {
+      "id": "tab_height",
+      "type": "slider",
+      "label": "Desktop Container Height",
+      "default": {
+        "size": 520,
+        "unit": "px"
+      },
+      "min": 350,
+      "max": 900,
+      "step": 10,
+      "tab": "style",
+      "section": "Dimensions & Sizing"
+    },
+    {
+      "id": "tab_collapsed_width",
+      "type": "slider",
+      "label": "Collapsed Tab Width",
+      "default": {
+        "size": 76,
+        "unit": "px"
+      },
+      "min": 50,
+      "max": 140,
+      "step": 2,
+      "tab": "style",
+      "section": "Dimensions & Sizing"
+    }
+  ]
+}
