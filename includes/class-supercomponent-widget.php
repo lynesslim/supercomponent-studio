@@ -328,6 +328,8 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 				case 'url':
 				case 'dimensions':
 				case 'typography':
+				case 'icons':
+				case 'icon':
 					break;
 
 				case 'repeater':
@@ -342,7 +344,7 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 								continue;
 							}
 							
-							$field_array_types = [ 'image', 'url', 'dimensions' ];
+							$field_array_types = [ 'image', 'url', 'dimensions', 'icons', 'icon' ];
 							$field_default_fallback = in_array( $field['type'], $field_array_types, true ) ? [] : '';
 
 							$field_args = [
@@ -455,6 +457,8 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 			'repeater'    => \Elementor\Controls_Manager::REPEATER,
 			'dimensions'  => \Elementor\Controls_Manager::DIMENSIONS,
 			'typography'  => 'group_typography',
+			'icons'       => \Elementor\Controls_Manager::ICONS,
+			'icon'        => \Elementor\Controls_Manager::ICONS,
 		];
 
 		return isset( $map[ $type ] ) ? $map[ $type ] : false;
@@ -834,6 +838,35 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 		}
 	}
 
+	/**
+	 * Render an Elementor icon control value to HTML (SVG, <i> tag, or image).
+	 */
+	private function render_icon_html( $icon_data ) {
+		if ( empty( $icon_data ) ) {
+			return '';
+		}
+		if ( is_string( $icon_data ) ) {
+			return $icon_data;
+		}
+		if ( is_array( $icon_data ) ) {
+			if ( class_exists( '\Elementor\Icons_Manager' ) ) {
+				ob_start();
+				\Elementor\Icons_Manager::render_icon( $icon_data, [ 'aria-hidden' => 'true' ] );
+				$icon_html = ob_get_clean();
+				if ( ! empty( $icon_html ) ) {
+					return $icon_html;
+				}
+			}
+			if ( isset( $icon_data['value'] ) && is_string( $icon_data['value'] ) && ! empty( $icon_data['value'] ) ) {
+				if ( isset( $icon_data['library'] ) && 'svg' === $icon_data['library'] && isset( $icon_data['value']['url'] ) ) {
+					return '<img src="' . esc_url( $icon_data['value']['url'] ) . '" alt="" aria-hidden="true" class="sc-icon-svg" />';
+				}
+				return '<i class="' . esc_attr( $icon_data['value'] ) . '" aria-hidden="true"></i>';
+			}
+		}
+		return '';
+	}
+
 	// ponytail: Regex-based template engine instead of a full AST parser
 	// Ceiling: Cannot handle deeply nested identical block tags or complex logic (e.g., {{#outer}}{{#outer}}...{{/outer}}{{/outer}})
 	// Upgrade path: Integrate a lightweight template engine like Mustache PHP (mustache/mustache)
@@ -905,11 +938,40 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 							$item_output
 						);
 
-						// 2. Replace simple variables
+						// 2. Replace unescaped {{{variable}}} inside repeater item
+						$item_output = preg_replace_callback(
+							'/\{\{\{([\w\.]+)\}\}\}/',
+							function ( $raw_matches ) use ( $item ) {
+								$key = $raw_matches[1];
+								if ( isset( $item[ $key ] ) ) {
+									$val = $item[ $key ];
+									if ( is_array( $val ) && ( isset( $val['value'] ) || isset( $val['library'] ) ) ) {
+										return $this->render_icon_html( $val );
+									}
+									if ( is_string( $val ) || is_numeric( $val ) ) {
+										return $val;
+									}
+								}
+								return '';
+							},
+							$item_output
+						);
+
+						// 3. Replace simple variables
 						foreach ( $item as $key => $item_val ) {
 							if ( is_string( $item_val ) || is_numeric( $item_val ) ) {
 								$item_output = str_replace( '{{' . $key . '}}', esc_html( $item_val ), $item_output );
 							} elseif ( is_array( $item_val ) ) {
+								if ( isset( $item_val['value'] ) || isset( $item_val['library'] ) ) {
+									$icon_rendered = $this->render_icon_html( $item_val );
+									$item_output = str_replace( '{{' . $key . '}}', $icon_rendered, $item_output );
+									if ( isset( $item_val['value'] ) && is_string( $item_val['value'] ) ) {
+										$item_output = str_replace( '{{' . $key . '.value}}', esc_attr( $item_val['value'] ), $item_output );
+									}
+									if ( isset( $item_val['library'] ) && is_string( $item_val['library'] ) ) {
+										$item_output = str_replace( '{{' . $key . '.library}}', esc_attr( $item_val['library'] ), $item_output );
+									}
+								}
 								if ( isset( $item_val['url'] ) ) {
 									$item_output = str_replace( '{{' . $key . '.url}}', esc_url( $item_val['url'] ), $item_output );
 								}
@@ -931,6 +993,35 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 
 				$show = ( '#' === $type ) ? $is_truthy : ! $is_truthy;
 				return $show ? $inner : '';
+			},
+			$output
+		);
+
+		// Handle unescaped {{{variable}}} replacements at root level
+		$output = preg_replace_callback(
+			'/\{\{\{([\w\.]+)\}\}\}/',
+			function ( $matches ) use ( $values ) {
+				$expression = $matches[1];
+				if ( strpos( $expression, '.' ) !== false ) {
+					$parts = explode( '.', $expression );
+					$var_id = $parts[0];
+					$key = $parts[1];
+					if ( isset( $values[ $var_id ] ) && is_array( $values[ $var_id ] ) && isset( $values[ $var_id ][ $key ] ) ) {
+						$val = $values[ $var_id ][ $key ];
+						return ( is_string( $val ) || is_numeric( $val ) ) ? $val : '';
+					}
+					return '';
+				}
+				if ( isset( $values[ $expression ] ) ) {
+					$val = $values[ $expression ];
+					if ( is_array( $val ) && ( isset( $val['value'] ) || isset( $val['library'] ) ) ) {
+						return $this->render_icon_html( $val );
+					}
+					if ( is_string( $val ) || is_numeric( $val ) ) {
+						return $val;
+					}
+				}
+				return '';
 			},
 			$output
 		);
@@ -970,6 +1061,9 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 				// Simple variable
 				if ( isset( $values[ $expression ] ) ) {
 					$val = $values[ $expression ];
+					if ( is_array( $val ) && ( isset( $val['value'] ) || isset( $val['library'] ) ) ) {
+						return $this->render_icon_html( $val );
+					}
 					if ( is_string( $val ) || is_numeric( $val ) ) {
 						return esc_html( $val );
 					}

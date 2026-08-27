@@ -48,6 +48,7 @@ Make sure to select the most appropriate control type for each design property:
   *Note:* In the HTML/CSS, this generates classes like `.sc-{control_id}`.
 - **`image`**: For media uploads. Returns `{ "url": "..." }`.
 - **`url`**: For links. Returns `{ "url": "...", "is_external": false }`.
+- **`icons`**: For Elementor's native Icon Library (Font Awesome, Elementor icons, SVGs). Returns `{ "value": "fas fa-star", "library": "fa-solid" }`. In HTML/Mustache, render with `{{{control_id}}}`.
 - **`repeater`**: For lists of items (e.g., features, testimonials, team members, social icons).
   *Structure:* 
   ```json

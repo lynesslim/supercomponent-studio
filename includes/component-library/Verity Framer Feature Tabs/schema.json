@@ -1,0 +1,465 @@
+{
+  "id": "verity-framer-feature-tabs",
+  "name": "Verity / Framer Feature Tabs",
+  "settings": [
+    {
+      "tab": "content",
+      "section": "Feature Tabs",
+      "id": "tabs",
+      "type": "repeater",
+      "label": "Feature Tabs",
+      "title_field": "{{{ title }}}",
+      "fields": [
+        {
+          "id": "tab_id",
+          "type": "text",
+          "label": "Tab ID",
+          "default": "0"
+        },
+        {
+          "id": "number",
+          "type": "text",
+          "label": "Number",
+          "default": "01"
+        },
+        {
+          "id": "title",
+          "type": "text",
+          "label": "Title",
+          "default": "Recurring tasks"
+        },
+        {
+          "id": "description",
+          "type": "textarea",
+          "label": "Description",
+          "default": "The reports, updates, and check-ins your team does on repeat now happen automatically — on schedule, every time, without anyone lifting a finger."
+        },
+        {
+          "id": "icon",
+          "type": "icons",
+          "label": "Tab Icon",
+          "default": {
+            "value": "fas fa-sync-alt",
+            "library": "fa-solid"
+          }
+        },
+        {
+          "id": "dashboard_image",
+          "type": "image",
+          "label": "Dashboard Image"
+        },
+        {
+          "id": "alt",
+          "type": "text",
+          "label": "Dashboard Alt Text"
+        }
+      ],
+      "default": [
+        {
+          "tab_id": "0",
+          "number": "01",
+          "title": "Recurring tasks",
+          "description": "The reports, updates, and check-ins your team does on repeat now happen automatically — on schedule, every time, without anyone lifting a finger.",
+          "icon": {
+            "value": "fas fa-sync-alt",
+            "library": "fa-solid"
+          },
+          "dashboard_image": {
+            "url": "https://framerusercontent.com/images/gGHkSTfi9EE0JCyl1GqMWyhWjjw.png?width=1531&height=1089"
+          },
+          "alt": "Scheduled tasks dashboard"
+        },
+        {
+          "tab_id": "1",
+          "number": "02",
+          "title": "Lead routing",
+          "description": "Route every new lead to the right person, workflow, or AI agent automatically, with the right context attached.",
+          "icon": {
+            "value": "fas fa-route",
+            "library": "fa-solid"
+          },
+          "dashboard_image": {
+            "url": "https://framerusercontent.com/images/ZdbKfiKUHNsEj58WfrEd4v7O4M.png?width=1531&height=1089"
+          },
+          "alt": "Lead routing dashboard"
+        },
+        {
+          "tab_id": "2",
+          "number": "03",
+          "title": "Ticket triage",
+          "description": "Automatically classify, prioritize, and route incoming support tickets so your team can focus on the work that matters.",
+          "icon": {
+            "value": "fas fa-inbox",
+            "library": "fa-solid"
+          },
+          "dashboard_image": {
+            "url": "https://framerusercontent.com/images/dMMIpvTBZYg5OTSRDFF6Jjyttw.png?width=1531&height=1089"
+          },
+          "alt": "Ticket triage dashboard"
+        },
+        {
+          "tab_id": "3",
+          "number": "04",
+          "title": "Live reporting",
+          "description": "See live performance, automation activity, and important business signals in one continuously updated reporting layer.",
+          "icon": {
+            "value": "fas fa-chart-line",
+            "library": "fa-solid"
+          },
+          "dashboard_image": {
+            "url": "https://framerusercontent.com/images/Q6yMkkxQ2S0fq4gCsU0ROwVsHo.png?width=1531&height=1089"
+          },
+          "alt": "Live reporting dashboard"
+        }
+      ]
+    },
+    {
+      "tab": "style",
+      "section": "Main Frame",
+      "id": "background_color",
+      "type": "color",
+      "label": "Background",
+      "default": "#0d0e0f"
+    },
+    {
+      "tab": "style",
+      "section": "Main Frame",
+      "id": "frame_border_color",
+      "type": "color",
+      "label": "Frame Border",
+      "default": "rgba(255,255,255,.075)"
+    },
+    {
+      "tab": "style",
+      "section": "Main Frame",
+      "id": "frame_border_width",
+      "type": "slider",
+      "label": "Frame Border Width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": {
+        "size": 1,
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Main Frame",
+      "id": "frame_radius",
+      "type": "slider",
+      "label": "Frame Radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": {
+        "size": 16,
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Main Frame",
+      "id": "frame_height",
+      "type": "slider",
+      "label": "Frame Height",
+      "min": 300,
+      "max": 800,
+      "step": 1,
+      "unit": "px",
+      "default": {
+        "size": 450,
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Main Frame",
+      "id": "left_column_width",
+      "type": "slider",
+      "label": "Left Column Width",
+      "min": 25,
+      "max": 60,
+      "step": 1,
+      "unit": "%",
+      "default": {
+        "size": 40,
+        "unit": "%"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Tabs",
+      "id": "tab_padding",
+      "type": "dimensions",
+      "label": "Tab Padding",
+      "default": {
+        "top": "20",
+        "right": "22",
+        "bottom": "20",
+        "left": "22",
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Tabs",
+      "id": "tab_border_color",
+      "type": "color",
+      "label": "Tab Divider Color",
+      "default": "rgba(255,255,255,.075)"
+    },
+    {
+      "tab": "style",
+      "section": "Tabs",
+      "id": "active_background",
+      "type": "color",
+      "label": "Active Background",
+      "default": "rgba(255,255,255,.015)"
+    },
+    {
+      "tab": "style",
+      "section": "Tabs",
+      "id": "active_flex",
+      "type": "slider",
+      "label": "Active Tab Expansion",
+      "min": 1,
+      "max": 4,
+      "step": 0.05,
+      "unit": "",
+      "default": {
+        "size": 2.15,
+        "unit": ""
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Icon",
+      "id": "icon_size",
+      "type": "slider",
+      "label": "Icon Box Size",
+      "min": 24,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": {
+        "size": 40,
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Icon",
+      "id": "icon_radius",
+      "type": "slider",
+      "label": "Icon Radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": {
+        "size": 8,
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Icon",
+      "id": "icon_border",
+      "type": "color",
+      "label": "Icon Border",
+      "default": "rgba(255,255,255,.10)"
+    },
+    {
+      "tab": "style",
+      "section": "Icon",
+      "id": "icon_background",
+      "type": "color",
+      "label": "Icon Background",
+      "default": "rgba(255,255,255,.018)"
+    },
+    {
+      "tab": "style",
+      "section": "Icon",
+      "id": "icon_color",
+      "type": "color",
+      "label": "Icon Color",
+      "default": "#21d2ed"
+    },
+    {
+      "tab": "style",
+      "section": "Icon",
+      "id": "icon_stroke_width",
+      "type": "slider",
+      "label": "SVG Stroke Width",
+      "min": 0.5,
+      "max": 4,
+      "step": 0.1,
+      "unit": "",
+      "default": {
+        "size": 1.6,
+        "unit": ""
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Typography",
+      "id": "title_typography",
+      "type": "typography",
+      "label": "Title Typography"
+    },
+    {
+      "tab": "style",
+      "section": "Typography",
+      "id": "description_typography",
+      "type": "typography",
+      "label": "Description Typography"
+    },
+    {
+      "tab": "style",
+      "section": "Typography",
+      "id": "title_color",
+      "type": "color",
+      "label": "Title Color",
+      "default": "#eeeeee"
+    },
+    {
+      "tab": "style",
+      "section": "Typography",
+      "id": "title_hover_color",
+      "type": "color",
+      "label": "Title Hover Color",
+      "default": "#ffffff"
+    },
+    {
+      "tab": "style",
+      "section": "Typography",
+      "id": "description_color",
+      "type": "color",
+      "label": "Description Color",
+      "default": "#969698"
+    },
+    {
+      "tab": "style",
+      "section": "Dashboard",
+      "id": "display_padding",
+      "type": "dimensions",
+      "label": "Dashboard Area Padding",
+      "default": {
+        "top": "46",
+        "right": "42",
+        "bottom": "46",
+        "left": "42",
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Dashboard",
+      "id": "dashboard_width",
+      "type": "slider",
+      "label": "Dashboard Width",
+      "min": 60,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": {
+        "size": 86,
+        "unit": "%"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Dashboard",
+      "id": "dashboard_radius",
+      "type": "slider",
+      "label": "Dashboard Radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": {
+        "size": 4,
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Dashboard",
+      "id": "dashboard_border",
+      "type": "color",
+      "label": "Dashboard Border",
+      "default": "rgba(255,255,255,.07)"
+    },
+    {
+      "tab": "style",
+      "section": "Effects",
+      "id": "accent_color",
+      "type": "color",
+      "label": "Accent Cyan",
+      "default": "#21d2ed"
+    },
+    {
+      "tab": "style",
+      "section": "Effects",
+      "id": "atmosphere_opacity",
+      "type": "slider",
+      "label": "Atmosphere",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": {
+        "size": 100,
+        "unit": "%"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Effects",
+      "id": "hover_line_width",
+      "type": "slider",
+      "label": "Active Line Width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": {
+        "size": 2,
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Animation",
+      "id": "tab_animation",
+      "type": "slider",
+      "label": "Tab Animation",
+      "min": 300,
+      "max": 1500,
+      "step": 50,
+      "unit": "ms",
+      "default": {
+        "size": 800,
+        "unit": "ms"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Animation",
+      "id": "dashboard_animation",
+      "type": "slider",
+      "label": "Dashboard Animation",
+      "min": 300,
+      "max": 1500,
+      "step": 50,
+      "unit": "ms",
+      "default": {
+        "size": 900,
+        "unit": "ms"
+      }
+    }
+  ]
+}

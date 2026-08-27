@@ -1,0 +1,697 @@
+.verity-tabs {
+  --bg: var(--background_color);
+  --border: var(--frame_border_color);
+  --text: var(--title_color);
+  --muted: var(--description_color);
+  --cyan: var(--accent_color);
+
+  width: 100%;
+  box-sizing: border-box;
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  color: var(--text);
+}
+
+.verity-tabs,
+.verity-tabs *,
+.verity-tabs *::before,
+.verity-tabs *::after {
+  box-sizing: border-box;
+}
+
+.verity-tabs .vt-frame {
+  position: relative;
+  width: 100%;
+  min-height: var(--frame_height);
+
+  display: grid;
+  grid-template-columns:
+    var(--left_column_width)
+    calc(100% - var(--left_column_width));
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      75% 100% at 82% 52%,
+      rgba(0,205,235,.20) 0%,
+      rgba(0,150,180,.09) 28%,
+      rgba(0,0,0,0) 67%
+    ),
+    var(--bg);
+
+  border:
+    var(--frame_border_width)
+    solid
+    var(--border);
+
+  border-radius: var(--frame_radius);
+}
+
+.verity-tabs .vt-frame::after {
+  content: "";
+
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  right: 45px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,214,240,.15) 0%,
+      rgba(0,214,240,.06) 35%,
+      transparent 72%
+    );
+
+  filter: blur(35px);
+
+  opacity: calc(var(--atmosphere_opacity) / 100);
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+.verity-tabs .vt-list {
+  position: relative;
+  z-index: 5;
+
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  border-right: 1px solid var(--border);
+}
+
+.verity-tabs .vt-item {
+  position: relative;
+
+  min-height: 0;
+  min-width: 0;
+
+  flex: 1 1 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: 100%;
+  margin: 0;
+  padding: var(--tab_padding);
+
+  appearance: none;
+  text-align: left;
+
+  cursor: pointer;
+  overflow: hidden;
+
+  border: 0;
+  border-bottom: 1px solid var(--tab_border_color);
+
+  background: transparent;
+
+  color: inherit;
+  font: inherit;
+
+  white-space: normal;
+
+  transition:
+    flex-grow var(--tab_animation) cubic-bezier(.16,1,.3,1),
+    background-color 500ms ease;
+}
+
+.verity-tabs .vt-item:last-child {
+  border-bottom: 0;
+}
+
+.verity-tabs .vt-item.active {
+  flex-grow: var(--active_flex);
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--active_background),
+      rgba(255,255,255,.005)
+    );
+}
+
+.verity-tabs .vt-top {
+  display: grid;
+
+  grid-template-columns:
+    var(--icon_size)
+    minmax(0,1fr)
+    18px;
+
+  align-items: center;
+
+  column-gap: 16px;
+
+  width: 100%;
+  min-width: 0;
+}
+
+.verity-tabs .vt-icon {
+  width: var(--icon_size);
+  height: var(--icon_size);
+
+  flex: 0 0 var(--icon_size);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border: 1px solid var(--icon_border);
+  border-radius: var(--icon_radius);
+
+  background: var(--icon_background);
+  color: var(--icon_color);
+
+  transition:
+    border-color 400ms ease,
+    background-color 400ms ease,
+    transform 500ms cubic-bezier(.16,1,.3,1);
+}
+
+.verity-tabs .vt-icon i {
+  font-size: 16px;
+  line-height: 1;
+  color: currentColor;
+}
+
+.verity-tabs .vt-icon svg {
+  display: block;
+
+  width: 19px;
+  height: 19px;
+
+  max-width: 65%;
+  max-height: 65%;
+
+  fill: currentColor;
+
+  stroke: currentColor;
+  stroke-width: var(--icon_stroke_width);
+
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  overflow: visible;
+}
+
+.verity-tabs .vt-icon img,
+.verity-tabs .vt-icon .sc-icon-svg {
+  display: block;
+  width: 50%;
+  height: 50%;
+  max-width: 65%;
+  max-height: 65%;
+  object-fit: contain;
+}
+
+.verity-tabs .vt-item:hover .vt-icon,
+.verity-tabs .vt-item.active .vt-icon {
+  border-color: rgba(33,210,237,.25);
+  background: rgba(33,210,237,.025);
+}
+
+.verity-tabs .vt-item:hover .vt-icon {
+  transform: translateY(-1px);
+}
+
+.verity-tabs .vt-title {
+  min-width: 0;
+
+  color: var(--title_color);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.verity-tabs .vt-item:hover .vt-title {
+  color: var(--title_hover_color);
+}
+
+.verity-tabs .vt-arrow {
+  width: 18px;
+  height: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #eeeeee;
+
+  flex: 0 0 18px;
+
+  transition:
+    transform 600ms cubic-bezier(.16,1,.3,1),
+    opacity 300ms ease;
+}
+
+.verity-tabs .vt-arrow svg {
+  display: block;
+
+  width: 16px;
+  height: 16px;
+
+  fill: none;
+
+  stroke: currentColor;
+  stroke-width: 1.6;
+
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.verity-tabs .vt-item:hover .vt-arrow,
+.verity-tabs .vt-item.active .vt-arrow {
+  transform: translateX(3px);
+}
+
+/* DESCRIPTION — fixed so it wraps naturally */
+.verity-tabs .vt-description-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+
+  width: calc(100% - 56px);
+  max-width: calc(100% - 56px);
+
+  min-width: 0;
+
+  opacity: 0;
+  margin-left: 56px;
+
+  transition:
+    grid-template-rows 700ms cubic-bezier(.16,1,.3,1),
+    opacity 450ms ease 80ms,
+    margin-top 700ms cubic-bezier(.16,1,.3,1);
+}
+
+.verity-tabs .vt-item.active .vt-description-wrap {
+  grid-template-rows: 1fr;
+
+  opacity: 1;
+
+  margin-top: 18px;
+}
+
+.verity-tabs .vt-description-inner {
+  min-height: 0;
+  min-width: 0;
+
+  overflow: hidden;
+}
+
+.verity-tabs .vt-description {
+  display: block;
+
+  width: 100%;
+  max-width: 330px;
+
+  margin: 0;
+  padding: 0;
+
+  color: var(--description_color);
+
+  white-space: normal !important;
+  overflow: visible;
+
+  overflow-wrap: anywhere;
+  word-break: normal;
+
+  line-height: 1.55;
+}
+
+/* RIGHT SIDE */
+.verity-tabs .vt-display {
+  position: relative;
+
+  z-index: 2;
+
+  min-width: 0;
+  min-height: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  padding: var(--display_padding);
+}
+
+.verity-tabs .vt-display::before {
+  content: "";
+
+  position: absolute;
+
+  left: 10%;
+  right: 4%;
+
+  top: 0;
+  bottom: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0,206,232,.035) 35%,
+      rgba(0,206,232,.13) 72%,
+      rgba(0,206,232,.22) 100%
+    );
+
+  pointer-events: none;
+}
+
+.verity-tabs .vt-dashboard-stage {
+  position: relative;
+
+  width: var(--dashboard_width);
+  max-width: 540px;
+
+  aspect-ratio: 1.40588 / 1;
+
+  z-index: 3;
+}
+
+.verity-tabs .vt-dashboard {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transform:
+    translateY(12px)
+    scale(.985);
+
+  pointer-events: none;
+
+  transition:
+    opacity 650ms ease,
+    transform var(--dashboard_animation) cubic-bezier(.16,1,.3,1),
+    visibility 0s linear 650ms;
+}
+
+.verity-tabs .vt-dashboard.active {
+  opacity: 1;
+  visibility: visible;
+
+  transform:
+    translateY(0)
+    scale(1);
+
+  transition:
+    opacity 700ms ease 80ms,
+    transform var(--dashboard_animation) cubic-bezier(.16,1,.3,1),
+    visibility 0s linear 0s;
+}
+
+.verity-tabs .vt-dashboard img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  border:
+    1px solid
+    var(--dashboard_border);
+
+  border-radius: var(--dashboard_radius);
+
+  box-shadow:
+    0 25px 70px rgba(0,0,0,.35);
+}
+
+.verity-tabs .vt-dashboard::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(13,14,15,.28),
+      transparent 20%
+    );
+
+  border-radius: var(--dashboard_radius);
+}
+
+.verity-tabs .vt-item::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 0;
+
+  width: var(--hover_line_width);
+  height: 100%;
+
+  background: var(--cyan);
+
+  transform: scaleY(0);
+  transform-origin: center;
+
+  transition:
+    transform 500ms cubic-bezier(.16,1,.3,1);
+}
+
+.verity-tabs .vt-item:hover::before,
+.verity-tabs .vt-item.active::before {
+  transform: scaleY(1);
+}
+
+@media (max-width: 900px) {
+  .verity-tabs .vt-frame {
+    grid-template-columns: 42% 58%;
+    min-height: 420px;
+  }
+
+  .verity-tabs .vt-item {
+    padding: 17px;
+  }
+
+  .verity-tabs .vt-top {
+    grid-template-columns:
+      36px
+      minmax(0,1fr)
+      16px;
+
+    column-gap: 12px;
+  }
+
+  .verity-tabs .vt-icon {
+    width: 36px;
+    height: 36px;
+    flex-basis: 36px;
+  }
+
+  .verity-tabs .vt-icon svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .verity-tabs .vt-title {
+    font-size: 16px;
+  }
+
+  .verity-tabs .vt-description-wrap {
+    margin-left: 48px;
+    width: calc(100% - 48px);
+    max-width: calc(100% - 48px);
+  }
+
+  .verity-tabs .vt-description {
+    max-width: 100%;
+    font-size: 13px;
+  }
+
+  .verity-tabs .vt-display {
+    padding: 30px 20px;
+  }
+
+  .verity-tabs .vt-dashboard-stage {
+    width: 92%;
+  }
+}
+
+@media (max-width: 767px) {
+  .verity-tabs .vt-frame {
+    display: flex;
+    flex-direction: column;
+
+    min-height: 0;
+
+    border-radius: 14px;
+  }
+
+  .verity-tabs .vt-list {
+    width: 100%;
+    border-right: 0;
+  }
+
+  .verity-tabs .vt-item {
+    flex: 0 0 72px;
+    min-height: 72px;
+
+    padding: 15px 18px;
+  }
+
+  .verity-tabs .vt-item.active {
+    flex: 0 0 170px;
+  }
+
+  .verity-tabs .vt-top {
+    grid-template-columns:
+      38px
+      minmax(0,1fr)
+      18px;
+
+    column-gap: 13px;
+  }
+
+  .verity-tabs .vt-icon {
+    width: 38px;
+    height: 38px;
+    flex-basis: 38px;
+  }
+
+  .verity-tabs .vt-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .verity-tabs .vt-title {
+    font-size: 16px;
+  }
+
+  .verity-tabs .vt-description-wrap {
+    margin-left: 51px;
+
+    width: calc(100% - 51px);
+    max-width: calc(100% - 51px);
+  }
+
+  .verity-tabs .vt-item.active .vt-description-wrap {
+    margin-top: 13px;
+  }
+
+  .verity-tabs .vt-description {
+    width: 100%;
+    max-width: 100%;
+
+    font-size: 13px;
+    line-height: 1.45;
+
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+  }
+
+  .verity-tabs .vt-display {
+    min-height: 300px;
+    padding: 28px 15px;
+  }
+
+  .verity-tabs .vt-dashboard-stage {
+    width: 94%;
+  }
+
+  .verity-tabs .vt-frame::after {
+    right: -100px;
+    top: 65%;
+  }
+}
+
+@media (max-width: 480px) {
+  .verity-tabs .vt-item {
+    flex-basis: 65px;
+    min-height: 65px;
+
+    padding: 13px 15px;
+  }
+
+  .verity-tabs .vt-item.active {
+    flex-basis: 160px;
+  }
+
+  .verity-tabs .vt-top {
+    grid-template-columns:
+      34px
+      minmax(0,1fr)
+      16px;
+
+    column-gap: 11px;
+  }
+
+  .verity-tabs .vt-icon {
+    width: 34px;
+    height: 34px;
+    flex-basis: 34px;
+  }
+
+  .verity-tabs .vt-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .verity-tabs .vt-title {
+    font-size: 15px;
+  }
+
+  .verity-tabs .vt-description-wrap {
+    margin-left: 45px;
+
+    width: calc(100% - 45px);
+    max-width: calc(100% - 45px);
+  }
+
+  .verity-tabs .vt-description {
+    width: 100%;
+    max-width: 100%;
+
+    font-size: 12px;
+  }
+
+  .verity-tabs .vt-display {
+    min-height: 230px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .verity-tabs *,
+  .verity-tabs *::before,
+  .verity-tabs *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

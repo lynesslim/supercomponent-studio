@@ -1,0 +1,66 @@
+<section class="verity-tabs">
+  <div class="vt-frame">
+
+    <div class="vt-list">
+
+      {{#tabs}}
+      <button
+        class="vt-item"
+        type="button"
+        data-tab="{{tab_id}}"
+        aria-selected="false"
+      >
+
+        <div class="vt-top">
+
+          <div class="vt-icon">
+            {{{icon}}}
+          </div>
+
+          <div class="vt-title sc-title_typography">
+            {{title}}
+          </div>
+
+          <div class="vt-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+
+        </div>
+
+        <div class="vt-description-wrap">
+          <div class="vt-description-inner">
+            <p class="vt-description sc-description_typography">{{description}}</p>
+          </div>
+        </div>
+
+      </button>
+      {{/tabs}}
+
+    </div>
+
+    <div class="vt-display">
+
+      <div class="vt-dashboard-stage">
+
+        {{#tabs}}
+        <div
+          class="vt-dashboard"
+          data-dashboard="{{tab_id}}"
+          aria-hidden="true"
+        >
+          <img
+            src="{{dashboard_image.url}}"
+            alt="{{alt}}"
+            loading="lazy"
+          >
+        </div>
+        {{/tabs}}
+
+      </div>
+
+    </div>
+
+  </div>
+</section>

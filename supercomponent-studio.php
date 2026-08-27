@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SuperComponent Studio
  * Description: Real-time, schema-driven custom component runtime for Elementor. Paste HTML, CSS, JS, and JSON schemas to build widgets instantly.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: Supercraft
  * Text Domain: supercomponent-studio
  */
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 final class SuperComponent_Studio {
 
-	const VERSION = '1.0.2';
+	const VERSION = '1.0.3';
 	const MINIMUM_ELEMENTOR_VERSION = '3.0.0';
 	const MINIMUM_PHP_VERSION = '7.4';
 
