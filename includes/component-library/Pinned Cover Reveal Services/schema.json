@@ -1,0 +1,350 @@
+{
+  "id": "pinned-cover-reveal-services",
+  "name": "Pinned Cover-Reveal Services Showcase",
+  "settings": [
+    {
+      "tab": "content",
+      "section": "Header & Labels",
+      "id": "show_top_bar",
+      "type": "switcher",
+      "label": "Show Top Bar",
+      "default": "yes"
+    },
+    {
+      "tab": "content",
+      "section": "Header & Labels",
+      "id": "top_badge_num",
+      "type": "text",
+      "label": "Top Badge Number",
+      "default": "03"
+    },
+    {
+      "tab": "content",
+      "section": "Header & Labels",
+      "id": "top_badge_text",
+      "type": "text",
+      "label": "Top Badge Text",
+      "default": "CORE SERVICES"
+    },
+    {
+      "tab": "content",
+      "section": "Header & Labels",
+      "id": "top_next_text",
+      "type": "text",
+      "label": "Top Next Text",
+      "default": "NEXT ↗"
+    },
+    {
+      "tab": "content",
+      "section": "Header & Labels",
+      "id": "treatment_section_label",
+      "type": "text",
+      "label": "Treatments Label",
+      "default": "TREATMENTS"
+    },
+    {
+      "tab": "content",
+      "section": "Header & Labels",
+      "id": "button_default_text",
+      "type": "text",
+      "label": "Button Default Text",
+      "default": "LEARN MORE"
+    },
+    {
+      "tab": "content",
+      "section": "Services List",
+      "id": "services_list",
+      "type": "repeater",
+      "label": "Services Slides",
+      "title_field": "{{{ service_title }}}",
+      "fields": [
+        {
+          "id": "service_title",
+          "type": "text",
+          "label": "Service Title",
+          "default": "Restorative Dentistry"
+        },
+        {
+          "id": "service_intro",
+          "type": "textarea",
+          "label": "Intro Paragraph",
+          "default": "Proactive dental care focused on prevention, protection, and long-term stability."
+        },
+        {
+          "id": "service_treatments",
+          "type": "textarea",
+          "label": "Treatments List (One per line)",
+          "default": "Preventive Dental Assessment\nProfessional Hygiene Therapy\nLong-Term Maintenance Plans"
+        },
+        {
+          "id": "is_video",
+          "type": "switcher",
+          "label": "Use Video Instead of Image",
+          "default": ""
+        },
+        {
+          "id": "service_image",
+          "type": "image",
+          "label": "Visual Image / Video Poster",
+          "default": {
+            "url": "https://framerusercontent.com/images/h5ZGA7cWwEIU9AAaa5AzVJ8WY.png?width=1254&height=1254"
+          }
+        },
+        {
+          "id": "service_video",
+          "type": "video",
+          "label": "Choose Video from Media",
+          "default": {
+            "url": ""
+          }
+        },
+        {
+          "id": "service_link",
+          "type": "url",
+          "label": "Service Link",
+          "default": {
+            "url": "#",
+            "is_external": false
+          }
+        }
+      ],
+      "default": [
+        {
+          "service_title": "Restorative Dentistry",
+          "service_intro": "Proactive dental care focused on prevention, protection, and long-term stability.",
+          "service_treatments": "Preventive Dental Assessment\nProfessional Hygiene Therapy\nLong-Term Maintenance Plans",
+          "is_video": "",
+          "service_image": {
+            "url": "https://framerusercontent.com/images/h5ZGA7cWwEIU9AAaa5AzVJ8WY.png?width=1254&height=1254"
+          },
+          "service_video": {
+            "url": ""
+          },
+          "service_link": {
+            "url": "#",
+            "is_external": false
+          }
+        },
+        {
+          "service_title": "Cosmetic Artistry",
+          "service_intro": "Refined cosmetic treatments designed to create natural, balanced, and confident smiles.",
+          "service_treatments": "Elite Laser Teeth Whitening\nBespoke Composite Artistry\nFull Mouth Aesthetic Harmony",
+          "is_video": "",
+          "service_image": {
+            "url": "https://framerusercontent.com/images/o2KbqwVSdlJYhZ6aNq6Fqpqm1M.png?width=1254&height=1254"
+          },
+          "service_video": {
+            "url": ""
+          },
+          "service_link": {
+            "url": "#",
+            "is_external": false
+          }
+        },
+        {
+          "service_title": "Orthodontic Care",
+          "service_intro": "Thoughtful orthodontic solutions focused on alignment, function, comfort, and lasting results.",
+          "service_treatments": "Clear Aligner Treatment\nAdvanced Orthodontic Planning\nBite & Alignment Correction",
+          "is_video": "",
+          "service_image": {
+            "url": "https://framerusercontent.com/images/tk9Kwu6R3GBhlGnJrxMk2Uex0s.png?width=1254&height=1254"
+          },
+          "service_video": {
+            "url": ""
+          },
+          "service_link": {
+            "url": "#",
+            "is_external": false
+          }
+        },
+        {
+          "service_title": "Preventive Protocols",
+          "service_intro": "Proactive dental protocols built around prevention, protection, and long-term oral health.",
+          "service_treatments": "Preventive Dental Assessment\nProfessional Hygiene Therapy\nLong-Term Maintenance Plans",
+          "is_video": "",
+          "service_image": {
+            "url": "https://framerusercontent.com/images/SHzfQRFGYAf9ox2r1iCwVGkPhJA.png?width=1254&height=1254"
+          },
+          "service_video": {
+            "url": ""
+          },
+          "service_link": {
+            "url": "#",
+            "is_external": false
+          }
+        },
+        {
+          "service_title": "Oral Surgery",
+          "service_intro": "Precise surgical care delivered with a calm, considered approach and patient-first attention.",
+          "service_treatments": "Complex Wisdom Tooth Extraction\nSurgical Dental Procedures\nPost-Operative Care",
+          "is_video": "",
+          "service_image": {
+            "url": "https://framerusercontent.com/images/w4S8BcgZwVWtcZAiSeHzkbqWNg.png?width=1254&height=1254"
+          },
+          "service_video": {
+            "url": ""
+          },
+          "service_link": {
+            "url": "#",
+            "is_external": false
+          }
+        }
+      ]
+    },
+    {
+      "tab": "content",
+      "section": "Video Settings",
+      "id": "video_autoplay",
+      "type": "switcher",
+      "label": "Autoplay Video",
+      "default": "yes"
+    },
+    {
+      "tab": "content",
+      "section": "Video Settings",
+      "id": "video_loop",
+      "type": "switcher",
+      "label": "Loop Video",
+      "default": "yes"
+    },
+    {
+      "tab": "content",
+      "section": "Video Settings",
+      "id": "video_muted",
+      "type": "switcher",
+      "label": "Mute Video",
+      "description": "Required for autoplay on iOS, Android, and modern desktop browsers.",
+      "default": "yes"
+    },
+    {
+      "tab": "content",
+      "section": "Video Settings",
+      "id": "video_playsinline",
+      "type": "switcher",
+      "label": "Play Inline on Mobile",
+      "description": "Plays inline inside the showcase without forcing fullscreen on mobile devices.",
+      "default": "yes"
+    },
+    {
+      "tab": "content",
+      "section": "Video Settings",
+      "id": "video_controls",
+      "type": "switcher",
+      "label": "Show Video Controls",
+      "default": ""
+    },
+    {
+      "tab": "style",
+      "section": "Scroll & Layout",
+      "id": "bg_color",
+      "type": "color",
+      "label": "Background Color",
+      "default": "#393939"
+    },
+    {
+      "tab": "style",
+      "section": "Scroll & Layout",
+      "id": "scroll_track_height",
+      "type": "slider",
+      "label": "Scroll Track Height (vh)",
+      "min": 200,
+      "max": 1000,
+      "step": 50,
+      "unit": "vh",
+      "default": {
+        "size": 500,
+        "unit": "vh"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Scroll & Layout",
+      "id": "min_pin_height",
+      "type": "slider",
+      "label": "Min Pinned View Height",
+      "min": 400,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": {
+        "size": 680,
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Colors & Themes",
+      "id": "text_primary_color",
+      "type": "color",
+      "label": "Primary Text / White",
+      "default": "#f3f1ed"
+    },
+    {
+      "tab": "style",
+      "section": "Colors & Themes",
+      "id": "text_muted_color",
+      "type": "color",
+      "label": "Muted Text Color",
+      "default": "rgba(243, 241, 237, 0.48)"
+    },
+    {
+      "tab": "style",
+      "section": "Colors & Themes",
+      "id": "progress_bg_color",
+      "type": "color",
+      "label": "Progress Track Color",
+      "default": "rgba(243, 241, 237, 0.15)"
+    },
+    {
+      "tab": "style",
+      "section": "Typography",
+      "id": "title_typography",
+      "type": "typography",
+      "label": "Title Typography"
+    },
+    {
+      "tab": "style",
+      "section": "Typography",
+      "id": "intro_typography",
+      "type": "typography",
+      "label": "Intro Typography"
+    },
+    {
+      "tab": "style",
+      "section": "Typography",
+      "id": "treatment_typography",
+      "type": "typography",
+      "label": "Treatments Typography"
+    },
+    {
+      "tab": "style",
+      "section": "Typography",
+      "id": "number_typography",
+      "type": "typography",
+      "label": "Counter Typography"
+    },
+    {
+      "tab": "style",
+      "section": "Learn More Button",
+      "id": "button_border_color",
+      "type": "color",
+      "label": "Button Border Color",
+      "default": "rgba(243, 241, 237, 0.42)"
+    },
+    {
+      "tab": "style",
+      "section": "Learn More Button",
+      "id": "button_radius",
+      "type": "slider",
+      "label": "Button Border Radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": {
+        "size": 100,
+        "unit": "px"
+      }
+    }
+  ]
+}

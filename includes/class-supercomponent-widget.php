@@ -248,8 +248,8 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 
 			$group_key = $tab . '||' . $section_label;
 
-			// Elementor's image, url, and dimensions controls require an array default value
-			$array_types = [ 'image', 'url', 'dimensions' ];
+			// Elementor's image, video, media, url, and dimensions controls require an array default value
+			$array_types = [ 'image', 'video', 'media', 'url', 'dimensions' ];
 			$default_fallback = in_array( $control['type'], $array_types, true ) ? [] : '';
 
 			$scoped_control_id = 'sc_' . $schema_id_clean . '_' . $control['id'];
@@ -325,6 +325,15 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 					break;
 
 				case 'image':
+				case 'video':
+				case 'media':
+					if ( 'video' === $control['type'] ) {
+						$control_args['media_type'] = 'video';
+					} elseif ( isset( $control['media_type'] ) ) {
+						$control_args['media_type'] = $control['media_type'];
+					}
+					break;
+
 				case 'url':
 				case 'dimensions':
 				case 'typography':
@@ -344,7 +353,7 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 								continue;
 							}
 							
-							$field_array_types = [ 'image', 'url', 'dimensions', 'icons', 'icon' ];
+							$field_array_types = [ 'image', 'video', 'media', 'url', 'dimensions', 'icons', 'icon' ];
 							$field_default_fallback = in_array( $field['type'], $field_array_types, true ) ? [] : '';
 
 							$field_args = [
@@ -352,6 +361,11 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 								'type'    => $field_type,
 								'default' => isset( $field['default'] ) ? $field['default'] : $field_default_fallback,
 							];
+							if ( 'video' === $field['type'] ) {
+								$field_args['media_type'] = 'video';
+							} elseif ( isset( $field['media_type'] ) ) {
+								$field_args['media_type'] = $field['media_type'];
+							}
 							if ( isset( $field['description'] ) ) {
 								$field_args['description'] = $field['description'];
 							}
@@ -448,6 +462,8 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 			'textarea'    => \Elementor\Controls_Manager::TEXTAREA,
 			'richtext'    => \Elementor\Controls_Manager::WYSIWYG,
 			'image'       => \Elementor\Controls_Manager::MEDIA,
+			'video'       => \Elementor\Controls_Manager::MEDIA,
+			'media'       => \Elementor\Controls_Manager::MEDIA,
 			'url'         => \Elementor\Controls_Manager::URL,
 			'color'       => \Elementor\Controls_Manager::COLOR,
 			'slider'      => \Elementor\Controls_Manager::SLIDER,

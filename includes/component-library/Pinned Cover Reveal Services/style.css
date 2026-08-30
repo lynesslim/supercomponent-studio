@@ -1,0 +1,644 @@
+.dentea-core {
+    --bg: var(--bg_color, #393939);
+    --white: var(--text_primary_color, #f3f1ed);
+    --muted: var(--text_muted_color, rgba(243, 241, 237, 0.48));
+    --line: var(--progress_bg_color, rgba(243, 241, 237, 0.15));
+
+    position: relative;
+    width: 100%;
+    background: var(--bg);
+    color: var(--white);
+    overflow: clip;
+    isolation: isolate;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.dentea-core *,
+.dentea-core *::before,
+.dentea-core *::after {
+    box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------
+   SCROLL LENGTH & PINNED VIEW
+--------------------------------------------------------- */
+
+.dentea-core .dentea-core-track {
+    position: relative;
+    height: var(--scroll_track_height, 500vh);
+}
+
+.dentea-core .dentea-core-pin {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100svh;
+    min-height: var(--min_pin_height, 680px);
+    overflow: hidden;
+    isolation: isolate;
+}
+
+/* ---------------------------------------------------------
+   TOP BAR
+--------------------------------------------------------- */
+
+.dentea-core .dentea-core-top {
+    position: absolute;
+    z-index: 100;
+    top: 24px;
+    left: 2.6%;
+    right: 2.6%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.dentea-core .dentea-core-label {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.dentea-core .dentea-core-next {
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+/* ---------------------------------------------------------
+   MAIN GRID (DESKTOP)
+--------------------------------------------------------- */
+
+.dentea-core .dentea-core-layout {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 29% 31% 40%;
+    padding: 84px 0 38px;
+}
+
+/* ---------------------------------------------------------
+   LEFT INTRO
+--------------------------------------------------------- */
+
+.dentea-core .dentea-core-intro {
+    position: relative;
+    z-index: 40;
+    padding-left: 2.6%;
+    padding-right: 8%;
+    display: flex;
+    align-items: flex-start;
+}
+
+.dentea-core .dentea-core-intro-text {
+    width: 100%;
+    max-width: 470px;
+    margin: 0;
+    font-family: "Times New Roman", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(27px, 2.45vw, 48px);
+    line-height: 0.94;
+    letter-spacing: -0.038em;
+    color: var(--muted);
+    transition: opacity 0.4s ease, transform 0.65s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.dentea-core .dentea-core-intro-text.change {
+    opacity: 0;
+    transform: translateY(-12px);
+}
+
+/* ---------------------------------------------------------
+   CENTER CONTENT
+--------------------------------------------------------- */
+
+.dentea-core .dentea-core-copy {
+    position: relative;
+    z-index: 50;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 4% 0 0;
+}
+
+.dentea-core .dentea-core-copy-inner {
+    width: 100%;
+    max-width: 590px;
+}
+
+.dentea-core .dentea-core-title {
+    position: relative;
+    margin: 0 0 68px;
+    font-family: "Times New Roman", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(55px, 5.7vw, 110px);
+    line-height: 0.78;
+    letter-spacing: -0.065em;
+    color: var(--white);
+    white-space: nowrap;
+    transition: opacity 0.35s ease, transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.dentea-core .dentea-core-title.change {
+    opacity: 0;
+    transform: translateY(-22px);
+}
+
+.dentea-core .dentea-core-treatment-label {
+    margin-bottom: 21px;
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+}
+
+.dentea-core .dentea-core-treatments {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    margin-bottom: 28px;
+}
+
+.dentea-core .dentea-core-treatment {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    max-width: 100%;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: var(--white);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.dentea-core .dentea-core-treatment:hover {
+    transform: translateX(5px);
+}
+
+.dentea-core .dentea-core-arrow {
+    margin-left: 5px;
+}
+
+/* ---------------------------------------------------------
+   LEARN MORE BUTTON
+--------------------------------------------------------- */
+
+.dentea-core .dentea-core-learn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border: 1px solid var(--button_border_color, rgba(243, 241, 237, 0.42));
+    border-radius: var(--button_radius, 100px);
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.dentea-core .dentea-core-learn:hover {
+    background: var(--white);
+    color: var(--bg);
+    border-color: var(--white);
+}
+
+/* ---------------------------------------------------------
+   RIGHT IMAGE & VIDEO VISUAL WINDOW
+--------------------------------------------------------- */
+
+.dentea-core .dentea-core-visual {
+    position: relative;
+    z-index: 20;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.dentea-core .dentea-core-image-window {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 122px);
+    max-height: 850px;
+    overflow: hidden;
+    background: #222222;
+}
+
+.dentea-core .dentea-core-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    opacity: 0;
+    z-index: 1;
+    clip-path: inset(100% 0 0 0);
+    will-change: clip-path, transform, opacity;
+    transform: scale(1.035);
+    transition: none;
+}
+
+.dentea-core .dentea-core-image img,
+.dentea-core .dentea-core-image video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform: scale(1.04);
+    will-change: transform;
+    user-select: none;
+}
+
+.dentea-core .dentea-core-image img {
+    pointer-events: none;
+}
+
+/* ---------------------------------------------------------
+   NUMBER & PROGRESS BAR
+--------------------------------------------------------- */
+
+.dentea-core .dentea-core-number {
+    position: absolute;
+    z-index: 100;
+    left: 2.6%;
+    bottom: 28px;
+    font-family: "Times New Roman", Georgia, serif;
+    font-size: clamp(65px, 6.2vw, 105px);
+    line-height: 0.75;
+    letter-spacing: -0.04em;
+    color: var(--white);
+    pointer-events: none;
+}
+
+.dentea-core .dentea-core-number span {
+    display: inline-block;
+    min-width: 1.1em;
+    transition: opacity 0.35s ease, transform 0.45s ease;
+}
+
+.dentea-core .dentea-core-progress {
+    position: absolute;
+    z-index: 100;
+    left: 29%;
+    right: 40%;
+    bottom: 32px;
+    height: 1px;
+    background: var(--line);
+}
+
+.dentea-core .dentea-core-progress-bar {
+    width: 0%;
+    height: 100%;
+    background: var(--white);
+    transform-origin: left center;
+}
+
+/* ---------------------------------------------------------
+   TABLET RESPONSIVE (768px - 1024px)
+--------------------------------------------------------- */
+
+@media (max-width: 1024px) and (min-width: 768px) {
+    .dentea-core .dentea-core-layout {
+        grid-template-columns: 28% 34% 38%;
+        padding: 76px 2.5% 42px;
+    }
+
+    .dentea-core .dentea-core-intro {
+        padding-right: 6%;
+    }
+
+    .dentea-core .dentea-core-intro-text {
+        font-size: clamp(20px, 2.8vw, 32px);
+        line-height: 1.0;
+    }
+
+    .dentea-core .dentea-core-title {
+        margin: 0 0 32px;
+        font-size: clamp(38px, 4.8vw, 62px);
+        line-height: 0.88;
+        white-space: normal;
+        word-break: break-word;
+    }
+
+    .dentea-core .dentea-core-treatments {
+        gap: 10px;
+        margin-bottom: 22px;
+    }
+
+    .dentea-core .dentea-core-treatment {
+        font-size: 11px;
+    }
+
+    .dentea-core .dentea-core-number {
+        font-size: clamp(48px, 5.8vw, 70px);
+        bottom: 22px;
+    }
+
+    .dentea-core .dentea-core-progress {
+        left: 28%;
+        right: 38%;
+        bottom: 26px;
+    }
+}
+
+/* ---------------------------------------------------------
+   MOBILE RESPONSIVE (<= 767px)
+--------------------------------------------------------- */
+
+@media (max-width: 767px) {
+    .dentea-core .dentea-core-pin {
+        height: 100vh;
+        height: 100svh;
+        height: 100dvh;
+        min-height: 540px;
+    }
+
+    .dentea-core .dentea-core-top {
+        top: 14px;
+        left: 18px;
+        right: 18px;
+        height: 30px;
+    }
+
+    .dentea-core .dentea-core-label,
+    .dentea-core .dentea-core-next {
+        font-size: 10px;
+    }
+
+    .dentea-core .dentea-core-layout {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 50px 18px 52px;
+        gap: 10px;
+    }
+
+    /* Top: Intro */
+    .dentea-core .dentea-core-intro {
+        flex: 0 0 auto;
+        padding: 0;
+        display: block;
+        z-index: 50;
+    }
+
+    .dentea-core .dentea-core-intro-text {
+        max-width: 100%;
+        font-size: clamp(17px, 4.4vw, 24px);
+        line-height: 1.05;
+        letter-spacing: -0.025em;
+    }
+
+    /* Middle: Visual Window */
+    .dentea-core .dentea-core-visual {
+        order: 2;
+        flex: 1 1 auto;
+        width: 100%;
+        min-height: 160px;
+        max-height: 38vh;
+        margin: 0;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .dentea-core .dentea-core-image-window {
+        width: 100%;
+        height: 100%;
+        min-height: 160px;
+        max-height: none;
+        border-radius: 8px;
+    }
+
+    /* Bottom: Copy */
+    .dentea-core .dentea-core-copy {
+        order: 3;
+        flex: 0 0 auto;
+        display: block;
+        padding: 0;
+        z-index: 60;
+    }
+
+    .dentea-core .dentea-core-copy-inner {
+        max-width: 100%;
+    }
+
+    .dentea-core .dentea-core-title {
+        margin: 0 0 6px;
+        font-size: clamp(26px, 7.8vw, 42px);
+        line-height: 0.85;
+        white-space: normal;
+    }
+
+    .dentea-core .dentea-core-treatment-label {
+        margin-bottom: 6px;
+        font-size: 9px;
+    }
+
+    .dentea-core .dentea-core-treatments {
+        gap: 5px;
+        margin-bottom: 12px;
+    }
+
+    .dentea-core .dentea-core-treatment {
+        font-size: 10px;
+        line-height: 1.2;
+    }
+
+    .dentea-core .dentea-core-learn {
+        padding: 7px 14px;
+        font-size: 9px;
+    }
+
+    /* Bottom Bar Controls */
+    .dentea-core .dentea-core-number {
+        left: auto;
+        right: 18px;
+        bottom: 12px;
+        font-size: clamp(34px, 8.5vw, 48px);
+        line-height: 1;
+    }
+
+    .dentea-core .dentea-core-progress {
+        left: 18px;
+        right: 76px;
+        bottom: 22px;
+        height: 2px;
+    }
+}
+
+/* ---------------------------------------------------------
+   SMALL MOBILE RESPONSIVE (<= 430px)
+--------------------------------------------------------- */
+
+@media (max-width: 430px) {
+    .dentea-core .dentea-core-pin {
+        min-height: 480px;
+    }
+
+    .dentea-core .dentea-core-layout {
+        padding: 44px 14px 44px;
+        gap: 8px;
+    }
+
+    .dentea-core .dentea-core-intro-text {
+        font-size: 16px;
+        line-height: 1.08;
+    }
+
+    .dentea-core .dentea-core-visual {
+        min-height: 140px;
+        max-height: 34vh;
+    }
+
+    .dentea-core .dentea-core-title {
+        font-size: clamp(23px, 7vw, 30px);
+        margin-bottom: 4px;
+    }
+
+    .dentea-core .dentea-core-treatment-label {
+        margin-bottom: 4px;
+        font-size: 8px;
+    }
+
+    .dentea-core .dentea-core-treatments {
+        gap: 4px;
+        margin-bottom: 9px;
+    }
+
+    .dentea-core .dentea-core-treatment {
+        font-size: 9px;
+    }
+
+    .dentea-core .dentea-core-learn {
+        padding: 6px 12px;
+        font-size: 8.5px;
+    }
+
+    .dentea-core .dentea-core-number {
+        right: 14px;
+        bottom: 10px;
+        font-size: 32px;
+    }
+
+    .dentea-core .dentea-core-progress {
+        left: 14px;
+        right: 60px;
+        bottom: 18px;
+    }
+}
+
+/* ---------------------------------------------------------
+   EXTRA SMALL MOBILE (<= 360px)
+--------------------------------------------------------- */
+
+@media (max-width: 360px) {
+    .dentea-core .dentea-core-pin {
+        min-height: 440px;
+    }
+
+    .dentea-core .dentea-core-layout {
+        padding: 40px 12px 40px;
+        gap: 6px;
+    }
+
+    .dentea-core .dentea-core-intro-text {
+        font-size: 14px;
+    }
+
+    .dentea-core .dentea-core-visual {
+        min-height: 120px;
+        max-height: 30vh;
+    }
+
+    .dentea-core .dentea-core-title {
+        font-size: 21px;
+    }
+}
+
+/* ---------------------------------------------------------
+   LANDSCAPE MOBILE (< 500px height)
+--------------------------------------------------------- */
+
+@media (max-height: 500px) and (orientation: landscape) {
+    .dentea-core .dentea-core-pin {
+        min-height: 100vh;
+    }
+
+    .dentea-core .dentea-core-layout {
+        display: grid;
+        grid-template-columns: 32% 38% 30%;
+        padding: 40px 16px 24px;
+        gap: 12px;
+    }
+
+    .dentea-core .dentea-core-visual {
+        order: unset;
+        max-height: none;
+        height: 100%;
+    }
+
+    .dentea-core .dentea-core-intro-text {
+        font-size: 16px;
+    }
+
+    .dentea-core .dentea-core-title {
+        font-size: 24px;
+        margin-bottom: 8px;
+    }
+
+    .dentea-core .dentea-core-treatments {
+        gap: 3px;
+        margin-bottom: 8px;
+    }
+
+    .dentea-core .dentea-core-number {
+        font-size: 32px;
+        bottom: 8px;
+        right: 16px;
+    }
+
+    .dentea-core .dentea-core-progress {
+        left: 16px;
+        right: 60px;
+        bottom: 14px;
+    }
+}
+
+/* ---------------------------------------------------------
+   ACCESSIBILITY & REDUCED MOTION
+--------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    .dentea-core .dentea-core-image,
+    .dentea-core .dentea-core-image img,
+    .dentea-core .dentea-core-image video,
+    .dentea-core .dentea-core-title,
+    .dentea-core .dentea-core-intro-text {
+        transition: none !important;
+    }
+}

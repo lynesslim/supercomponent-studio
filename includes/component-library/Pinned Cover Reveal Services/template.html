@@ -1,0 +1,109 @@
+<section class="dentea-core" data-instance-id="{{instanceId}}"
+    data-video-autoplay="{{video_autoplay}}"
+    data-video-loop="{{video_loop}}"
+    data-video-muted="{{video_muted}}"
+    data-video-playsinline="{{video_playsinline}}"
+    data-video-controls="{{video_controls}}"
+>
+    <!-- Hidden dynamic data store for JS reactive sync -->
+    <div class="dentea-core-data-source" style="display: none;">
+        {{#services_list}}
+        <div 
+            class="dentea-core-data-item"
+            data-title="{{service_title}}"
+            data-intro="{{service_intro}}"
+            data-treatments="{{service_treatments}}"
+            data-link="{{service_link.url}}"
+            data-target="{{#service_link.is_external}}_blank{{/service_link.is_external}}{{^service_link.is_external}}_self{{/service_link.is_external}}"
+            data-is-video="{{is_video}}"
+            data-video-url="{{service_video.url}}"
+            data-image-url="{{service_image.url}}"
+        ></div>
+        {{/services_list}}
+    </div>
+
+    <div class="dentea-core-track">
+        <div class="dentea-core-pin">
+
+            <!-- TOP BAR -->
+            {{#show_top_bar}}
+            <div class="dentea-core-top">
+                <div class="dentea-core-label">
+                    <span>{{top_badge_num}}</span>
+                    <span>{{top_badge_text}}</span>
+                </div>
+                <div class="dentea-core-next">
+                    {{top_next_text}}
+                </div>
+            </div>
+            {{/show_top_bar}}
+
+            <!-- FIXED LAYOUT -->
+            <div class="dentea-core-layout">
+
+                <!-- LEFT INTRO -->
+                <div class="dentea-core-intro">
+                    <p class="dentea-core-intro-text sc-intro_typography" id="denteaCoreIntro-{{instanceId}}"></p>
+                </div>
+
+                <!-- CENTER COPY -->
+                <div class="dentea-core-copy">
+                    <div class="dentea-core-copy-inner">
+                        <h2 class="dentea-core-title sc-title_typography" id="denteaCoreTitle-{{instanceId}}"></h2>
+
+                        <div class="dentea-core-treatment-label">
+                            {{treatment_section_label}}
+                        </div>
+
+                        <div class="dentea-core-treatments" id="denteaCoreTreatments-{{instanceId}}"></div>
+
+                        <a href="#" class="dentea-core-learn" id="denteaCoreLearn-{{instanceId}}">
+                            {{button_default_text}}
+                            <span>→</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- RIGHT IMAGE / VIDEO VISUAL WINDOW -->
+                <div class="dentea-core-visual">
+                    <div class="dentea-core-image-window" id="denteaCoreImageWindow-{{instanceId}}">
+                        {{#services_list}}
+                        <div class="dentea-core-image" data-slide-index="{{@index}}">
+                            {{#is_video}}
+                            <video 
+                                src="{{service_video.url}}" 
+                                poster="{{service_image.url}}"
+                                playsinline 
+                                webkit-playsinline 
+                                muted 
+                                loop 
+                                preload="auto"
+                            >
+                                {{#service_image.url}}
+                                <img src="{{service_image.url}}" alt="{{service_title}}">
+                                {{/service_image.url}}
+                            </video>
+                            {{/is_video}}
+                            {{^is_video}}
+                            <img src="{{service_image.url}}" alt="{{service_title}}">
+                            {{/is_video}}
+                        </div>
+                        {{/services_list}}
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- NUMBER COUNTER -->
+            <div class="dentea-core-number sc-number_typography">
+                <span id="denteaCoreNumber-{{instanceId}}">01</span>
+            </div>
+
+            <!-- PROGRESS BAR -->
+            <div class="dentea-core-progress">
+                <div class="dentea-core-progress-bar" id="denteaCoreProgress-{{instanceId}}"></div>
+            </div>
+
+        </div>
+    </div>
+</section>

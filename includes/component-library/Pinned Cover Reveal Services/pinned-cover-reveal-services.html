@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinned Cover-Reveal Services Showcase</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #222;
+            color: #f3f1ed;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .dentea-core {
+            --bg: var(--bg_color, #393939);
+            --white: var(--text_primary_color, #f3f1ed);
+            --muted: var(--text_muted_color, rgba(243, 241, 237, 0.48));
+            --line: var(--progress_bg_color, rgba(243, 241, 237, 0.15));
+
+            position: relative;
+            width: 100%;
+            background: var(--bg);
+            color: var(--white);
+            overflow: clip;
+            isolation: isolate;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        .dentea-core *,
+        .dentea-core *::before,
+        .dentea-core *::after {
+            box-sizing: border-box;
+        }
+
+        /* SCROLL LENGTH & PINNED VIEW */
+        .dentea-core .dentea-core-track {
+            position: relative;
+            height: var(--scroll_track_height, 500vh);
+        }
+
+        .dentea-core .dentea-core-pin {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            height: 100svh;
+            min-height: var(--min_pin_height, 680px);
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        /* TOP BAR */
+        .dentea-core .dentea-core-top {
+            position: absolute;
+            z-index: 100;
+            top: 24px;
+            left: 2.6%;
+            right: 2.6%;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+
+        .dentea-core .dentea-core-label {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.045em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .dentea-core .dentea-core-next {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        /* MAIN GRID */
+        .dentea-core .dentea-core-layout {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            grid-template-columns: 29% 31% 40%;
+            padding: 84px 0 38px;
+        }
+
+        /* LEFT INTRO */
+        .dentea-core .dentea-core-intro {
+            position: relative;
+            z-index: 40;
+            padding-left: 2.6%;
+            padding-right: 8%;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .dentea-core .dentea-core-intro-text {
+            width: 100%;
+            max-width: 470px;
+            margin: 0;
+            font-family: 'Playfair Display', "Times New Roman", Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: clamp(27px, 2.45vw, 48px);
+            line-height: 0.94;
+            letter-spacing: -0.038em;
+            color: var(--muted);
+            transition: opacity 0.4s ease, transform 0.65s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        .dentea-core .dentea-core-intro-text.change {
+            opacity: 0;
+            transform: translateY(-12px);
+        }
+
+        /* CENTER CONTENT */
+        .dentea-core .dentea-core-copy {
+            position: relative;
+            z-index: 50;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            padding: 0 4% 0 0;
+        }
+
+        .dentea-core .dentea-core-copy-inner {
+            width: 100%;
+            max-width: 590px;
+        }
+
+        .dentea-core .dentea-core-title {
+            position: relative;
+            margin: 0 0 68px;
+            font-family: 'Playfair Display', "Times New Roman", Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: clamp(55px, 5.7vw, 110px);
+            line-height: 0.78;
+            letter-spacing: -0.065em;
+            color: var(--white);
+            white-space: nowrap;
+            transition: opacity 0.35s ease, transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        .dentea-core .dentea-core-title.change {
+            opacity: 0;
+            transform: translateY(-22px);
+        }
+
+        .dentea-core .dentea-core-treatment-label {
+            margin-bottom: 21px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            color: var(--muted);
+        }
+
+        .dentea-core .dentea-core-treatments {
+            display: flex;
+            flex-direction: column;
+            gap: 13px;
+            margin-bottom: 28px;
+        }
+
+        .dentea-core .dentea-core-treatment {
+            display: flex;
+            align-items: center;
+            width: max-content;
+            max-width: 100%;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
+            color: var(--white);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .dentea-core .dentea-core-treatment:hover {
+            transform: translateX(5px);
+        }
+
+        .dentea-core .dentea-core-arrow {
+            margin-left: 5px;
+        }
+
+        /* LEARN MORE BUTTON */
+        .dentea-core .dentea-core-learn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            border: 1px solid var(--button_border_color, rgba(243, 241, 237, 0.42));
+            border-radius: var(--button_radius, 100px);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.045em;
+            text-transform: uppercase;
+            color: var(--white);
+            text-decoration: none;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .dentea-core .dentea-core-learn:hover {
+            background: var(--white);
+            color: var(--bg);
+            border-color: var(--white);
+        }
+
+        /* RIGHT VISUAL WINDOW */
+        .dentea-core .dentea-core-visual {
+            position: relative;
+            z-index: 20;
+            height: 100%;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            overflow: hidden;
+            min-width: 0;
+        }
+
+        .dentea-core .dentea-core-image-window {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 122px);
+            max-height: 850px;
+            overflow: hidden;
+            background: #222222;
+        }
+
+        .dentea-core .dentea-core-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            opacity: 0;
+            z-index: 1;
+            clip-path: inset(100% 0 0 0);
+            will-change: clip-path, transform, opacity;
+            transform: scale(1.035);
+            transition: none;
+        }
+
+        .dentea-core .dentea-core-image img,
+        .dentea-core .dentea-core-image video {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transform: scale(1.04);
+            will-change: transform;
+            user-select: none;
+        }
+
+        .dentea-core .dentea-core-image img {
+            pointer-events: none;
+        }
+
+        /* NUMBER & PROGRESS */
+        .dentea-core .dentea-core-number {
+            position: absolute;
+            z-index: 100;
+            left: 2.6%;
+            bottom: 28px;
+            font-family: 'Playfair Display', "Times New Roman", Georgia, serif;
+            font-size: clamp(65px, 6.2vw, 105px);
+            line-height: 0.75;
+            letter-spacing: -0.04em;
+            color: var(--white);
+            pointer-events: none;
+        }
+
+        .dentea-core .dentea-core-number span {
+            display: inline-block;
+            min-width: 1.1em;
+            transition: opacity 0.35s ease, transform 0.45s ease;
+        }
+
+        .dentea-core .dentea-core-progress {
+            position: absolute;
+            z-index: 100;
+            left: 29%;
+            right: 40%;
+            bottom: 32px;
+            height: 1px;
+            background: var(--line);
+        }
+
+        .dentea-core .dentea-core-progress-bar {
+            width: 0%;
+            height: 100%;
+            background: var(--white);
+            transform-origin: left center;
+        }
+
+        /* TABLET RESPONSIVE */
+        @media (max-width: 1024px) and (min-width: 768px) {
+            .dentea-core .dentea-core-layout {
+                grid-template-columns: 28% 34% 38%;
+                padding: 76px 2.5% 42px;
+            }
+
+            .dentea-core .dentea-core-intro {
+                padding-right: 6%;
+            }
+
+            .dentea-core .dentea-core-intro-text {
+                font-size: clamp(20px, 2.8vw, 32px);
+                line-height: 1.0;
+            }
+
+            .dentea-core .dentea-core-title {
+                margin: 0 0 32px;
+                font-size: clamp(38px, 4.8vw, 62px);
+                line-height: 0.88;
+                white-space: normal;
+                word-break: break-word;
+            }
+
+            .dentea-core .dentea-core-treatments {
+                gap: 10px;
+                margin-bottom: 22px;
+            }
+
+            .dentea-core .dentea-core-treatment {
+                font-size: 11px;
+            }
+
+            .dentea-core .dentea-core-number {
+                font-size: clamp(48px, 5.8vw, 70px);
+                bottom: 22px;
+            }
+
+            .dentea-core .dentea-core-progress {
+                left: 28%;
+                right: 38%;
+                bottom: 26px;
+            }
+        }
+
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 767px) {
+            .dentea-core .dentea-core-pin {
+                height: 100vh;
+                height: 100svh;
+                height: 100dvh;
+                min-height: 540px;
+            }
+
+            .dentea-core .dentea-core-top {
+                top: 14px;
+                left: 18px;
+                right: 18px;
+                height: 30px;
+            }
+
+            .dentea-core .dentea-core-label,
+            .dentea-core .dentea-core-next {
+                font-size: 10px;
+            }
+
+            .dentea-core .dentea-core-layout {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                padding: 50px 18px 52px;
+                gap: 10px;
+            }
+
+            .dentea-core .dentea-core-intro {
+                flex: 0 0 auto;
+                padding: 0;
+                display: block;
+                z-index: 50;
+            }
+
+            .dentea-core .dentea-core-intro-text {
+                max-width: 100%;
+                font-size: clamp(17px, 4.4vw, 24px);
+                line-height: 1.05;
+                letter-spacing: -0.025em;
+            }
+
+            .dentea-core .dentea-core-visual {
+                order: 2;
+                flex: 1 1 auto;
+                width: 100%;
+                min-height: 160px;
+                max-height: 38vh;
+                margin: 0;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+
+            .dentea-core .dentea-core-image-window {
+                width: 100%;
+                height: 100%;
+                min-height: 160px;
+                max-height: none;
+                border-radius: 8px;
+            }
+
+            .dentea-core .dentea-core-copy {
+                order: 3;
+                flex: 0 0 auto;
+                display: block;
+                padding: 0;
+                z-index: 60;
+            }
+
+            .dentea-core .dentea-core-copy-inner {
+                max-width: 100%;
+            }
+
+            .dentea-core .dentea-core-title {
+                margin: 0 0 6px;
+                font-size: clamp(26px, 7.8vw, 42px);
+                line-height: 0.85;
+                white-space: normal;
+            }
+
+            .dentea-core .dentea-core-treatment-label {
+                margin-bottom: 6px;
+                font-size: 9px;
+            }
+
+            .dentea-core .dentea-core-treatments {
+                gap: 5px;
+                margin-bottom: 12px;
+            }
+
+            .dentea-core .dentea-core-treatment {
+                font-size: 10px;
+                line-height: 1.2;
+            }
+
+            .dentea-core .dentea-core-learn {
+                padding: 7px 14px;
+                font-size: 9px;
+            }
+
+            .dentea-core .dentea-core-number {
+                left: auto;
+                right: 18px;
+                bottom: 12px;
+                font-size: clamp(34px, 8.5vw, 48px);
+                line-height: 1;
+            }
+
+            .dentea-core .dentea-core-progress {
+                left: 18px;
+                right: 76px;
+                bottom: 22px;
+                height: 2px;
+            }
+        }
+
+        /* SMALL MOBILE */
+        @media (max-width: 430px) {
+            .dentea-core .dentea-core-pin {
+                min-height: 480px;
+            }
+
+            .dentea-core .dentea-core-layout {
+                padding: 44px 14px 44px;
+                gap: 8px;
+            }
+
+            .dentea-core .dentea-core-intro-text {
+                font-size: 16px;
+                line-height: 1.08;
+            }
+
+            .dentea-core .dentea-core-visual {
+                min-height: 140px;
+                max-height: 34vh;
+            }
+
+            .dentea-core .dentea-core-title {
+                font-size: clamp(23px, 7vw, 30px);
+                margin-bottom: 4px;
+            }
+
+            .dentea-core .dentea-core-treatment-label {
+                margin-bottom: 4px;
+                font-size: 8px;
+            }
+
+            .dentea-core .dentea-core-treatments {
+                gap: 4px;
+                margin-bottom: 9px;
+            }
+
+            .dentea-core .dentea-core-treatment {
+                font-size: 9px;
+            }
+
+            .dentea-core .dentea-core-learn {
+                padding: 6px 12px;
+                font-size: 8.5px;
+            }
+
+            .dentea-core .dentea-core-number {
+                right: 14px;
+                bottom: 10px;
+                font-size: 32px;
+            }
+
+            .dentea-core .dentea-core-progress {
+                left: 14px;
+                right: 60px;
+                bottom: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="dentea-core" data-instance-id="demo-showcase"
+        data-video-autoplay="yes"
+        data-video-loop="yes"
+        data-video-muted="yes"
+        data-video-playsinline="yes"
+        data-video-controls="no"
+    >
+        <!-- Data store -->
+        <div class="dentea-core-data-source" style="display: none;">
+            <div class="dentea-core-data-item"
+                data-title="Restorative Dentistry"
+                data-intro="Proactive dental care focused on prevention, protection, and long-term stability."
+                data-treatments="Preventive Dental Assessment&#10;Professional Hygiene Therapy&#10;Long-Term Maintenance Plans"
+                data-link="#"
+                data-target="_self"
+                data-is-video=""
+                data-video-url=""
+            ></div>
+            <div class="dentea-core-data-item"
+                data-title="Cosmetic Artistry"
+                data-intro="Refined cosmetic treatments designed to create natural, balanced, and confident smiles."
+                data-treatments="Elite Laser Teeth Whitening&#10;Bespoke Composite Artistry&#10;Full Mouth Aesthetic Harmony"
+                data-link="#"
+                data-target="_self"
+                data-is-video=""
+                data-video-url=""
+            ></div>
+            <div class="dentea-core-data-item"
+                data-title="Orthodontic Care"
+                data-intro="Thoughtful orthodontic solutions focused on alignment, function, comfort, and lasting results."
+                data-treatments="Clear Aligner Treatment&#10;Advanced Orthodontic Planning&#10;Bite &amp; Alignment Correction"
+                data-link="#"
+                data-target="_self"
+                data-is-video=""
+                data-video-url=""
+            ></div>
+            <div class="dentea-core-data-item"
+                data-title="Preventive Protocols"
+                data-intro="Proactive dental protocols built around prevention, protection, and long-term oral health."
+                data-treatments="Preventive Dental Assessment&#10;Professional Hygiene Therapy&#10;Long-Term Maintenance Plans"
+                data-link="#"
+                data-target="_self"
+                data-is-video=""
+                data-video-url=""
+            ></div>
+            <div class="dentea-core-data-item"
+                data-title="Oral Surgery"
+                data-intro="Precise surgical care delivered with a calm, considered approach and patient-first attention."
+                data-treatments="Complex Wisdom Tooth Extraction&#10;Surgical Dental Procedures&#10;Post-Operative Care"
+                data-link="#"
+                data-target="_self"
+                data-is-video=""
+                data-video-url=""
+            ></div>
+        </div>
+
+        <div class="dentea-core-track">
+            <div class="dentea-core-pin">
+
+                <!-- TOP BAR -->
+                <div class="dentea-core-top">
+                    <div class="dentea-core-label">
+                        <span>03</span>
+                        <span>CORE SERVICES</span>
+                    </div>
+                    <div class="dentea-core-next">
+                        NEXT ↗
+                    </div>
+                </div>
+
+                <!-- FIXED LAYOUT -->
+                <div class="dentea-core-layout">
+
+                    <!-- LEFT INTRO -->
+                    <div class="dentea-core-intro">
+                        <p class="dentea-core-intro-text" id="denteaCoreIntro-demo-showcase"></p>
+                    </div>
+
+                    <!-- CENTER COPY -->
+                    <div class="dentea-core-copy">
+                        <div class="dentea-core-copy-inner">
+                            <h2 class="dentea-core-title" id="denteaCoreTitle-demo-showcase"></h2>
+
+                            <div class="dentea-core-treatment-label">
+                                TREATMENTS
+                            </div>
+
+                            <div class="dentea-core-treatments" id="denteaCoreTreatments-demo-showcase"></div>
+
+                            <a href="#" class="dentea-core-learn" id="denteaCoreLearn-demo-showcase">
+                                LEARN MORE
+                                <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT IMAGE / VIDEO VISUAL WINDOW -->
+                    <div class="dentea-core-visual">
+                        <div class="dentea-core-image-window" id="denteaCoreImageWindow-demo-showcase">
+                            <div class="dentea-core-image" data-slide-index="0">
+                                <img src="https://framerusercontent.com/images/h5ZGA7cWwEIU9AAaa5AzVJ8WY.png?width=1254&height=1254" alt="Restorative Dentistry">
+                            </div>
+                            <div class="dentea-core-image" data-slide-index="1">
+                                <img src="https://framerusercontent.com/images/o2KbqwVSdlJYhZ6aNq6Fqpqm1M.png?width=1254&height=1254" alt="Cosmetic Artistry">
+                            </div>
+                            <div class="dentea-core-image" data-slide-index="2">
+                                <img src="https://framerusercontent.com/images/tk9Kwu6R3GBhlGnJrxMk2Uex0s.png?width=1254&height=1254" alt="Orthodontic Care">
+                            </div>
+                            <div class="dentea-core-image" data-slide-index="3">
+                                <img src="https://framerusercontent.com/images/SHzfQRFGYAf9ox2r1iCwVGkPhJA.png?width=1254&height=1254" alt="Preventive Protocols">
+                            </div>
+                            <div class="dentea-core-image" data-slide-index="4">
+                                <img src="https://framerusercontent.com/images/w4S8BcgZwVWtcZAiSeHzkbqWNg.png?width=1254&height=1254" alt="Oral Surgery">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- NUMBER COUNTER -->
+                <div class="dentea-core-number">
+                    <span id="denteaCoreNumber-demo-showcase">01</span>
+                </div>
+
+                <!-- PROGRESS BAR -->
+                <div class="dentea-core-progress">
+                    <div class="dentea-core-progress-bar" id="denteaCoreProgress-demo-showcase"></div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <script>
+        (function() {
+            var instanceId = 'demo-showcase';
+            
+            const currentInstanceId = typeof instanceId !== 'undefined' ? instanceId : 'demo-showcase';
+
+            if (window.supercomponentCleanups && window.supercomponentCleanups[currentInstanceId]) {
+                window.supercomponentCleanups[currentInstanceId]();
+            }
+
+            let animationFrameId = null;
+            let resizeHandler = null;
+            let textTimer = null;
+
+            function init() {
+                let root = document.querySelector(`[data-instance-id="${currentInstanceId}"]`) ||
+                           document.querySelector('.dentea-core');
+                if (!root) return;
+
+                const dataNodes = root.querySelectorAll(".dentea-core-data-item");
+                const data = [];
+
+                dataNodes.forEach(function (node) {
+                    const rawTreatments = (node.getAttribute("data-treatments") || "").trim();
+                    const treatmentsList = rawTreatments
+                        ? rawTreatments.split("\n").map(function (s) { return s.trim(); }).filter(Boolean)
+                        : [];
+
+                    data.push({
+                        title: node.getAttribute("data-title") || "",
+                        intro: node.getAttribute("data-intro") || "",
+                        treatments: treatmentsList,
+                        link: node.getAttribute("data-link") || "#",
+                        target: node.getAttribute("data-target") || "_self",
+                        isVideo: node.getAttribute("data-is-video") === "yes",
+                        videoUrl: node.getAttribute("data-video-url") || ""
+                    });
+                });
+
+                if (!data.length) return;
+
+                const track = root.querySelector(".dentea-core-track");
+                const imageLayers = Array.from(root.querySelectorAll(".dentea-core-image"));
+                const title = root.querySelector('[id^="denteaCoreTitle"]') || root.querySelector('.dentea-core-title');
+                const intro = root.querySelector('[id^="denteaCoreIntro"]') || root.querySelector('.dentea-core-intro-text');
+                const treatments = root.querySelector('[id^="denteaCoreTreatments"]') || root.querySelector('.dentea-core-treatments');
+                const learnBtn = root.querySelector('[id^="denteaCoreLearn"]') || root.querySelector('.dentea-core-learn');
+                const number = root.querySelector('[id^="denteaCoreNumber"] span') || root.querySelector('.dentea-core-number span') || root.querySelector('[id^="denteaCoreNumber"]');
+                const progress = root.querySelector('[id^="denteaCoreProgress"]') || root.querySelector('.dentea-core-progress-bar');
+
+                if (!track || !imageLayers.length) return;
+
+                const globalAutoplay = root.getAttribute("data-video-autoplay") !== "no";
+                const globalLoop = root.getAttribute("data-video-loop") !== "no";
+                const globalMuted = root.getAttribute("data-video-muted") !== "no";
+                const globalPlaysinline = root.getAttribute("data-video-playsinline") !== "no";
+                const globalControls = root.getAttribute("data-video-controls") === "yes";
+
+                const allVideos = Array.from(root.querySelectorAll(".dentea-core-image video"));
+                allVideos.forEach(function (video) {
+                    if (globalPlaysinline) {
+                        video.setAttribute("playsinline", "");
+                        video.setAttribute("webkit-playsinline", "");
+                    }
+                    if (globalMuted) {
+                        video.muted = true;
+                        video.setAttribute("muted", "");
+                    }
+                    if (globalLoop) {
+                        video.loop = true;
+                        video.setAttribute("loop", "");
+                    }
+                    video.controls = globalControls;
+                    video.preload = "auto";
+                });
+
+                let scrollTarget = 0;
+                let scrollSmooth = 0;
+                let previousIndex = -1;
+                let currentIndex = 0;
+
+                function getProgress() {
+                    const rect = track.getBoundingClientRect();
+                    const total = track.offsetHeight - window.innerHeight;
+                    if (total <= 0) return 0;
+                    return Math.max(0, Math.min(1, -rect.top / total));
+                }
+
+                function setContent(index) {
+                    const item = data[index];
+                    if (!item) return;
+
+                    if (title) title.classList.add("change");
+                    if (intro) intro.classList.add("change");
+
+                    clearTimeout(textTimer);
+
+                    textTimer = setTimeout(function () {
+                        if (title) {
+                            title.textContent = item.title;
+                            title.classList.remove("change");
+                        }
+
+                        if (intro) {
+                            intro.textContent = item.intro;
+                            intro.classList.remove("change");
+                        }
+
+                        if (treatments) {
+                            treatments.innerHTML = item.treatments.map(function (itemText) {
+                                return `
+                                    <div class="dentea-core-treatment sc-treatment_typography">
+                                        ${itemText}
+                                        <span class="dentea-core-arrow">↗</span>
+                                    </div>
+                                `;
+                            }).join("");
+                        }
+
+                        if (learnBtn) {
+                            learnBtn.setAttribute("href", item.link || "#");
+                            learnBtn.setAttribute("target", item.target || "_self");
+                            if (item.target === "_blank") {
+                                learnBtn.setAttribute("rel", "noopener noreferrer");
+                            } else {
+                                learnBtn.removeAttribute("rel");
+                            }
+                        }
+
+                        if (number) {
+                            number.textContent = String(index + 1).padStart(2, "0");
+                        }
+                    }, 140);
+                }
+
+                function syncVideoPlayback(currentIdx, nextIdx, fraction) {
+                    if (!allVideos.length) return;
+
+                    allVideos.forEach(function (video) {
+                        const layer = video.closest(".dentea-core-image");
+                        if (!layer) return;
+                        const slideIdx = parseInt(layer.getAttribute("data-slide-index") || "-1", 10);
+                        const isVisible = (slideIdx === currentIdx) || (slideIdx === nextIdx && fraction > 0.02);
+
+                        if (isVisible) {
+                            if (globalAutoplay && video.paused && video.src) {
+                                const playPromise = video.play();
+                                if (playPromise !== undefined) {
+                                    playPromise.catch(function () {});
+                                }
+                            }
+                        } else {
+                            if (!video.paused) {
+                                video.pause();
+                            }
+                        }
+                    });
+                }
+
+                function renderImages(progressValue) {
+                    const max = data.length - 1;
+                    const exact = progressValue * max;
+                    const base = Math.floor(exact);
+                    const fraction = exact - base;
+
+                    const current = Math.min(base, max);
+                    const next = Math.min(base + 1, max);
+
+                    imageLayers.forEach(function (layer) {
+                        layer.style.opacity = "0";
+                        layer.style.zIndex = "1";
+                        layer.style.clipPath = "inset(100% 0 0 0)";
+                        layer.style.transform = "scale(1.035)";
+
+                        const media = layer.querySelector("img, video");
+                        if (media) {
+                            media.style.transform = "scale(1.045)";
+                        }
+                    });
+
+                    const currentLayer = imageLayers[current];
+                    if (currentLayer) {
+                        currentLayer.style.opacity = "1";
+                        currentLayer.style.zIndex = "5";
+                        currentLayer.style.clipPath = "inset(0 0 0 0)";
+                        currentLayer.style.transform = `scale(${1.035 - fraction * 0.015})`;
+
+                        const media = currentLayer.querySelector("img, video");
+                        if (media) {
+                            media.style.transform = `scale(${1.045 - fraction * 0.025})`;
+                        }
+                    }
+
+                    if (next !== current) {
+                        const nextLayer = imageLayers[next];
+                        if (nextLayer) {
+                            nextLayer.style.opacity = "1";
+                            nextLayer.style.zIndex = "10";
+
+                            const hidden = (1 - fraction) * 100;
+                            nextLayer.style.clipPath = `inset(${hidden}% 0 0 0)`;
+                            nextLayer.style.transform = `scale(${1.055 - fraction * 0.02})`;
+
+                            const media = nextLayer.querySelector("img, video");
+                            if (media) {
+                                const mediaScale = 1.065 - fraction * 0.035;
+                                media.style.transform = `scale(${mediaScale})`;
+                            }
+                        }
+                    }
+
+                    syncVideoPlayback(current, next, fraction);
+
+                    const rounded = Math.round(exact);
+                    if (rounded !== currentIndex) {
+                        previousIndex = currentIndex;
+                        currentIndex = Math.min(rounded, max);
+                        setContent(currentIndex);
+                    }
+
+                    if (progressValue < 0.001 && currentIndex !== 0) {
+                        currentIndex = 0;
+                        previousIndex = 0;
+                        setContent(0);
+                    }
+                }
+
+                function animate() {
+                    scrollTarget = getProgress();
+                    scrollSmooth += (scrollTarget - scrollSmooth) * 0.08;
+
+                    renderImages(scrollSmooth);
+
+                    if (progress) {
+                        progress.style.width = (scrollSmooth * 100) + "%";
+                    }
+
+                    animationFrameId = requestAnimationFrame(animate);
+                }
+
+                setContent(0);
+                renderImages(0);
+                animate();
+
+                resizeHandler = function () {
+                    scrollTarget = getProgress();
+                };
+                window.addEventListener("resize", resizeHandler, { passive: true });
+            }
+
+            window.supercomponentCleanups = window.supercomponentCleanups || {};
+            window.supercomponentCleanups[currentInstanceId] = function () {
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                    animationFrameId = null;
+                }
+                if (resizeHandler) {
+                    window.removeEventListener("resize", resizeHandler);
+                    resizeHandler = null;
+                }
+                if (textTimer) {
+                    clearTimeout(textTimer);
+                    textTimer = null;
+                }
+
+                const root = document.querySelector(`[data-instance-id="${currentInstanceId}"]`) ||
+                             document.querySelector('.dentea-core');
+                if (root) {
+                    const vids = root.querySelectorAll("video");
+                    vids.forEach(function (v) {
+                        try { v.pause(); } catch (e) {}
+                    });
+                }
+            };
+
+            init();
+        })();
+    </script>
+</body>
+</html>
