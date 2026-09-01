@@ -336,8 +336,9 @@
                   <div class="sc-curved-carousel__overlay"></div>
                 </div>
                 <div class="sc-curved-carousel__glass">
-                  <div class="sc-curved-carousel__badge">
-                    <i class="fas fa-spa" aria-hidden="true"></i>
+                  <div class="sc-curved-carousel__badge" style="{{#badge_color}}--card-badge-bg: {{badge_color}};{{/badge_color}}">
+                    {{{badge_icon}}}
+                    {{^badge_icon}}<i class="fas fa-heartbeat" aria-hidden="true"></i>{{/badge_icon}}
                   </div>
                   <div class="sc-curved-carousel__info">
                     <h4 class="sc-curved-carousel__title">Therapy Session</h4>

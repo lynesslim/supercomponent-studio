@@ -866,24 +866,52 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 			return '';
 		}
 		if ( is_string( $icon_data ) ) {
-			return $icon_data;
+			$val = trim( $icon_data );
+			if ( empty( $val ) ) {
+				return '';
+			}
+			if ( strpos( $val, '<svg' ) !== false || strpos( $val, '<img' ) !== false || strpos( $val, '<i' ) !== false ) {
+				return $val;
+			}
+			if ( strpos( $val, 'fa-' ) !== false && strpos( $val, 'fa ' ) === false && strpos( $val, 'fas ' ) === false && strpos( $val, 'far ' ) === false && strpos( $val, 'fab ' ) === false ) {
+				$val = 'fas ' . $val;
+			}
+			return '<i class="' . esc_attr( $val ) . '" aria-hidden="true"></i>';
 		}
 		if ( is_array( $icon_data ) ) {
+			// 1. Try Elementor native Icons_Manager
 			if ( class_exists( '\Elementor\Icons_Manager' ) ) {
 				ob_start();
 				\Elementor\Icons_Manager::render_icon( $icon_data, [ 'aria-hidden' => 'true' ] );
 				$icon_html = ob_get_clean();
-				if ( ! empty( $icon_html ) ) {
+				if ( ! empty( trim( $icon_html ) ) ) {
 					return $icon_html;
 				}
 			}
-			if ( isset( $icon_data['value'] ) && is_string( $icon_data['value'] ) && ! empty( $icon_data['value'] ) ) {
-				if ( isset( $icon_data['library'] ) && 'svg' === $icon_data['library'] && isset( $icon_data['value']['url'] ) ) {
-					return '<img src="' . esc_url( $icon_data['value']['url'] ) . '" alt="" aria-hidden="true" class="sc-icon-svg" />';
+
+			// 2. Handle SVG array: ['value' => ['url' => '...'], 'library' => 'svg']
+			if ( isset( $icon_data['value'] ) && is_array( $icon_data['value'] ) && ! empty( $icon_data['value']['url'] ) ) {
+				return '<img src="' . esc_url( $icon_data['value']['url'] ) . '" alt="" aria-hidden="true" class="sc-icon-svg" style="width: 1em; height: 1em; display: inline-block; vertical-align: middle;" />';
+			}
+
+			// 3. Handle SVG array with direct URL: ['url' => '...']
+			if ( isset( $icon_data['url'] ) && ! empty( $icon_data['url'] ) ) {
+				return '<img src="' . esc_url( $icon_data['url'] ) . '" alt="" aria-hidden="true" class="sc-icon-svg" style="width: 1em; height: 1em; display: inline-block; vertical-align: middle;" />';
+			}
+
+			// 4. Handle Font Icon string: ['value' => 'fas fa-heart', 'library' => 'fa-solid']
+			if ( isset( $icon_data['value'] ) && is_string( $icon_data['value'] ) && ! empty( trim( $icon_data['value'] ) ) ) {
+				$val = trim( $icon_data['value'] );
+				if ( strpos( $val, '<svg' ) !== false ) {
+					return $val;
 				}
-				return '<i class="' . esc_attr( $icon_data['value'] ) . '" aria-hidden="true"></i>';
+				if ( strpos( $val, 'fa-' ) !== false && strpos( $val, 'fa ' ) === false && strpos( $val, 'fas ' ) === false && strpos( $val, 'far ' ) === false && strpos( $val, 'fab ' ) === false ) {
+					$val = 'fas ' . $val;
+				}
+				return '<i class="' . esc_attr( $val ) . '" aria-hidden="true"></i>';
 			}
 		}
+
 		return '';
 	}
 
@@ -950,9 +978,9 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 							if ( isset( $repeater_defaults[ $item_index ][ $f_id ] ) && ! empty( $repeater_defaults[ $item_index ][ $f_id ] ) ) {
 								$fallback = $repeater_defaults[ $item_index ][ $f_id ];
 							}
-							if ( ! isset( $item[ $f_id ] ) || '' === $item[ $f_id ] ) {
+							if ( ! isset( $item[ $f_id ] ) || '' === $item[ $f_id ] || ( is_array( $item[ $f_id ] ) && empty( $item[ $f_id ] ) ) ) {
 								$item[ $f_id ] = $fallback;
-							} elseif ( is_array( $item[ $f_id ] ) && isset( $item[ $f_id ]['value'] ) && empty( $item[ $f_id ]['value'] ) ) {
+							} elseif ( is_array( $item[ $f_id ] ) && ( ! isset( $item[ $f_id ]['value'] ) || empty( $item[ $f_id ]['value'] ) ) && ! isset( $item[ $f_id ]['url'] ) ) {
 								$item[ $f_id ] = $fallback;
 							}
 						}
@@ -984,6 +1012,9 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 								if ( is_array( $sub_val ) && empty( $sub_val ) ) {
 									$is_truthy = false;
 								}
+								if ( is_array( $sub_val ) && ( ( isset( $sub_val['value'] ) && empty( $sub_val['value'] ) ) || ( ! isset( $sub_val['value'] ) && ! isset( $sub_val['url'] ) ) ) ) {
+									$is_truthy = false;
+								}
 
 								$show = ( '#' === $sub_type ) ? $is_truthy : ! $is_truthy;
 								return $show ? $sub_inner : '';
@@ -998,11 +1029,18 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 								$key = $raw_matches[1];
 								if ( isset( $item[ $key ] ) ) {
 									$val = $item[ $key ];
-									if ( is_array( $val ) && ( isset( $val['value'] ) || isset( $val['library'] ) ) ) {
-										return $this->render_icon_html( $val );
+									if ( is_array( $val ) ) {
+										$rendered = $this->render_icon_html( $val );
+										if ( '' !== $rendered ) {
+											return $rendered;
+										}
+										if ( isset( $val['url'] ) ) {
+											return $val['url'];
+										}
 									}
 									if ( is_string( $val ) || is_numeric( $val ) ) {
-										return $val;
+										$rendered = $this->render_icon_html( $val );
+										return '' !== $rendered ? $rendered : $val;
 									}
 								}
 								return '';
