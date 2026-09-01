@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SuperComponent Studio
  * Description: Real-time, schema-driven custom component runtime for Elementor. Paste HTML, CSS, JS, and JSON schemas to build widgets instantly.
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Supercraft
  * Text Domain: supercomponent-studio
  */
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 final class SuperComponent_Studio {
 
-	const VERSION = '1.0.7';
+	const VERSION = '1.0.8';
 	const MINIMUM_ELEMENTOR_VERSION = '3.0.0';
 	const MINIMUM_PHP_VERSION = '7.4';
 
@@ -78,6 +78,7 @@ final class SuperComponent_Studio {
 		// Register Assets
 		add_action( 'elementor/editor/before_enqueue_scripts', [ $this, 'enqueue_editor_scripts' ] );
 		add_action( 'elementor/editor/after_enqueue_styles', [ $this, 'enqueue_editor_styles' ] );
+		add_action( 'elementor/frontend/after_register_styles', [ $this, 'enqueue_frontend_styles' ] );
 	}
 
 	public function admin_notice_missing_main_plugin() {
@@ -145,6 +146,20 @@ final class SuperComponent_Studio {
 			plugins_url( '/assets/css/editor.css', __FILE__ ),
 			[],
 			time()
+		);
+	}
+
+	public function enqueue_frontend_styles() {
+		if ( ! supercomponent_is_validated() ) {
+			return;
+		}
+		// Enqueue Font Awesome on the frontend so icon controls render correctly
+		// even when Elementor's lazy FA registration hasn't fired (e.g. schema-default icons).
+		wp_enqueue_style(
+			'supercomponent-fontawesome',
+			'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
+			[],
+			'6.5.1'
 		);
 	}
 }
