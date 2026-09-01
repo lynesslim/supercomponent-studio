@@ -1,0 +1,68 @@
+/* =========================================================
+   SuperComponent Studio - Developer Tab Code Editors
+   Fixed Height with Dedicated Vertical & Horizontal Scrollbars
+   ========================================================= */
+
+/* Developer Section Spacing */
+.elementor-control-developer_settings .elementor-control-type-code {
+    margin-bottom: 14px;
+}
+
+/* Fixed Height for Ace Editors: JSON, HTML, CSS, JS */
+.elementor-control-schema .elementor-control-input-wrapper,
+.elementor-control-html .elementor-control-input-wrapper,
+.elementor-control-css .elementor-control-input-wrapper,
+.elementor-control-js .elementor-control-input-wrapper {
+    position: relative !important;
+}
+
+.elementor-control-schema .ace_editor,
+.elementor-control-html .ace_editor,
+.elementor-control-css .ace_editor,
+.elementor-control-js .ace_editor {
+    height: 240px !important;
+    min-height: 240px !important;
+    max-height: 240px !important;
+    border: 1px solid #d5dadf !important;
+    border-radius: 4px !important;
+    box-sizing: border-box !important;
+}
+
+/* Ensure Ace scrollbars are visible and functional */
+.elementor-control-schema .ace_editor .ace_scrollbar-v,
+.elementor-control-html .ace_editor .ace_scrollbar-v,
+.elementor-control-css .ace_editor .ace_scrollbar-v,
+.elementor-control-js .ace_editor .ace_scrollbar-v {
+    display: block !important;
+}
+
+.elementor-control-schema .ace_editor .ace_scrollbar-h,
+.elementor-control-html .ace_editor .ace_scrollbar-h,
+.elementor-control-css .ace_editor .ace_scrollbar-h,
+.elementor-control-js .ace_editor .ace_scrollbar-h {
+    display: block !important;
+}
+
+/* Textarea Fallback (if Ace editor is not active) */
+.elementor-control-schema textarea.elementor-editor-code,
+.elementor-control-html textarea.elementor-editor-code,
+.elementor-control-css textarea.elementor-editor-code,
+.elementor-control-js textarea.elementor-editor-code,
+.elementor-control-schema textarea,
+.elementor-control-html textarea,
+.elementor-control-css textarea,
+.elementor-control-js textarea {
+    height: 240px !important;
+    min-height: 240px !important;
+    max-height: 240px !important;
+    overflow-y: scroll !important;
+    overflow-x: auto !important;
+    white-space: pre !important;
+    word-break: normal !important;
+    word-wrap: normal !important;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+    resize: vertical !important;
+    box-sizing: border-box !important;
+}

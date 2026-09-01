@@ -8,12 +8,14 @@
             this.listenForControlChanges();
             this.listenForRebuild();
             this.hookPanelOpen();
+            this.initCodeEditors();
         },
 
         // Hook into the Elementor panel opening event for our widget
         hookPanelOpen: function () {
             var self = this;
             elementor.hooks.addAction('panel/open_editor/widget/supercomponent', function (panel, model, view) {
+                self.initCodeEditors();
                 if (view && view.container) {
                     if (view.container._isRebuildingPanel) {
                         view.container._isRebuildingPanel = false;
@@ -25,8 +27,48 @@
                         model: model,
                         container: view.container
                     });
+                    self.initCodeEditors();
                 }
             });
+        },
+
+        // Configure Developer tab Ace editors to have fixed height with scrollbars
+        initCodeEditors: function () {
+            var applyAceConfig = function () {
+                var codeSelectors = ['.elementor-control-schema', '.elementor-control-html', '.elementor-control-css', '.elementor-control-js'];
+                codeSelectors.forEach(function (sel) {
+                    var $wrapper = $(sel);
+                    if (!$wrapper.length) return;
+                    var $ace = $wrapper.find('.ace_editor');
+                    if ($ace.length && window.ace) {
+                        $ace.each(function () {
+                            try {
+                                var ed = ace.edit(this);
+                                if (ed) {
+                                    ed.setOptions({
+                                        maxLines: null,
+                                        minLines: null,
+                                        autoScrollEditorIntoView: false
+                                    });
+                                    ed.renderer.setScrollMargin(0, 0, 0, 0);
+                                    ed.resize(true);
+                                }
+                            } catch (e) {}
+                        });
+                    }
+                });
+            };
+
+            applyAceConfig();
+            setTimeout(applyAceConfig, 100);
+            setTimeout(applyAceConfig, 300);
+            setTimeout(applyAceConfig, 600);
+
+            $(document).off('click.scCodeEditors', '.elementor-control-developer_settings .elementor-panel-heading, #elementor-panel-section-developer_settings .elementor-panel-heading')
+                .on('click.scCodeEditors', '.elementor-control-developer_settings .elementor-panel-heading, #elementor-panel-section-developer_settings .elementor-panel-heading', function () {
+                    setTimeout(applyAceConfig, 100);
+                    setTimeout(applyAceConfig, 300);
+                });
         },
 
         listenForRebuild: function (controlView) {
