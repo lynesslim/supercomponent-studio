@@ -32,6 +32,10 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 		return [ 'supercomponent', 'component', 'custom', 'code' ];
 	}
 
+	public function get_style_depends() {
+		return [ 'elementor-icons-fa-solid', 'elementor-icons-fa-regular', 'elementor-icons-fa-brands' ];
+	}
+
 	// ponytail: Naive JSON decode + basic array check for schema validation
 	// Ceiling: Does not validate nested property types or detect circular dependency conditions
 	// Upgrade path: Replace with a full JSON Schema validator (e.g., justinrainbow/json-schema)
@@ -261,7 +265,7 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 			];
 
 			// Native Elementor real-time CSS variable injection
-			if ( in_array( $control['type'], [ 'color', 'slider', 'number', 'dimensions' ], true ) ) {
+			if ( in_array( $control['type'], [ 'color', 'slider', 'number', 'dimensions', 'select' ], true ) ) {
 				if ( 'slider' === $control['type'] ) {
 					$control_args['selectors'] = [
 						'{{WRAPPER}}' => "--{$control['id']}: {{SIZE}}{{UNIT}};",
@@ -918,8 +922,41 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 
 				// If it's a repeater loop (only for positive '#' and if value is a list of arrays)
 				if ( '#' === $type && is_array( $val ) && ! empty( $val ) && isset( $val[0] ) && is_array( $val[0] ) ) {
+					// Collect field defaults and row defaults for this repeater from schema settings
+					$field_defaults = [];
+					$repeater_defaults = [];
+					if ( is_array( $settings ) ) {
+						foreach ( $settings as $ctrl ) {
+							if ( isset( $ctrl['id'] ) && $ctrl['id'] === $expression ) {
+								if ( isset( $ctrl['fields'] ) && is_array( $ctrl['fields'] ) ) {
+									foreach ( $ctrl['fields'] as $fld ) {
+										if ( isset( $fld['id'], $fld['default'] ) ) {
+											$field_defaults[ $fld['id'] ] = $fld['default'];
+										}
+									}
+								}
+								if ( isset( $ctrl['default'] ) && is_array( $ctrl['default'] ) ) {
+									$repeater_defaults = $ctrl['default'];
+								}
+							}
+						}
+					}
+
 					$result = '';
-					foreach ( $val as $item ) {
+					foreach ( $val as $item_index => $item ) {
+						// Fallback to schema defaults if saved repeater item has missing or empty field values
+						foreach ( $field_defaults as $f_id => $f_def ) {
+							$fallback = $f_def;
+							if ( isset( $repeater_defaults[ $item_index ][ $f_id ] ) && ! empty( $repeater_defaults[ $item_index ][ $f_id ] ) ) {
+								$fallback = $repeater_defaults[ $item_index ][ $f_id ];
+							}
+							if ( ! isset( $item[ $f_id ] ) || '' === $item[ $f_id ] ) {
+								$item[ $f_id ] = $fallback;
+							} elseif ( is_array( $item[ $f_id ] ) && isset( $item[ $f_id ]['value'] ) && empty( $item[ $f_id ]['value'] ) ) {
+								$item[ $f_id ] = $fallback;
+							}
+						}
+
 						$item_output = $inner;
 						
 						// 1. Process nested conditional/inverted blocks inside this repeater item

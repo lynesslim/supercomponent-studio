@@ -1,0 +1,334 @@
+/* =========================================================
+   SUPERCOMPONENT: CURVED CAROUSEL
+   Interactive Arc/Curved Slider with Glassmorphism Cards
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
+
+.sc-curved-carousel-wrap {
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  padding: 20px 0 30px;
+}
+
+.sc-curved-carousel {
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* =========================================================
+   CAROUSEL STAGE & TRACK
+   ========================================================= */
+.sc-curved-carousel__stage {
+  width: 100%;
+  height: var(--carousel_height, 560px);
+  position: relative;
+  overflow: hidden;
+  perspective: 1200px;
+  -webkit-perspective: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.sc-curved-carousel__stage.is-dragging {
+  cursor: grabbing;
+}
+
+.sc-curved-carousel__stage.has-feather {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black var(--feather_size, 14%),
+    black calc(100% - var(--feather_size, 14%)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black var(--feather_size, 14%),
+    black calc(100% - var(--feather_size, 14%)),
+    transparent 100%
+  );
+}
+
+.sc-curved-carousel__track {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+/* =========================================================
+   INDIVIDUAL CARDS
+   ========================================================= */
+.sc-curved-carousel__card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--card_width, 290px);
+  height: var(--card_height, 420px);
+  margin-top: calc(var(--card_height, 420px) / -2);
+  margin-left: calc(var(--card_width, 290px) / -2);
+  pointer-events: auto;
+  will-change: transform, opacity;
+  transform-origin: center center;
+  transition: box-shadow 0.3s ease;
+}
+
+.sc-curved-carousel__card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--card_radius, 32px);
+  overflow: hidden;
+  background-color: #1e293b;
+  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+}
+
+.sc-curved-carousel__card.is-active .sc-curved-carousel__card-inner {
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.25) inset;
+}
+
+/* =========================================================
+   CARD IMAGE & OVERLAY
+   ========================================================= */
+.sc-curved-carousel__media {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.sc-curved-carousel__img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: var(--image_fit, cover) !important;
+  object-position: var(--image_position, center center) !important;
+  display: block !important;
+  pointer-events: none;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.sc-curved-carousel__card:hover .sc-curved-carousel__img {
+  transform: scale(1.03);
+}
+
+.sc-curved-carousel__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0) 30%,
+    rgba(15, 23, 42, 0.25) 60%,
+    rgba(15, 23, 42, 0.7) 100%
+  );
+  pointer-events: none;
+}
+
+/* =========================================================
+   GLASSMORPHISM CONTAINER
+   ========================================================= */
+.sc-curved-carousel__glass {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  background: var(--glass_bg, rgba(255, 255, 255, 0.22));
+  backdrop-filter: blur(var(--glass_blur, 16px));
+  -webkit-backdrop-filter: blur(var(--glass_blur, 16px));
+  border: 1px solid var(--glass_border_color, rgba(255, 255, 255, 0.38));
+  border-radius: var(--glass_radius, 22px);
+  padding: var(--glass_padding, 18px 16px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+/* Badge Icon */
+.sc-curved-carousel__badge {
+  width: var(--badge_size, 40px);
+  height: var(--badge_size, 40px);
+  min-width: var(--badge_size, 40px);
+  min-height: var(--badge_size, 40px);
+  border-radius: 50%;
+  background-color: var(--card-badge-bg, var(--icon_badge_bg, #38bdf8));
+  color: var(--badge_icon_color, #ffffff) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+  font-size: calc(var(--badge_size, 40px) * 0.44);
+  line-height: 1;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+.sc-curved-carousel__badge i,
+.sc-curved-carousel__badge .elementor-icon i {
+  font-size: calc(var(--badge_size, 40px) * 0.44) !important;
+  line-height: 1 !important;
+  color: var(--badge_icon_color, #ffffff) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.sc-curved-carousel__badge svg,
+.sc-curved-carousel__badge .elementor-icon svg {
+  width: calc(var(--badge_size, 40px) * 0.45) !important;
+  height: calc(var(--badge_size, 40px) * 0.45) !important;
+  display: block !important;
+  fill: var(--badge_icon_color, #ffffff) !important;
+  color: var(--badge_icon_color, #ffffff) !important;
+}
+
+.sc-curved-carousel__badge svg path,
+.sc-curved-carousel__badge svg circle,
+.sc-curved-carousel__badge svg rect,
+.sc-curved-carousel__badge svg polygon {
+  fill: var(--badge_icon_color, #ffffff);
+}
+
+.sc-curved-carousel__badge svg[stroke] path,
+.sc-curved-carousel__badge svg[stroke] circle,
+.sc-curved-carousel__badge svg[stroke] line {
+  stroke: var(--badge_icon_color, #ffffff) !important;
+}
+
+/* Typography Inside Glass */
+.sc-curved-carousel__info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.sc-curved-carousel__title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--glass_title_color, #ffffff);
+  letter-spacing: -0.01em;
+}
+
+.sc-curved-carousel__desc {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--glass_desc_color, rgba(255, 255, 255, 0.88));
+}
+
+/* Clickable Link */
+.sc-curved-carousel__link {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  cursor: pointer;
+}
+
+/* =========================================================
+   NAVIGATION ARROWS (OPTIONAL)
+   ========================================================= */
+.sc-curved-carousel__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--arrow_bg, rgba(255, 255, 255, 0.88));
+  color: var(--arrow_color, #0f172a);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  z-index: 50;
+  transition: all 0.2s ease;
+}
+
+.sc-curved-carousel__nav:hover {
+  background-color: #ffffff;
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+.sc-curved-carousel__nav--prev {
+  left: 20px;
+}
+
+.sc-curved-carousel__nav--next {
+  right: 20px;
+}
+
+/* =========================================================
+   RESPONSIVE OPTIMIZATIONS
+   ========================================================= */
+@media (max-width: 768px) {
+  .sc-curved-carousel__stage {
+    height: 480px;
+    --feather_size: 8%;
+  }
+  .sc-curved-carousel__card {
+    width: clamp(230px, 68vw, 260px);
+    height: clamp(340px, 50vh, 380px);
+    margin-top: calc(-1 * clamp(340px, 50vh, 380px) / 2);
+    margin-left: calc(-1 * clamp(230px, 68vw, 260px) / 2);
+  }
+  .sc-curved-carousel__title {
+    font-size: 15px;
+  }
+  .sc-curved-carousel__desc {
+    font-size: 12px;
+  }
+  .sc-curved-carousel__badge {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+  }
+  .sc-curved-carousel__nav {
+    display: none; /* Swipe gesture is natural on mobile */
+  }
+}

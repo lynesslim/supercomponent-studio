@@ -1,0 +1,449 @@
+{
+  "id": "curved-carousel",
+  "name": "Curved Carousel",
+  "settings": [
+    {
+      "id": "cards",
+      "type": "repeater",
+      "label": "Carousel Cards",
+      "tab": "content",
+      "section": "Cards",
+      "title_field": "{{{ title }}}",
+      "fields": [
+        {
+          "id": "title",
+          "type": "text",
+          "label": "Title",
+          "default": "App guidance"
+        },
+        {
+          "id": "description",
+          "type": "textarea",
+          "label": "Description",
+          "default": "Receive actionable steps before they become problems."
+        },
+        {
+          "id": "image",
+          "type": "image",
+          "label": "Card Image",
+          "default": {
+            "url": "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?q=80&w=800&auto=format&fit=crop"
+          }
+        },
+        {
+          "id": "badge_icon",
+          "type": "icons",
+          "label": "Badge Icon",
+          "default": {
+            "value": "fas fa-heartbeat",
+            "library": "fa-solid"
+          }
+        },
+        {
+          "id": "badge_color",
+          "type": "color",
+          "label": "Custom Badge Color (Optional Override)",
+          "default": ""
+        },
+        {
+          "id": "link",
+          "type": "url",
+          "label": "Card Link",
+          "default": {
+            "url": "#",
+            "is_external": false
+          }
+        }
+      ],
+      "default": [
+        {
+          "title": "Therapy Session",
+          "description": "Targeted musculoskeletal relief and physical recovery.",
+          "image": {
+            "url": "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?q=80&w=800&auto=format&fit=crop"
+          },
+          "badge_icon": {
+            "value": "fas fa-spa",
+            "library": "fa-solid"
+          },
+          "badge_color": "",
+          "link": {
+            "url": "#",
+            "is_external": false
+          }
+        },
+        {
+          "title": "App guidance",
+          "description": "Receive actionable steps before they become problems.",
+          "image": {
+            "url": "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?q=80&w=800&auto=format&fit=crop"
+          },
+          "badge_icon": {
+            "value": "fas fa-heartbeat",
+            "library": "fa-solid"
+          },
+          "badge_color": "",
+          "link": {
+            "url": "#",
+            "is_external": false
+          }
+        },
+        {
+          "title": "Personalized routines",
+          "description": "Adaptive fitness and mobility sessions tailored to your biometrics.",
+          "image": {
+            "url": "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=800&auto=format&fit=crop"
+          },
+          "badge_icon": {
+            "value": "fas fa-child",
+            "library": "fa-solid"
+          },
+          "badge_color": "",
+          "link": {
+            "url": "#",
+            "is_external": false
+          }
+        },
+        {
+          "title": "Data sync hub",
+          "description": "Continuous vital metric monitoring synced across all devices.",
+          "image": {
+            "url": "https://images.unsplash.com/photo-1510017803434-a899398421b3?q=80&w=800&auto=format&fit=crop"
+          },
+          "badge_icon": {
+            "value": "fas fa-sync-alt",
+            "library": "fa-solid"
+          },
+          "badge_color": "",
+          "link": {
+            "url": "#",
+            "is_external": false
+          }
+        },
+        {
+          "title": "Circadian score",
+          "description": "Optimized sleep stages and nervous system recovery scoring.",
+          "image": {
+            "url": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=800&auto=format&fit=crop"
+          },
+          "badge_icon": {
+            "value": "fas fa-moon",
+            "library": "fa-solid"
+          },
+          "badge_color": "",
+          "link": {
+            "url": "#",
+            "is_external": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "show_arrows",
+      "type": "switcher",
+      "label": "Show Navigation Arrows",
+      "default": "no",
+      "tab": "content",
+      "section": "Controls & Motion"
+    },
+    {
+      "id": "autoplay",
+      "type": "switcher",
+      "label": "Enable Autoplay",
+      "default": "no",
+      "tab": "content",
+      "section": "Controls & Motion"
+    },
+    {
+      "id": "autoplay_speed",
+      "type": "slider",
+      "label": "Autoplay Delay (ms)",
+      "default": {
+        "size": 4000,
+        "unit": "ms"
+      },
+      "min": 1500,
+      "max": 9000,
+      "step": 500,
+      "tab": "content",
+      "section": "Controls & Motion",
+      "condition": {
+        "autoplay": "yes"
+      }
+    },
+    {
+      "id": "carousel_height",
+      "type": "slider",
+      "label": "Carousel Height",
+      "default": {
+        "size": 560,
+        "unit": "px"
+      },
+      "min": 360,
+      "max": 800,
+      "step": 10,
+      "tab": "style",
+      "section": "Curved Arc & Dimensions"
+    },
+    {
+      "id": "card_width",
+      "type": "slider",
+      "label": "Card Width",
+      "default": {
+        "size": 290,
+        "unit": "px"
+      },
+      "min": 200,
+      "max": 450,
+      "step": 5,
+      "tab": "style",
+      "section": "Curved Arc & Dimensions"
+    },
+    {
+      "id": "card_height",
+      "type": "slider",
+      "label": "Card Height",
+      "default": {
+        "size": 420,
+        "unit": "px"
+      },
+      "min": 280,
+      "max": 650,
+      "step": 5,
+      "tab": "style",
+      "section": "Curved Arc & Dimensions"
+    },
+    {
+      "id": "card_gap",
+      "type": "slider",
+      "label": "Spacing Between Cards",
+      "default": {
+        "size": 26,
+        "unit": "px"
+      },
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "tab": "style",
+      "section": "Curved Arc & Dimensions"
+    },
+    {
+      "id": "arc_curvature",
+      "type": "slider",
+      "label": "Arc Curvature (Vertical Dip)",
+      "default": {
+        "size": 45,
+        "unit": "px"
+      },
+      "min": 0,
+      "max": 140,
+      "step": 5,
+      "tab": "style",
+      "section": "Curved Arc & Dimensions"
+    },
+    {
+      "id": "arc_tilt",
+      "type": "slider",
+      "label": "Arc Tilt Angle (Degrees)",
+      "default": {
+        "size": 11,
+        "unit": "deg"
+      },
+      "min": 0,
+      "max": 25,
+      "step": 1,
+      "tab": "style",
+      "section": "Curved Arc & Dimensions"
+    },
+    {
+      "id": "feather_edges",
+      "type": "switcher",
+      "label": "Feather / Fade Carousel Edges",
+      "default": "yes",
+      "tab": "style",
+      "section": "Curved Arc & Dimensions"
+    },
+    {
+      "id": "feather_size",
+      "type": "slider",
+      "label": "Edge Feather Width (%)",
+      "default": {
+        "size": 14,
+        "unit": "%"
+      },
+      "min": 4,
+      "max": 30,
+      "step": 1,
+      "tab": "style",
+      "section": "Curved Arc & Dimensions",
+      "condition": {
+        "feather_edges": "yes"
+      }
+    },
+    {
+      "id": "card_radius",
+      "type": "slider",
+      "label": "Card Corner Radius",
+      "default": {
+        "size": 32,
+        "unit": "px"
+      },
+      "min": 8,
+      "max": 50,
+      "step": 2,
+      "tab": "style",
+      "section": "Card Styling"
+    },
+    {
+      "id": "image_fit",
+      "type": "select",
+      "label": "Image Object Fit",
+      "default": "cover",
+      "options": [
+        { "value": "cover", "label": "Cover" },
+        { "value": "contain", "label": "Contain" },
+        { "value": "fill", "label": "Fill (Stretch)" },
+        { "value": "scale-down", "label": "Scale Down" }
+      ],
+      "tab": "style",
+      "section": "Card Styling"
+    },
+    {
+      "id": "image_position",
+      "type": "select",
+      "label": "Image Position",
+      "default": "center center",
+      "options": [
+        { "value": "center center", "label": "Center Center" },
+        { "value": "center top", "label": "Center Top" },
+        { "value": "center bottom", "label": "Center Bottom" },
+        { "value": "left center", "label": "Left Center" },
+        { "value": "left top", "label": "Left Top" },
+        { "value": "right center", "label": "Right Center" },
+        { "value": "right top", "label": "Right Top" }
+      ],
+      "tab": "style",
+      "section": "Card Styling"
+    },
+    {
+      "id": "glass_bg",
+      "type": "color",
+      "label": "Glass Container Background",
+      "default": "rgba(255, 255, 255, 0.22)",
+      "tab": "style",
+      "section": "Glassmorphism Card"
+    },
+    {
+      "id": "glass_blur",
+      "type": "slider",
+      "label": "Glass Blur Intensity",
+      "default": {
+        "size": 16,
+        "unit": "px"
+      },
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "tab": "style",
+      "section": "Glassmorphism Card"
+    },
+    {
+      "id": "glass_border_color",
+      "type": "color",
+      "label": "Glass Border Color",
+      "default": "rgba(255, 255, 255, 0.38)",
+      "tab": "style",
+      "section": "Glassmorphism Card"
+    },
+    {
+      "id": "glass_radius",
+      "type": "slider",
+      "label": "Glass Corner Radius",
+      "default": {
+        "size": 22,
+        "unit": "px"
+      },
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "tab": "style",
+      "section": "Glassmorphism Card"
+    },
+    {
+      "id": "glass_padding",
+      "type": "dimensions",
+      "label": "Glass Inner Padding",
+      "default": {
+        "top": "18",
+        "right": "16",
+        "bottom": "18",
+        "left": "16",
+        "unit": "px"
+      },
+      "tab": "style",
+      "section": "Glassmorphism Card"
+    },
+    {
+      "id": "glass_title_color",
+      "type": "color",
+      "label": "Title Text Color",
+      "default": "#ffffff",
+      "tab": "style",
+      "section": "Glassmorphism Card"
+    },
+    {
+      "id": "glass_desc_color",
+      "type": "color",
+      "label": "Description Text Color",
+      "default": "rgba(255, 255, 255, 0.88)",
+      "tab": "style",
+      "section": "Glassmorphism Card"
+    },
+    {
+      "id": "badge_size",
+      "type": "slider",
+      "label": "Icon Badge Size",
+      "default": {
+        "size": 40,
+        "unit": "px"
+      },
+      "min": 28,
+      "max": 60,
+      "step": 2,
+      "tab": "style",
+      "section": "Glassmorphism Card"
+    },
+    {
+      "id": "icon_badge_bg",
+      "type": "color",
+      "label": "Badge Background Color",
+      "default": "#38bdf8",
+      "tab": "style",
+      "section": "Glassmorphism Card"
+    },
+    {
+      "id": "badge_icon_color",
+      "type": "color",
+      "label": "Badge Icon Color",
+      "default": "#ffffff",
+      "tab": "style",
+      "section": "Glassmorphism Card"
+    },
+    {
+      "id": "arrow_bg",
+      "type": "color",
+      "label": "Arrow Background",
+      "default": "rgba(255, 255, 255, 0.88)",
+      "tab": "style",
+      "section": "Navigation Arrows"
+    },
+    {
+      "id": "arrow_color",
+      "type": "color",
+      "label": "Arrow Icon Color",
+      "default": "#0f172a",
+      "tab": "style",
+      "section": "Navigation Arrows"
+    }
+  ]
+}

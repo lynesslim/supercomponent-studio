@@ -1,0 +1,43 @@
+<div class="sc-curved-carousel-wrap" data-autoplay="{{autoplay}}" data-autoplay-speed="{{autoplay_speed.size}}">
+  <div class="sc-curved-carousel">
+    <div class="sc-curved-carousel__stage {{#feather_edges}}has-feather{{/feather_edges}}">
+      <div class="sc-curved-carousel__track">
+        {{#cards}}
+        <div class="sc-curved-carousel__card">
+          <div class="sc-curved-carousel__card-inner">
+            <div class="sc-curved-carousel__media">
+              <img class="sc-curved-carousel__img" src="{{image.url}}" alt="{{title}}" loading="lazy" />
+              <div class="sc-curved-carousel__overlay"></div>
+            </div>
+            <div class="sc-curved-carousel__glass">
+              <div class="sc-curved-carousel__badge" style="{{#badge_color}}--card-badge-bg: {{badge_color}};{{/badge_color}}">
+                {{{badge_icon}}}
+              </div>
+              <div class="sc-curved-carousel__info">
+                <h4 class="sc-curved-carousel__title">{{title}}</h4>
+                <p class="sc-curved-carousel__desc">{{description}}</p>
+              </div>
+            </div>
+            {{#link.url}}
+            <a href="{{link.url}}" class="sc-curved-carousel__link" target="{{link.is_external ? '_blank' : '_self'}}" aria-label="{{title}}"></a>
+            {{/link.url}}
+          </div>
+        </div>
+        {{/cards}}
+      </div>
+
+      {{#show_arrows}}
+      <button type="button" class="sc-curved-carousel__nav sc-curved-carousel__nav--prev" aria-label="Previous Slide">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <button type="button" class="sc-curved-carousel__nav sc-curved-carousel__nav--next" aria-label="Next Slide">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+      {{/show_arrows}}
+    </div>
+  </div>
+</div>
