@@ -322,8 +322,8 @@
 </head>
 <body>
 
-  <div class="elementor-element-curved-demo" data-instance-id="curved-demo" data-settings='{"autoplay":"yes","autoplay_speed":{"size":3500,"unit":"ms"}}'>
-    <div class="sc-curved-carousel-wrap" data-autoplay="yes" data-autoplay-speed="3500">
+  <div class="elementor-element-curved-demo" data-instance-id="curved-demo" data-settings='{"autoplay":"yes","autoplay_speed":{"size":3500,"unit":"ms"},"entrance_animation":"yes","entrance_duration":{"size":800,"unit":"ms"},"entrance_stagger":{"size":80,"unit":"ms"}}'>
+    <div class="sc-curved-carousel-wrap" data-autoplay="yes" data-autoplay-speed="3500" data-entrance="yes" data-entrance-duration="800" data-entrance-stagger="80">
       <div class="sc-curved-carousel">
         <div class="sc-curved-carousel__stage has-feather">
           <div class="sc-curved-carousel__track">
@@ -336,9 +336,8 @@
                   <div class="sc-curved-carousel__overlay"></div>
                 </div>
                 <div class="sc-curved-carousel__glass">
-                  <div class="sc-curved-carousel__badge" style="{{#badge_color}}--card-badge-bg: {{badge_color}};{{/badge_color}}">
-                    {{{badge_icon}}}
-                    {{^badge_icon}}<i class="fas fa-heartbeat" aria-hidden="true"></i>{{/badge_icon}}
+                  <div class="sc-curved-carousel__badge">
+                    <i class="fas fa-spa" aria-hidden="true"></i>
                   </div>
                   <div class="sc-curved-carousel__info">
                     <h4 class="sc-curved-carousel__title">Therapy Session</h4>

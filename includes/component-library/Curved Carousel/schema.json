@@ -172,6 +172,43 @@
       }
     },
     {
+      "id": "entrance_animation",
+      "type": "switcher",
+      "label": "Entrance Animation",
+      "description": "Cards fan out from center along the curved arc on scroll-into-view.",
+      "default": "yes",
+      "tab": "content",
+      "section": "Controls & Motion"
+    },
+    {
+      "id": "entrance_duration",
+      "type": "slider",
+      "label": "Animation Duration (ms)",
+      "default": {
+        "size": 800,
+        "unit": "ms"
+      },
+      "min": 300,
+      "max": 2000,
+      "step": 50,
+      "tab": "content",
+      "section": "Controls & Motion"
+    },
+    {
+      "id": "entrance_stagger",
+      "type": "slider",
+      "label": "Card Stagger Delay (ms)",
+      "default": {
+        "size": 80,
+        "unit": "ms"
+      },
+      "min": 0,
+      "max": 400,
+      "step": 10,
+      "tab": "content",
+      "section": "Controls & Motion"
+    },
+    {
       "id": "carousel_height",
       "type": "slider",
       "label": "Carousel Height",

@@ -341,7 +341,154 @@
   stage.addEventListener("mouseenter", pauseAutoplay);
   stage.addEventListener("mouseleave", startAutoplay);
 
-  // 10. Resize Observer
+  // 10. Entrance Animation Configuration & Easing
+  function getEntranceConfig() {
+    var innerWrap = container.querySelector(".sc-curved-carousel-wrap") || container;
+    var enabled = false;
+    var duration = 800;
+    var stagger = 90;
+
+    // Try reading from data-settings JSON
+    try {
+      var rawSettings = container.getAttribute("data-settings");
+      if (rawSettings) {
+        var parsed = JSON.parse(rawSettings);
+        if (parsed.entrance_animation === "yes" || parsed.entrance_animation === true || parsed.entrance_animation === "true") {
+          enabled = true;
+        }
+        if (parsed.entrance_duration) {
+          var d = typeof parsed.entrance_duration === "object" ? parsed.entrance_duration.size : parsed.entrance_duration;
+          if (!isNaN(parseInt(d, 10))) duration = parseInt(d, 10);
+        }
+        if (parsed.entrance_stagger) {
+          var s = typeof parsed.entrance_stagger === "object" ? parsed.entrance_stagger.size : parsed.entrance_stagger;
+          if (!isNaN(parseInt(s, 10))) stagger = parseInt(s, 10);
+        }
+      }
+    } catch (e) {}
+
+    // Fallback to HTML data attributes
+    var attrEntrance = innerWrap.getAttribute("data-entrance") || container.getAttribute("data-entrance");
+    if (attrEntrance === "yes" || attrEntrance === "true") {
+      enabled = true;
+    }
+    var attrDuration = innerWrap.getAttribute("data-entrance-duration") || container.getAttribute("data-entrance-duration");
+    if (attrDuration && !isNaN(parseInt(attrDuration, 10))) {
+      duration = parseInt(attrDuration, 10);
+    }
+    var attrStagger = innerWrap.getAttribute("data-entrance-stagger") || container.getAttribute("data-entrance-stagger");
+    if (attrStagger && !isNaN(parseInt(attrStagger, 10))) {
+      stagger = parseInt(attrStagger, 10);
+    }
+
+    return { enabled: enabled, duration: duration || 800, stagger: stagger };
+  }
+
+  function easeOutSoft(t) {
+    var s = 0.55; // Gentle organic spring overshoot
+    t = Math.min(1, Math.max(0, t));
+    return 1 + (s + 1) * Math.pow(t - 1, 3) + s * Math.pow(t - 1, 2);
+  }
+
+  var isEntering = false;
+  var entranceStartTime = null;
+  var entranceConfig = getEntranceConfig();
+
+  function triggerEntrance() {
+    if (!entranceConfig.enabled) return;
+    isEntering = true;
+    entranceStartTime = null;
+  }
+
+  // Override tick to handle entrance fan-out along curved arc
+  function tick() {
+    if (isEntering) {
+      var now = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
+      if (!entranceStartTime) entranceStartTime = now;
+      var elapsed = now - entranceStartTime;
+      var allDone = true;
+      var totalWidth = cardCount * spacing;
+
+      for (var i = 0; i < cardCount; i++) {
+        var card = cards[i];
+        var basePos = i * spacing;
+        var targetDiff = basePos - currentOffset;
+
+        if (isInfinite) {
+          targetDiff = ((targetDiff % totalWidth) + totalWidth) % totalWidth;
+          if (targetDiff > totalWidth / 2) targetDiff -= totalWidth;
+        }
+
+        var targetU = targetDiff / spacing;
+        var rank = Math.round(Math.abs(targetU));
+        var cardDelay = rank * entranceConfig.stagger;
+        var cardElapsed = Math.max(0, elapsed - cardDelay);
+        var t = Math.min(1, cardElapsed / entranceConfig.duration);
+
+        if (t < 1) allDone = false;
+
+        var progress = easeOutSoft(t);
+        var curProgress = Math.max(0, progress);
+
+        // Slide out from center along the convex curved arc
+        var diff = targetDiff * curProgress;
+        var u = diff / spacing;
+        var absU = Math.abs(u);
+
+        var y = Math.pow(absU, 1.7) * arcCurvature;
+        var rotZ = u * arcTilt;
+        var rotY = -u * 4;
+        var scale = Math.max(0.86, 1 - absU * 0.04) * (0.84 + 0.16 * Math.min(1, curProgress));
+        var opacity = Math.max(0, 1 - Math.pow(absU / 3.4, 2)) * Math.min(1, t * 1.8);
+        var zIndex = Math.round(100 - absU * 10);
+
+        card.style.transform =
+          "translate3d(" +
+          diff.toFixed(2) +
+          "px, " +
+          y.toFixed(2) +
+          "px, 0) rotateZ(" +
+          rotZ.toFixed(2) +
+          "deg) rotateY(" +
+          rotY.toFixed(2) +
+          "deg) scale(" +
+          scale.toFixed(3) +
+          ")";
+
+        card.style.zIndex = zIndex;
+        card.style.opacity = opacity.toFixed(3);
+
+        if (absU < 0.5) {
+          card.classList.add("is-active");
+        } else {
+          card.classList.remove("is-active");
+        }
+      }
+
+      if (allDone) {
+        isEntering = false;
+        startAutoplay();
+      }
+
+      animFrameId = requestAnimationFrame(tick);
+      return;
+    }
+
+    // Normal interactive loop
+    if (!isDragging) {
+      var delta = targetOffset - currentOffset;
+      if (Math.abs(delta) > 0.1) {
+        currentOffset += delta * 0.14;
+      } else {
+        currentOffset = targetOffset;
+      }
+    }
+
+    updateCardTransforms();
+    animFrameId = requestAnimationFrame(tick);
+  }
+
+  // 11. Resize Observer
   var onResize = function () {
     readSettings();
     updateCardTransforms();
@@ -349,7 +496,10 @@
   window.addEventListener("resize", onResize);
 
   // Bind pointer events
-  stage.addEventListener("pointerdown", onPointerDown);
+  stage.addEventListener("pointerdown", function (e) {
+    if (isEntering) isEntering = false; // user interaction cancels entrance animation smoothly
+    onPointerDown(e);
+  });
   stage.addEventListener("pointermove", onPointerMove);
   stage.addEventListener("pointerup", onPointerUp);
   stage.addEventListener("pointercancel", onPointerUp);
@@ -359,15 +509,40 @@
     e.preventDefault();
   });
 
-  // 11. Initial Setup
+  // 12. Initial Setup
   readSettings();
   setupCardClicks();
   snapToNearest();
   currentOffset = targetOffset;
-  tick();
-  startAutoplay();
 
-  // 12. Register cleanup for live Elementor rebuilds
+  if (entranceConfig.enabled) {
+    // Hide initially until scrolled into view
+    cards.forEach(function (card) {
+      card.style.opacity = "0";
+    });
+
+    if (typeof IntersectionObserver !== "undefined") {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            observer.unobserve(entry.target);
+            triggerEntrance();
+            tick();
+          }
+        });
+      }, { threshold: 0.12 });
+
+      observer.observe(stage);
+    } else {
+      triggerEntrance();
+      tick();
+    }
+  } else {
+    tick();
+    startAutoplay();
+  }
+
+  // 13. Register cleanup for live Elementor rebuilds
   window.supercomponentCleanups[cleanupKey] = function () {
     if (animFrameId) cancelAnimationFrame(animFrameId);
     if (autoplayTimer) clearInterval(autoplayTimer);
