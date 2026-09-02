@@ -1008,12 +1008,20 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 									$sub_val = isset( $item[ $sub_expr ] ) ? $item[ $sub_expr ] : null;
 								}
 
-								$is_truthy = ! empty( $sub_val ) && 'false' !== $sub_val;
-								if ( is_array( $sub_val ) && empty( $sub_val ) ) {
+								$is_truthy = ! empty( $sub_val );
+								if ( is_scalar( $sub_val ) && in_array( strtolower( (string) $sub_val ), [ 'false', 'no', 'off', '0' ], true ) ) {
 									$is_truthy = false;
 								}
-								if ( is_array( $sub_val ) && ( ( isset( $sub_val['value'] ) && empty( $sub_val['value'] ) ) || ( ! isset( $sub_val['value'] ) && ! isset( $sub_val['url'] ) ) ) ) {
-									$is_truthy = false;
+								if ( is_array( $sub_val ) ) {
+									if ( empty( $sub_val ) ) {
+										$is_truthy = false;
+									} elseif ( isset( $sub_val['value'] ) && empty( $sub_val['value'] ) ) {
+										$is_truthy = false;
+									} elseif ( isset( $sub_val['url'] ) && empty( $sub_val['url'] ) ) {
+										$is_truthy = false;
+									} elseif ( ! isset( $sub_val['value'] ) && ! isset( $sub_val['url'] ) ) {
+										$is_truthy = false;
+									}
 								}
 
 								$show = ( '#' === $sub_type ) ? $is_truthy : ! $is_truthy;
@@ -1076,10 +1084,21 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 					return $result;
 				}
 
-				// For standard conditionals (empty arrays are considered falsy)
-				$is_truthy = ! empty( $val ) && 'false' !== $val;
-				if ( is_array( $val ) && empty( $val ) ) {
+				// For standard conditionals (empty arrays and 'no'/'false'/'off'/'0' are considered falsy)
+				$is_truthy = ! empty( $val );
+				if ( is_scalar( $val ) && in_array( strtolower( (string) $val ), [ 'false', 'no', 'off', '0' ], true ) ) {
 					$is_truthy = false;
+				}
+				if ( is_array( $val ) ) {
+					if ( empty( $val ) ) {
+						$is_truthy = false;
+					} elseif ( isset( $val['value'] ) && empty( $val['value'] ) ) {
+						$is_truthy = false;
+					} elseif ( isset( $val['url'] ) && empty( $val['url'] ) ) {
+						$is_truthy = false;
+					} elseif ( ! isset( $val['value'] ) && ! isset( $val['url'] ) ) {
+						$is_truthy = false;
+					}
 				}
 
 				$show = ( '#' === $type ) ? $is_truthy : ! $is_truthy;
