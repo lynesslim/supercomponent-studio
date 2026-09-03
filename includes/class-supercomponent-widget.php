@@ -78,6 +78,7 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 				'type' => \Elementor\Controls_Manager::CODE,
 				'language' => 'json',
 				'rows' => 12,
+				'classes' => 'sc-code-control sc-code-schema',
 				'placeholder' => '{"id": "my-component", "name": "My Component", "settings": [...]}',
 				'description' => esc_html__( 'Define the component controls as JSON.', 'supercomponent-studio' ),
 			]
@@ -90,6 +91,7 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 				'type' => \Elementor\Controls_Manager::CODE,
 				'language' => 'html',
 				'rows' => 15,
+				'classes' => 'sc-code-control sc-code-html',
 				'placeholder' => '<div class="my-component">{{title}}</div>',
 				'description' => esc_html__( 'HTML with {{variable}} placeholders.', 'supercomponent-studio' ),
 			]
@@ -102,6 +104,7 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 				'type' => \Elementor\Controls_Manager::CODE,
 				'language' => 'css',
 				'rows' => 12,
+				'classes' => 'sc-code-control sc-code-css',
 				'placeholder' => '.my-component { color: var(--color); }',
 				'description' => esc_html__( 'CSS using var(--variable-name) tokens.', 'supercomponent-studio' ),
 			]
@@ -114,6 +117,7 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 				'type' => \Elementor\Controls_Manager::CODE,
 				'language' => 'javascript',
 				'rows' => 10,
+				'classes' => 'sc-code-control sc-code-js',
 				'placeholder' => '// Custom JS (optional)',
 				'description' => esc_html__( 'Optional JavaScript for the component.', 'supercomponent-studio' ),
 			]

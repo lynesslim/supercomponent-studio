@@ -1,25 +1,23 @@
 /* =========================================================
    SuperComponent Studio - Developer Tab Code Editors
    Fixed Height with Dedicated Vertical & Horizontal Scrollbars
+   (Strictly Scoped to SuperComponent Studio to never affect native Elementor widgets)
    ========================================================= */
 
 /* Developer Section Spacing */
-.elementor-control-developer_settings .elementor-control-type-code {
+.elementor-control-developer_settings ~ .elementor-control-type-code,
+.elementor-control-type-code.sc-code-control {
     margin-bottom: 14px;
 }
 
 /* Fixed Height for Ace Editors: JSON, HTML, CSS, JS */
-.elementor-control-schema .elementor-control-input-wrapper,
-.elementor-control-html .elementor-control-input-wrapper,
-.elementor-control-css .elementor-control-input-wrapper,
-.elementor-control-js .elementor-control-input-wrapper {
+.elementor-control-type-code.sc-code-control .elementor-control-input-wrapper,
+.elementor-control-developer_settings ~ .elementor-control-type-code .elementor-control-input-wrapper {
     position: relative !important;
 }
 
-.elementor-control-schema .ace_editor,
-.elementor-control-html .ace_editor,
-.elementor-control-css .ace_editor,
-.elementor-control-js .ace_editor {
+.elementor-control-type-code.sc-code-control .ace_editor,
+.elementor-control-developer_settings ~ .elementor-control-type-code .ace_editor {
     height: 240px !important;
     min-height: 240px !important;
     max-height: 240px !important;
@@ -29,29 +27,21 @@
 }
 
 /* Ensure Ace scrollbars are visible and functional */
-.elementor-control-schema .ace_editor .ace_scrollbar-v,
-.elementor-control-html .ace_editor .ace_scrollbar-v,
-.elementor-control-css .ace_editor .ace_scrollbar-v,
-.elementor-control-js .ace_editor .ace_scrollbar-v {
+.elementor-control-type-code.sc-code-control .ace_editor .ace_scrollbar-v,
+.elementor-control-developer_settings ~ .elementor-control-type-code .ace_editor .ace_scrollbar-v {
     display: block !important;
 }
 
-.elementor-control-schema .ace_editor .ace_scrollbar-h,
-.elementor-control-html .ace_editor .ace_scrollbar-h,
-.elementor-control-css .ace_editor .ace_scrollbar-h,
-.elementor-control-js .ace_editor .ace_scrollbar-h {
+.elementor-control-type-code.sc-code-control .ace_editor .ace_scrollbar-h,
+.elementor-control-developer_settings ~ .elementor-control-type-code .ace_editor .ace_scrollbar-h {
     display: block !important;
 }
 
 /* Textarea Fallback (if Ace editor is not active) */
-.elementor-control-schema textarea.elementor-editor-code,
-.elementor-control-html textarea.elementor-editor-code,
-.elementor-control-css textarea.elementor-editor-code,
-.elementor-control-js textarea.elementor-editor-code,
-.elementor-control-schema textarea,
-.elementor-control-html textarea,
-.elementor-control-css textarea,
-.elementor-control-js textarea {
+.elementor-control-type-code.sc-code-control textarea.elementor-editor-code,
+.elementor-control-developer_settings ~ .elementor-control-type-code textarea.elementor-editor-code,
+.elementor-control-type-code.sc-code-control textarea,
+.elementor-control-developer_settings ~ .elementor-control-type-code textarea {
     height: 240px !important;
     min-height: 240px !important;
     max-height: 240px !important;

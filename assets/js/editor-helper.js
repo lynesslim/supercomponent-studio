@@ -35,7 +35,31 @@
         // Configure Developer tab Ace editors to have fixed height with scrollbars
         initCodeEditors: function () {
             var applyAceConfig = function () {
-                var codeSelectors = ['.elementor-control-schema', '.elementor-control-html', '.elementor-control-css', '.elementor-control-js'];
+                // Safety check: Only apply if currently editing a supercomponent widget
+                try {
+                    var panel = elementor.getPanelView ? elementor.getPanelView() : null;
+                    if (panel && panel.currentPageView && panel.currentPageView.model) {
+                        var widgetType = panel.currentPageView.model.get('widgetType');
+                        if (widgetType && widgetType !== 'supercomponent') {
+                            return; // Strictly ignore other widgets (e.g. native HTML widget)
+                        }
+                    }
+                } catch (err) {}
+
+                var $devSection = $('.elementor-control-developer_settings, #elementor-panel-section-developer_settings');
+                if (!$devSection.length) return;
+
+                var codeSelectors = [
+                    '.sc-code-control',
+                    '.sc-code-schema',
+                    '.sc-code-html',
+                    '.sc-code-css',
+                    '.sc-code-js',
+                    '.elementor-control-developer_settings ~ .elementor-control-schema',
+                    '.elementor-control-developer_settings ~ .elementor-control-html',
+                    '.elementor-control-developer_settings ~ .elementor-control-css',
+                    '.elementor-control-developer_settings ~ .elementor-control-js'
+                ];
                 codeSelectors.forEach(function (sel) {
                     var $wrapper = $(sel);
                     if (!$wrapper.length) return;
@@ -158,6 +182,7 @@
                     name: 'schema',
                     type: 'code',
                     label: 'Schema (JSON)',
+                    classes: 'sc-code-control sc-code-schema',
                     tab: 'content',
                     section: 'developer_settings'
                 },
@@ -165,6 +190,7 @@
                     name: 'html',
                     type: 'code',
                     label: 'HTML Template',
+                    classes: 'sc-code-control sc-code-html',
                     tab: 'content',
                     section: 'developer_settings'
                 },
@@ -172,6 +198,7 @@
                     name: 'css',
                     type: 'code',
                     label: 'CSS',
+                    classes: 'sc-code-control sc-code-css',
                     tab: 'content',
                     section: 'developer_settings'
                 },
@@ -179,6 +206,7 @@
                     name: 'js',
                     type: 'code',
                     label: 'JavaScript',
+                    classes: 'sc-code-control sc-code-js',
                     tab: 'content',
                     section: 'developer_settings'
                 },
