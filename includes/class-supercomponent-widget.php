@@ -391,6 +391,7 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 									}
 								}
 								$field_args['options'] = $options;
+							}
 							if ( isset( $field['condition'] ) && is_array( $field['condition'] ) ) {
 								$field_args['condition'] = $field['condition'];
 							}
