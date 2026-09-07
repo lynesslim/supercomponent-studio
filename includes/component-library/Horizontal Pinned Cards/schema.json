@@ -1,0 +1,450 @@
+{
+  "id": "horizontal-pinned-cards",
+  "name": "Horizontal Pinned Cards",
+  "settings": [
+    {
+      "tab": "content",
+      "section": "Cards Content",
+      "id": "cards",
+      "type": "repeater",
+      "label": "Cards List",
+      "title_field": "{{{ index }}} - {{{ title }}}",
+      "fields": [
+        {
+          "id": "index",
+          "type": "text",
+          "label": "Card Index",
+          "default": "01 / 08"
+        },
+        {
+          "id": "title",
+          "type": "text",
+          "label": "Card Title",
+          "default": "Card Title"
+        },
+        {
+          "id": "image",
+          "type": "image",
+          "label": "Background Image"
+        },
+        {
+          "id": "icon_source",
+          "type": "select",
+          "label": "Icon Source",
+          "default": "svg",
+          "options": [
+            {
+              "value": "svg",
+              "label": "Custom SVG (Raw Code)"
+            },
+            {
+              "value": "library",
+              "label": "Icon Library (FontAwesome / Elementor)"
+            }
+          ]
+        },
+        {
+          "id": "icon_library",
+          "type": "icons",
+          "label": "Choose Icon from Library",
+          "default": {
+            "value": "fas fa-star",
+            "library": "fa-solid"
+          },
+          "condition": {
+            "icon_source": "library"
+          }
+        },
+        {
+          "id": "icon_svg",
+          "type": "textarea",
+          "label": "Icon (Raw SVG)",
+          "default": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/></svg>",
+          "condition": {
+            "icon_source": "svg"
+          }
+        },
+        {
+          "id": "link",
+          "type": "url",
+          "label": "Card Link"
+        }
+      ],
+      "default": [
+        {
+          "index": "01 / 08",
+          "title": "Hospitality",
+          "image": {
+            "url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80"
+          },
+          "icon_source": "svg",
+          "icon_library": {
+            "value": "fas fa-hotel",
+            "library": "fa-solid"
+          },
+          "icon_svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 19V9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10\"/><path d=\"M13 19v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6\"/><path d=\"M2 19h20\"/><circle cx=\"7\" cy=\"9\" r=\"1\"/></svg>"
+        },
+        {
+          "index": "02 / 08",
+          "title": "Food & Beverage",
+          "image": {
+            "url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80"
+          },
+          "icon_source": "svg",
+          "icon_library": {
+            "value": "fas fa-utensils",
+            "library": "fa-solid"
+          },
+          "icon_svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M18 8h1a4 4 0 0 1 0 8h-1\"/><path d=\"M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z\"/><line x1=\"6\" y1=\"1\" x2=\"6\" y2=\"4\"/><line x1=\"10\" y1=\"1\" x2=\"10\" y2=\"4\"/><line x1=\"14\" y1=\"1\" x2=\"14\" y2=\"4\"/></svg>"
+        },
+        {
+          "index": "03 / 08",
+          "title": "Retail",
+          "image": {
+            "url": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80"
+          },
+          "icon_source": "svg",
+          "icon_library": {
+            "value": "fas fa-shopping-bag",
+            "library": "fa-solid"
+          },
+          "icon_svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z\"/><path d=\"M3 6h18\"/><path d=\"M16 10a4 4 0 0 1-8 0\"/></svg>"
+        },
+        {
+          "index": "04 / 08",
+          "title": "Healthcare",
+          "image": {
+            "url": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80"
+          },
+          "icon_source": "svg",
+          "icon_library": {
+            "value": "fas fa-heartbeat",
+            "library": "fa-solid"
+          },
+          "icon_svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M22 12h-4l-3 9L9 3l-3 9H2\"/></svg>"
+        },
+        {
+          "index": "05 / 08",
+          "title": "Manufacturing",
+          "image": {
+            "url": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80"
+          },
+          "icon_source": "svg",
+          "icon_library": {
+            "value": "fas fa-industry",
+            "library": "fa-solid"
+          },
+          "icon_svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z\"/><path d=\"M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z\"/></svg>"
+        },
+        {
+          "index": "06 / 08",
+          "title": "Logistics",
+          "image": {
+            "url": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80"
+          },
+          "icon_source": "svg",
+          "icon_library": {
+            "value": "fas fa-truck",
+            "library": "fa-solid"
+          },
+          "icon_svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"1\" y=\"6\" width=\"15\" height=\"11\"/><path d=\"M16 9h4l3 3v5h-7z\"/><circle cx=\"6\" cy=\"19\" r=\"2\"/><circle cx=\"18\" cy=\"19\" r=\"2\"/></svg>"
+        },
+        {
+          "index": "07 / 08",
+          "title": "Smart Buildings",
+          "image": {
+            "url": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80"
+          },
+          "icon_source": "svg",
+          "icon_library": {
+            "value": "fas fa-building",
+            "library": "fa-solid"
+          },
+          "icon_svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18\"/><path d=\"M6 22h12\"/><path d=\"M9 9h1\"/><path d=\"M14 9h1\"/><path d=\"M9 13h1\"/><path d=\"M14 13h1\"/><path d=\"M9 17h1\"/><path d=\"M14 17h1\"/><circle cx=\"18.5\" cy=\"16.5\" r=\"1.2\"/></svg>"
+        },
+        {
+          "index": "08 / 08",
+          "title": "Future Industries",
+          "image": {
+            "url": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80"
+          },
+          "icon_source": "svg",
+          "icon_library": {
+            "value": "fas fa-microchip",
+            "library": "fa-solid"
+          },
+          "icon_svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"7\" y=\"7\" width=\"10\" height=\"10\" rx=\"1\"/><line x1=\"7\" y1=\"2\" x2=\"7\" y2=\"5\"/><line x1=\"12\" y1=\"2\" x2=\"12\" y2=\"5\"/><line x1=\"17\" y1=\"2\" x2=\"17\" y2=\"5\"/><line x1=\"7\" y1=\"19\" x2=\"7\" y2=\"22\"/><line x1=\"12\" y1=\"19\" x2=\"12\" y2=\"22\"/><line x1=\"17\" y1=\"19\" x2=\"17\" y2=\"22\"/><line x1=\"2\" y1=\"7\" x2=\"5\" y2=\"7\"/><line x1=\"2\" y1=\"12\" x2=\"5\" y2=\"12\"/><line x1=\"2\" y1=\"17\" x2=\"5\" y2=\"17\"/><line x1=\"19\" y1=\"7\" x2=\"22\" y2=\"7\"/><line x1=\"19\" y1=\"12\" x2=\"22\" y2=\"12\"/><line x1=\"19\" y1=\"17\" x2=\"22\" y2=\"17\"/></svg>"
+        }
+      ]
+    },
+    {
+      "tab": "content",
+      "section": "Edge Fade",
+      "id": "show_edge_fade",
+      "type": "switcher",
+      "label": "Enable Edge Fades",
+      "default": "yes"
+    },
+    {
+      "tab": "style",
+      "section": "Card Dimensions",
+      "id": "card_width",
+      "type": "slider",
+      "label": "Card Width (px)",
+      "unit": "px",
+      "min": 220,
+      "max": 500,
+      "step": 10,
+      "default": {
+        "size": 320,
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Card Dimensions",
+      "id": "card_height",
+      "type": "slider",
+      "label": "Card Height (px)",
+      "unit": "px",
+      "min": 280,
+      "max": 700,
+      "step": 10,
+      "default": {
+        "size": 420,
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Card Dimensions",
+      "id": "card_gap",
+      "type": "slider",
+      "label": "Card Gap (px)",
+      "unit": "px",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "default": {
+        "size": 20,
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Card Dimensions",
+      "id": "card_radius",
+      "type": "slider",
+      "label": "Card Border Radius (px)",
+      "unit": "px",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "default": {
+        "size": 18,
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Card Dimensions",
+      "id": "stage_padding_y",
+      "type": "slider",
+      "label": "Stage Vertical Padding (px)",
+      "unit": "px",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": {
+        "size": 30,
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Colors & Overlays",
+      "id": "accent_color",
+      "type": "color",
+      "label": "Accent Rule Color",
+      "default": "#4F6BFF"
+    },
+    {
+      "tab": "style",
+      "section": "Colors & Overlays",
+      "id": "card_title_color",
+      "type": "color",
+      "label": "Title Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "tab": "style",
+      "section": "Colors & Overlays",
+      "id": "card_index_color",
+      "type": "color",
+      "label": "Index Color",
+      "default": "rgba(255, 255, 255, 0.7)"
+    },
+    {
+      "tab": "style",
+      "section": "Colors & Overlays",
+      "id": "icon_color",
+      "type": "color",
+      "label": "Icon Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "tab": "style",
+      "section": "Colors & Overlays",
+      "id": "overlay_top_color",
+      "type": "color",
+      "label": "Card Overlay Top",
+      "default": "rgba(10, 12, 20, 0.35)"
+    },
+    {
+      "tab": "style",
+      "section": "Colors & Overlays",
+      "id": "overlay_bottom_color",
+      "type": "color",
+      "label": "Card Overlay Bottom",
+      "default": "rgba(10, 12, 20, 0.85)"
+    },
+    {
+      "tab": "style",
+      "section": "Colors & Overlays",
+      "id": "edge_fade_color",
+      "type": "color",
+      "label": "Edge Fade Color",
+      "default": "#FFFFFF",
+      "condition": {
+        "show_edge_fade": "yes"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Colors & Overlays",
+      "id": "edge_fade_width",
+      "type": "slider",
+      "label": "Edge Fade Width (px)",
+      "unit": "px",
+      "min": 20,
+      "max": 180,
+      "step": 5,
+      "default": {
+        "size": 60,
+        "unit": "px"
+      },
+      "condition": {
+        "show_edge_fade": "yes"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Indicator Rule",
+      "id": "rule_width",
+      "type": "slider",
+      "label": "Rule Width (px)",
+      "unit": "px",
+      "min": 10,
+      "max": 100,
+      "step": 2,
+      "default": {
+        "size": 32,
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Indicator Rule",
+      "id": "rule_height",
+      "type": "slider",
+      "label": "Rule Height (px)",
+      "unit": "px",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": {
+        "size": 3,
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Indicator Rule",
+      "id": "rule_radius",
+      "type": "slider",
+      "label": "Rule Border Radius (px)",
+      "unit": "px",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": {
+        "size": 2,
+        "unit": "px"
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Typography",
+      "id": "title_typography",
+      "type": "typography",
+      "label": "Card Title Typography"
+    },
+    {
+      "tab": "style",
+      "section": "Typography",
+      "id": "index_typography",
+      "type": "typography",
+      "label": "Card Index Typography"
+    },
+    {
+      "tab": "style",
+      "section": "Scroll Settings",
+      "id": "scrub_speed",
+      "type": "slider",
+      "label": "Scroll Scrub Smoothness",
+      "min": 0.1,
+      "max": 3,
+      "step": 0.1,
+      "default": {
+        "size": 1
+      }
+    },
+    {
+      "tab": "style",
+      "section": "Scroll Settings",
+      "id": "pin_breakpoint",
+      "type": "select",
+      "label": "Pinning Screen Breakpoint",
+      "default": "768",
+      "options": [
+        {
+          "value": "768",
+          "label": "Desktop & Tablet (> 767px)"
+        },
+        {
+          "value": "1025",
+          "label": "Desktop Only (> 1024px)"
+        },
+        {
+          "value": "all",
+          "label": "All Screens (including Mobile)"
+        }
+      ]
+    },
+    {
+      "tab": "style",
+      "section": "Scroll Settings",
+      "id": "pin_start_offset",
+      "type": "slider",
+      "label": "Pin Start Top Offset (px)",
+      "unit": "px",
+      "min": 0,
+      "max": 300,
+      "step": 5,
+      "default": {
+        "size": 0,
+        "unit": "px"
+      }
+    }
+  ]
+}

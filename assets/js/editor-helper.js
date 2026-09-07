@@ -442,6 +442,17 @@
                             }
                         });
                         window.dispatchEvent(event);
+                        try {
+                            var iframe = document.querySelector('#elementor-preview-iframe');
+                            if (iframe && iframe.contentWindow) {
+                                iframe.contentWindow.dispatchEvent(new CustomEvent('supercomponent:update', {
+                                    detail: {
+                                        instanceId: instanceId,
+                                        settings: merged
+                                    }
+                                }));
+                            }
+                        } catch (e) {}
                     }
                 }
             });

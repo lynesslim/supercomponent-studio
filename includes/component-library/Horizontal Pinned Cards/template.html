@@ -1,0 +1,28 @@
+<div class="el-hs-wrapper" data-edge-fade="{{show_edge_fade}}">
+  <div class="el-hs-pin-stage">
+    <div class="el-hs-track">
+      {{#cards}}
+      <div class="el-hs-card" style="{{#image.url}}background-image: url('{{image.url}}');{{/image.url}}">
+        <div class="el-hs-icon">
+          {{#is_library_icon}}
+          {{{icon_library}}}
+          {{/is_library_icon}}
+          {{^is_library_icon}}
+          {{{icon_svg}}}
+          {{/is_library_icon}}
+        </div>
+        <div class="el-hs-bottom">
+          {{#index}}
+          <p class="el-hs-index sc-index_typography">{{index}}</p>
+          {{/index}}
+          <h3 class="el-hs-card-title sc-title_typography">{{title}}</h3>
+          <div class="el-hs-rule"></div>
+        </div>
+        {{#link.url}}
+        <a href="{{link.url}}" class="el-hs-card-link" target="{{link.is_external ? '_blank' : '_self'}}" aria-label="{{title}}"></a>
+        {{/link.url}}
+      </div>
+      {{/cards}}
+    </div>
+  </div>
+</div>

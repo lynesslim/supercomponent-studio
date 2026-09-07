@@ -1,36 +1,95 @@
 .dial-demo-wrapper {
   position: relative;
-  min-height: 100vh;
+  min-height: var(--section_height, 100vh);
   background: transparent;
 }
 
 .dial-stage {
   position: relative;
-  height: 100vh;
-  min-height: 720px;
+  height: var(--section_height, 100vh);
+  min-height: var(--section_min_height, 720px);
   overflow: hidden;
   isolation: isolate;
   background: transparent;
+}
+
+/* Background Layers */
+.dial-bg-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .dial-bg {
   position: absolute;
   inset: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  z-index: 0;
   pointer-events: none;
+  opacity: 0;
+  transform: scale(1.03);
+  transition: opacity var(--bg_transition_duration, 0.6s) cubic-bezier(0.22, 1, 0.36, 1),
+              transform var(--bg_transition_duration, 0.6s) cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+/* Fixed background mode */
+.dial-bg--fixed {
+  z-index: 1;
+}
+
+.dial-demo-wrapper[data-bg-mode="fixed"] .dial-bg--fixed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Dynamic per-stage background mode */
+.dial-bg-stage-layers {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.dial-bg--stage {
+  z-index: 2;
+}
+
+.dial-demo-wrapper[data-bg-mode="dynamic"] .dial-bg--stage.is-active {
+  opacity: 1;
+  transform: scale(1);
+  z-index: 3;
+}
+
+/* Fallback: when in dynamic mode, fixed background displays smoothly underneath */
+.dial-demo-wrapper[data-bg-mode="dynamic"] .dial-bg--fixed {
+  opacity: 0.6;
+  transform: scale(1);
+}
+
+/* None / Transparent mode */
+.dial-demo-wrapper[data-bg-mode="none"] .dial-bg-container {
+  display: none;
 }
 
 .dial-bg-overlay {
   position: absolute;
   inset: 0;
-  background-color: var(--bg_overlay_color, rgba(0, 0, 0, 0.4));
+  background-color: var(--bg_overlay_color, rgba(0, 0, 0, 0.45));
+  z-index: 4;
+  pointer-events: none;
 }
 
+/* Dial Circle & Marker */
 .dial {
   position: absolute;
   width: var(--dial-size, min(148vw, 1500px));
@@ -53,13 +112,13 @@
 .dial__base {
   fill: none;
   stroke: var(--dial_line_color, rgba(255, 255, 255, 0.62));
-  stroke-width: 1;
+  stroke-width: var(--dial_line_width, 1);
   vector-effect: non-scaling-stroke;
 }
 
 .dial__dot {
   fill: var(--dial_dot_color, #ffffff);
-  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.75));
+  filter: drop-shadow(0 0 6px var(--dial_dot_glow_color, rgba(255, 255, 255, 0.75)));
 }
 
 .dial__label {
@@ -81,12 +140,13 @@
   color: var(--active_label_color, #ffffff);
 }
 
+/* Content Area */
 .dial-content {
   position: absolute;
   z-index: 5;
   left: clamp(28px, 40vw, 680px);
   top: 50%;
-  width: min(480px, calc(100vw - 80px));
+  width: min(var(--content_max_width, 480px), calc(100vw - 80px));
   transform: translateY(-50%);
 }
 
@@ -135,14 +195,14 @@
   }
 
   .dial-stage {
-    height: 100svh;
-    min-height: 680px;
+    height: var(--section_height, 100svh);
+    min-height: calc(var(--section_min_height, 720px) * 0.92);
   }
 
   .dial-content {
     left: 22vw;
     top: calc(50% + 76px);
-    width: min(520px, 70vw);
+    width: min(var(--content_max_width, 520px), 70vw);
     transform: none;
     display: flex;
     flex-direction: column;
@@ -191,8 +251,8 @@
   }
 
   .dial-stage {
-    height: 100svh;
-    min-height: 620px;
+    height: var(--section_height, 100svh);
+    min-height: calc(var(--section_min_height, 720px) * 0.85);
   }
 
   .dial-content {
@@ -223,11 +283,7 @@
   }
 
   .dial__base {
-    stroke-width: .8;
-  }
-
-  .dial__dot {
-    r: 4;
+    stroke-width: calc(var(--dial_line_width, 1) * 0.8);
   }
 }
 
@@ -267,6 +323,7 @@
   .dial,
   .dial__label,
   .dial__dot,
+  .dial-bg,
   .dial-content__title,
   .dial-content__body {
     animation: none !important;

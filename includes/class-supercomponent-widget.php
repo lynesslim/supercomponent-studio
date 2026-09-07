@@ -282,6 +282,12 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 					$control_args['selectors'] = [
 						'{{WRAPPER}}' => "--{$control['id']}: {{VALUE}};",
 					];
+					if ( 'color' === $control['type'] ) {
+						$control_args['selectors']['{{WRAPPER}} .sc-' . $control['id']] = 'color: {{VALUE}} !important;';
+						if ( strpos( $control['id'], 'title' ) !== false ) {
+							$control_args['selectors']['{{WRAPPER}} .el-hs-card-title, {{WRAPPER}} .dial-content__title'] = 'color: {{VALUE}} !important;';
+						}
+					}
 				}
 			}
 
@@ -385,6 +391,8 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 									}
 								}
 								$field_args['options'] = $options;
+							if ( isset( $field['condition'] ) && is_array( $field['condition'] ) ) {
+								$field_args['condition'] = $field['condition'];
 							}
 							$repeater->add_control( $field['id'], $field_args );
 						}
@@ -987,6 +995,17 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 							} elseif ( is_array( $item[ $f_id ] ) && ( ! isset( $item[ $f_id ]['value'] ) || empty( $item[ $f_id ]['value'] ) ) && ! isset( $item[ $f_id ]['url'] ) ) {
 								$item[ $f_id ] = $fallback;
 							}
+						}
+
+						// Dynamic helper flags for select/switcher controls inside repeater (e.g. icon_source: library -> icon_source_library)
+						foreach ( $item as $f_k => $f_v ) {
+							if ( is_string( $f_v ) && ! empty( $f_v ) ) {
+								$item[ $f_k . '_' . $f_v ] = 'yes';
+							}
+						}
+						if ( isset( $item['icon_source'] ) ) {
+							$item['is_library_icon'] = ( 'library' === $item['icon_source'] ) ? 'yes' : '';
+							$item['is_svg_icon']     = ( 'svg' === $item['icon_source'] ) ? 'yes' : '';
 						}
 
 						$item_output = $inner;
