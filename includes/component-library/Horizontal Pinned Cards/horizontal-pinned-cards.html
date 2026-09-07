@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Horizontal Pinned Cards — SuperComponent Demo</title>
+  <title>Horizontal Draggable Cards — SuperComponent Demo</title>
 
   <!-- Google Font Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +23,7 @@
 
     .demo-header {
       text-align: center;
-      padding: 80px 24px 40px;
+      padding: 60px 24px 30px;
       max-width: 800px;
       margin: 0 auto;
     }
@@ -87,18 +87,26 @@
       box-sizing: border-box;
     }
 
-    /* Pin Stage Container */
+    /* Stage Container */
     .el-hs-pin-stage {
       width: 100%;
       height: auto;
-      min-height: 100vh;
-      min-height: 100svh;
+      min-height: auto;
       display: flex;
       align-items: center;
       position: relative;
       padding-top: var(--stage_padding_y, 30px);
       padding-bottom: var(--stage_padding_y, 30px);
       overflow: hidden;
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: pan-y;
+    }
+
+    .el-hs-pin-stage:active,
+    .el-hs-pin-stage.is-dragging {
+      cursor: grabbing;
     }
 
     /* Edge Fade Overlay Left */
@@ -137,6 +145,10 @@
       padding-bottom: 25px;
       padding-left: 5vw;
       padding-right: 5vw;
+      cursor: inherit;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: pan-y;
     }
 
     /* Base Card Styles */
@@ -156,6 +168,9 @@
       background-repeat: no-repeat;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
       transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-drag: none;
     }
 
     /* Dark Overlay for Text Readability */
@@ -168,9 +183,18 @@
       pointer-events: none;
     }
 
+    /* Optional Full-card Link */
+    .el-hs-card-link {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      -webkit-user-drag: none;
+      user-select: none;
+    }
+
     /* Hover State for Desktop */
     @media (hover: hover) {
-      .el-hs-card:hover {
+      .el-hs-pin-stage:not(.is-dragging) .el-hs-card:hover {
         transform: translateY(-8px);
         box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5);
       }
@@ -186,6 +210,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      pointer-events: none;
     }
 
     .el-hs-icon svg {
@@ -199,15 +224,10 @@
       color: inherit;
     }
 
-    .el-hs-icon img.sc-icon-svg {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
     .el-hs-bottom {
       position: relative;
       z-index: 2;
+      pointer-events: none;
     }
 
     .el-hs-index {
@@ -217,10 +237,9 @@
       margin: 0 0 6px 0;
     }
 
-    .el-hs-wrapper .el-hs-card-title,
     .el-hs-card-title {
       margin: 0;
-      color: var(--card_title_color, var(--title_color, #FFFFFF)) !important;
+      color: var(--card_title_color, #FFFFFF);
       font-weight: 800;
       font-size: clamp(18px, 2vw, 24px);
       letter-spacing: -0.01em;
@@ -248,38 +267,37 @@
       }
     }
 
-    /* Mobile & Tablet Specific Responsive Fixes */
-    @media (max-width: 1024px) {
+    /* Tablet Layout */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .el-hs-card {
+        width: var(--card_width, clamp(280px, 35vw, 360px));
+        height: var(--card_height, clamp(360px, 50vh, 460px));
+      }
+    }
+
+    /* Mobile Touch Screens (< 768px) */
+    @media (max-width: 767px) {
       .el-hs-pin-stage {
-        padding-top: calc(var(--stage_padding_y, 30px) * 0.5);
-        padding-bottom: calc(var(--stage_padding_y, 30px) * 0.5);
-        overflow-x: hidden;
+        min-height: auto;
+        padding-top: calc(var(--stage_padding_y, 30px) * 0.6);
+        padding-bottom: calc(var(--stage_padding_y, 30px) * 0.6);
       }
       
       .el-hs-wrapper[data-edge-fade="yes"] .el-hs-pin-stage::before,
       .el-hs-wrapper[data-edge-fade="yes"] .el-hs-pin-stage::after {
-        width: 30px;
+        width: 25px;
       }
 
       .el-hs-track {
-        width: 100%;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        padding-left: 20px;
-        padding-right: 20px;
-        padding-bottom: 20px;
-      }
-
-      .el-hs-track::-webkit-scrollbar {
-        display: none;
+        padding-left: 16px;
+        padding-right: 16px;
+        padding-bottom: 16px;
       }
 
       .el-hs-card {
         width: 78vw;
         max-width: 340px;
         height: 380px;
-        scroll-snap-align: center;
       }
     }
 
@@ -292,21 +310,22 @@
 
     .demo-footer {
       text-align: center;
-      padding: 120px 24px;
-      color: rgba(255, 255, 255, 0.5);
+      padding: 60px 20px;
+      color: rgba(255, 255, 255, 0.4);
       font-size: 14px;
     }
   </style>
 </head>
 <body>
 
+  <!-- Demo Header -->
   <header class="demo-header">
-    <div class="demo-badge">SuperComponent Studio</div>
-    <h1 class="demo-title">Horizontal Pinned Cards</h1>
-    <p class="demo-subtitle">Scroll down smoothly to trigger the desktop pinning animation and explore industries.</p>
+    <span class="demo-badge">Drag & Swipe Component</span>
+    <h1 class="demo-title">Horizontal Draggable Cards</h1>
+    <p class="demo-subtitle">Click and drag horizontally, use your mouse wheel, or swipe seamlessly on touch screens.</p>
   </header>
 
-  <!-- SuperComponent Widget Template -->
+  <!-- Component Wrapper -->
   <div class="el-hs-wrapper" id="elHsWrapper" data-edge-fade="yes">
     <div class="el-hs-pin-stage" id="elHsStage">
       <div class="el-hs-track" id="elHsTrack">
@@ -321,18 +340,20 @@
             <h3 class="el-hs-card-title sc-title_typography">Hospitality</h3>
             <div class="el-hs-rule"></div>
           </div>
+          <a href="#" class="el-hs-card-link" aria-label="Hospitality"></a>
         </div>
 
         <!-- Panel 2 -->
         <div class="el-hs-card" style="background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80');">
           <div class="el-hs-icon">
-            <i class="fas fa-utensils"></i>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
           </div>
           <div class="el-hs-bottom">
             <p class="el-hs-index sc-index_typography">02 / 08</p>
-            <h3 class="el-hs-card-title sc-title_typography">Food &amp; Beverage</h3>
+            <h3 class="el-hs-card-title sc-title_typography">Food & Beverage</h3>
             <div class="el-hs-rule"></div>
           </div>
+          <a href="#" class="el-hs-card-link" aria-label="Food & Beverage"></a>
         </div>
 
         <!-- Panel 3 -->
@@ -345,6 +366,7 @@
             <h3 class="el-hs-card-title sc-title_typography">Retail</h3>
             <div class="el-hs-rule"></div>
           </div>
+          <a href="#" class="el-hs-card-link" aria-label="Retail"></a>
         </div>
 
         <!-- Panel 4 -->
@@ -357,6 +379,7 @@
             <h3 class="el-hs-card-title sc-title_typography">Healthcare</h3>
             <div class="el-hs-rule"></div>
           </div>
+          <a href="#" class="el-hs-card-link" aria-label="Healthcare"></a>
         </div>
 
         <!-- Panel 5 -->
@@ -369,6 +392,7 @@
             <h3 class="el-hs-card-title sc-title_typography">Manufacturing</h3>
             <div class="el-hs-rule"></div>
           </div>
+          <a href="#" class="el-hs-card-link" aria-label="Manufacturing"></a>
         </div>
 
         <!-- Panel 6 -->
@@ -381,6 +405,7 @@
             <h3 class="el-hs-card-title sc-title_typography">Logistics</h3>
             <div class="el-hs-rule"></div>
           </div>
+          <a href="#" class="el-hs-card-link" aria-label="Logistics"></a>
         </div>
 
         <!-- Panel 7 -->
@@ -393,6 +418,7 @@
             <h3 class="el-hs-card-title sc-title_typography">Smart Buildings</h3>
             <div class="el-hs-rule"></div>
           </div>
+          <a href="#" class="el-hs-card-link" aria-label="Smart Buildings"></a>
         </div>
 
         <!-- Panel 8 -->
@@ -405,6 +431,7 @@
             <h3 class="el-hs-card-title sc-title_typography">Future Industries</h3>
             <div class="el-hs-rule"></div>
           </div>
+          <a href="#" class="el-hs-card-link" aria-label="Future Industries"></a>
         </div>
 
       </div>
@@ -415,50 +442,107 @@
     <p>End of horizontal cards demo section</p>
   </footer>
 
-  <!-- GSAP Core & ScrollTrigger CDN -->
+  <!-- GSAP Core & Draggable CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
 
   <script>
     (function() {
-      gsap.registerPlugin(ScrollTrigger);
+      gsap.registerPlugin(Draggable);
 
       const stage = document.getElementById('elHsStage');
       const track = document.getElementById('elHsTrack');
-
       if (!stage || !track) return;
 
-      const mm = gsap.matchMedia();
+      function getMinX() {
+        const diff = track.scrollWidth - stage.clientWidth;
+        return diff > 0 ? -diff : 0;
+      }
 
-      mm.add("(min-width: 768px)", () => {
-        const getScrollAmount = () => -(track.scrollWidth - stage.clientWidth);
+      let hasDragged = false;
+      let pointerStartX = 0;
 
-        const tween = gsap.to(track, {
-          x: getScrollAmount,
-          ease: "none"
-        });
+      const draggable = Draggable.create(track, {
+        type: 'x',
+        bounds: {
+          minX: getMinX(),
+          maxX: 0
+        },
+        edgeResistance: 0.65,
+        dragClickables: true,
+        cursor: 'grab',
+        activeCursor: 'grabbing',
+        zIndexBoost: false,
+        onPress: function() {
+          stage.classList.add('is-dragging');
+          hasDragged = false;
+          pointerStartX = this.pointerX;
+        },
+        onDrag: function() {
+          if (Math.abs(this.pointerX - pointerStartX) > 5) {
+            hasDragged = true;
+          }
+        },
+        onRelease: function() {
+          stage.classList.remove('is-dragging');
+          const minX = getMinX();
+          const currentX = gsap.getProperty(track, 'x') || 0;
+          if (currentX > 0) {
+            gsap.to(track, { x: 0, duration: 0.4, ease: 'power2.out' });
+          } else if (currentX < minX) {
+            gsap.to(track, { x: minX, duration: 0.4, ease: 'power2.out' });
+          }
+        }
+      })[0];
 
-        ScrollTrigger.create({
-          trigger: stage,
-          start: "top top",
-          end: () => `+=${Math.max(200, Math.abs(getScrollAmount()))}`,
-          pin: true,
-          pinSpacing: true,
-          animation: tween,
-          scrub: 1,
-          anticipatePin: 1,
-          invalidateOnRefresh: true
-        });
-      });
+      // Suppress link click if dragged
+      track.addEventListener('click', function(e) {
+        if (hasDragged) {
+          e.preventDefault();
+          e.stopPropagation();
+          hasDragged = false;
+        }
+      }, true);
 
-      mm.add("(max-width: 767px)", () => {
-        gsap.set(track, { clearProps: "all" });
-      });
+      // Mouse wheel horizontal scrolling
+      let wheelTween = null;
+      stage.addEventListener('wheel', function(e) {
+        const minX = getMinX();
+        if (minX >= 0) return;
 
-      setTimeout(() => ScrollTrigger.refresh(), 150);
-      setTimeout(() => ScrollTrigger.refresh(), 600);
-      window.addEventListener('load', () => ScrollTrigger.refresh());
-      window.addEventListener('resize', () => ScrollTrigger.refresh());
+        const currentX = gsap.getProperty(track, 'x') || 0;
+        const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+        if (Math.abs(delta) < 2) return;
+
+        const targetX = Math.max(minX, Math.min(0, currentX - delta * 1.5));
+        if (targetX !== currentX) {
+          e.preventDefault();
+          if (wheelTween) wheelTween.kill();
+          wheelTween = gsap.to(track, {
+            x: targetX,
+            duration: 0.35,
+            ease: 'power2.out',
+            overwrite: 'auto',
+            onUpdate: function() {
+              if (draggable) draggable.update();
+            }
+          });
+        }
+      }, { passive: false });
+
+      function updateBounds() {
+        if (!draggable) return;
+        const minX = getMinX();
+        draggable.applyBounds({ minX: minX, maxX: 0 });
+        const currentX = gsap.getProperty(track, 'x') || 0;
+        if (currentX < minX) {
+          gsap.to(track, { x: minX, duration: 0.25, ease: 'power2.out' });
+        }
+      }
+
+      window.addEventListener('resize', updateBounds);
+      setTimeout(updateBounds, 200);
+      setTimeout(updateBounds, 800);
     })();
   </script>
 </body>

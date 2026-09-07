@@ -1,6 +1,6 @@
 {
   "id": "horizontal-pinned-cards",
-  "name": "Horizontal Pinned Cards",
+  "name": "Horizontal Draggable Cards",
   "settings": [
     {
       "tab": "content",
@@ -398,52 +398,23 @@
     },
     {
       "tab": "style",
-      "section": "Scroll Settings",
-      "id": "scrub_speed",
+      "section": "Drag & Interaction",
+      "id": "enable_mousewheel",
+      "type": "switcher",
+      "label": "Mouse Wheel Horizontal Scroll",
+      "default": "yes"
+    },
+    {
+      "tab": "style",
+      "section": "Drag & Interaction",
+      "id": "edge_resistance",
       "type": "slider",
-      "label": "Scroll Scrub Smoothness",
+      "label": "Edge Drag Resistance",
       "min": 0.1,
-      "max": 3,
-      "step": 0.1,
+      "max": 1,
+      "step": 0.05,
       "default": {
-        "size": 1
-      }
-    },
-    {
-      "tab": "style",
-      "section": "Scroll Settings",
-      "id": "pin_breakpoint",
-      "type": "select",
-      "label": "Pinning Screen Breakpoint",
-      "default": "768",
-      "options": [
-        {
-          "value": "768",
-          "label": "Desktop & Tablet (> 767px)"
-        },
-        {
-          "value": "1025",
-          "label": "Desktop Only (> 1024px)"
-        },
-        {
-          "value": "all",
-          "label": "All Screens (including Mobile)"
-        }
-      ]
-    },
-    {
-      "tab": "style",
-      "section": "Scroll Settings",
-      "id": "pin_start_offset",
-      "type": "slider",
-      "label": "Pin Start Top Offset (px)",
-      "unit": "px",
-      "min": 0,
-      "max": 300,
-      "step": 5,
-      "default": {
-        "size": 0,
-        "unit": "px"
+        "size": 0.65
       }
     }
   ]

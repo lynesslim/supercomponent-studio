@@ -5,11 +5,14 @@
   }
 
   const currentInstanceId = typeof instanceId !== 'undefined' ? instanceId : 'default';
-  let mmInstance = null;
-  let scrollTriggerInstance = null;
+  let draggableInstance = null;
+  let resizeHandler = null;
+  let wheelHandler = null;
+  let clickCaptureHandler = null;
+  let wheelTween = null;
 
-  function loadGSAP(callback) {
-    if (window.gsap && window.ScrollTrigger) {
+  function loadDependencies(callback) {
+    if (window.gsap && window.Draggable) {
       callback();
       return;
     }
@@ -19,11 +22,12 @@
       const s = document.createElement('script');
       s.src = src;
       s.onload = () => resolve();
+      s.onerror = () => resolve();
       document.head.appendChild(s);
     });
 
     loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js', () => !!window.gsap)
-      .then(() => loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js', () => !!window.ScrollTrigger))
+      .then(() => loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js', () => !!(window.gsap && window.Draggable)))
       .then(() => callback());
   }
 
@@ -45,99 +49,158 @@
       }
     }
 
-    gsap.registerPlugin(ScrollTrigger);
+    if (!window.gsap || !window.Draggable) return;
+    gsap.registerPlugin(Draggable);
 
     const stage = container.querySelector('.el-hs-pin-stage');
     const track = container.querySelector('.el-hs-track');
-
     if (!stage || !track) return;
 
-    // Clean up previous matchMedia instance if any
-    if (mmInstance) {
-      mmInstance.revert();
-      mmInstance = null;
-    }
-    if (scrollTriggerInstance) {
-      scrollTriggerInstance.kill();
-      scrollTriggerInstance = null;
+    // Clean up any existing Draggable instance
+    if (draggableInstance) {
+      draggableInstance.kill();
+      draggableInstance = null;
     }
 
-    mmInstance = gsap.matchMedia();
-
-    const pinOffset = (settings.pin_start_offset && typeof settings.pin_start_offset.size !== 'undefined')
-      ? settings.pin_start_offset.size
-      : (typeof settings.pin_start_offset === 'number' ? settings.pin_start_offset : 0);
-
-    const scrubVal = (settings.scrub_speed && typeof settings.scrub_speed.size !== 'undefined')
-      ? settings.scrub_speed.size
-      : (typeof settings.scrub_speed === 'number' ? settings.scrub_speed : 1);
-
-    const breakpointMode = settings.pin_breakpoint || '768';
-    let mediaQuery = '(min-width: 768px)';
-    if (breakpointMode === '1025') {
-      mediaQuery = '(min-width: 1025px)';
-    } else if (breakpointMode === 'all') {
-      mediaQuery = '(min-width: 0px)';
+    function getMinX() {
+      const diff = track.scrollWidth - stage.clientWidth;
+      return diff > 0 ? -diff : 0;
     }
 
-    const startTrigger = (pinOffset > 0) ? `top ${pinOffset}px` : 'top top';
+    const resistance = (settings.edge_resistance && typeof settings.edge_resistance.size !== 'undefined')
+      ? settings.edge_resistance.size
+      : (typeof settings.edge_resistance === 'number' ? settings.edge_resistance : 0.65);
 
-    mmInstance.add(mediaQuery, () => {
-      // Calculate scroll distance: total track width minus visible stage width
-      const getScrollAmount = () => -(track.scrollWidth - stage.clientWidth);
+    let hasDragged = false;
+    let pointerStartX = 0;
 
-      const tween = gsap.to(track, {
-        x: getScrollAmount,
-        ease: 'none'
-      });
-
-      scrollTriggerInstance = ScrollTrigger.create({
-        trigger: stage,
-        start: startTrigger,
-        end: () => `+=${Math.max(200, Math.abs(getScrollAmount()))}`,
-        pin: true,
-        pinSpacing: true,
-        animation: tween,
-        scrub: scrubVal,
-        anticipatePin: 1,
-        invalidateOnRefresh: true
-      });
+    // Create GSAP Draggable instance
+    const draggables = Draggable.create(track, {
+      type: 'x',
+      bounds: {
+        minX: getMinX(),
+        maxX: 0
+      },
+      edgeResistance: resistance,
+      dragClickables: true,
+      cursor: 'grab',
+      activeCursor: 'grabbing',
+      zIndexBoost: false,
+      onPress: function() {
+        stage.classList.add('is-dragging');
+        hasDragged = false;
+        pointerStartX = this.pointerX;
+      },
+      onDrag: function() {
+        if (Math.abs(this.pointerX - pointerStartX) > 5) {
+          hasDragged = true;
+        }
+      },
+      onRelease: function() {
+        stage.classList.remove('is-dragging');
+        const minX = getMinX();
+        const currentX = gsap.getProperty(track, 'x') || 0;
+        if (currentX > 0) {
+          gsap.to(track, { x: 0, duration: 0.4, ease: 'power2.out' });
+        } else if (currentX < minX) {
+          gsap.to(track, { x: minX, duration: 0.4, ease: 'power2.out' });
+        }
+      }
     });
 
-    if (breakpointMode !== 'all') {
-      const mobileQuery = breakpointMode === '1025' ? '(max-width: 1024px)' : '(max-width: 767px)';
-      mmInstance.add(mobileQuery, () => {
-        // Clear transforms on small screens for native swipe scroll
-        gsap.set(track, { clearProps: 'all' });
-      });
+    draggableInstance = draggables && draggables.length ? draggables[0] : null;
+
+    // Suppress clicks on child links if user was dragging
+    clickCaptureHandler = function(e) {
+      if (hasDragged) {
+        e.preventDefault();
+        e.stopPropagation();
+        hasDragged = false;
+      }
+    };
+    track.addEventListener('click', clickCaptureHandler, true);
+
+    // Mouse wheel horizontal scrolling
+    if (settings.enable_mousewheel !== 'no') {
+      wheelHandler = function(e) {
+        const minX = getMinX();
+        if (minX >= 0) return;
+
+        const currentX = gsap.getProperty(track, 'x') || 0;
+        const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+        if (Math.abs(delta) < 2) return;
+
+        const targetX = Math.max(minX, Math.min(0, currentX - delta * 1.5));
+        if (targetX !== currentX) {
+          e.preventDefault();
+          if (wheelTween) wheelTween.kill();
+          wheelTween = gsap.to(track, {
+            x: targetX,
+            duration: 0.35,
+            ease: 'power2.out',
+            overwrite: 'auto',
+            onUpdate: function() {
+              if (draggableInstance) draggableInstance.update();
+            }
+          });
+        }
+      };
+      stage.addEventListener('wheel', wheelHandler, { passive: false });
     }
 
-    // Refresh triggers to ensure exact dimensions after images/fonts load
-    setTimeout(() => { ScrollTrigger.refresh(); }, 150);
-    setTimeout(() => { ScrollTrigger.refresh(); }, 600);
-    setTimeout(() => { ScrollTrigger.refresh(); }, 1500);
+    // Window resize handler to recalculate bounds
+    resizeHandler = function() {
+      if (!draggableInstance) return;
+      const minX = getMinX();
+      draggableInstance.applyBounds({
+        minX: minX,
+        maxX: 0
+      });
+      const currentX = gsap.getProperty(track, 'x') || 0;
+      if (currentX < minX) {
+        gsap.to(track, { x: minX, duration: 0.25, ease: 'power2.out' });
+      }
+    };
+    window.addEventListener('resize', resizeHandler);
+
+    // Delayed bounds recalculation after fonts/images settle
+    setTimeout(resizeHandler, 200);
+    setTimeout(resizeHandler, 800);
+    setTimeout(resizeHandler, 1600);
   }
 
   // Cleanup handler for live re-renders
   window.supercomponentCleanups = window.supercomponentCleanups || {};
   window.supercomponentCleanups[currentInstanceId] = function() {
-    if (scrollTriggerInstance) {
-      scrollTriggerInstance.kill();
-      scrollTriggerInstance = null;
+    if (wheelTween) {
+      wheelTween.kill();
+      wheelTween = null;
     }
-    if (mmInstance) {
-      mmInstance.revert();
-      mmInstance = null;
+    if (draggableInstance) {
+      draggableInstance.kill();
+      draggableInstance = null;
+    }
+    if (resizeHandler) {
+      window.removeEventListener('resize', resizeHandler);
+      resizeHandler = null;
+    }
+    const container = document.querySelector(`[data-instance-id="${currentInstanceId}"]`) ||
+                      document.querySelector(`#supercomponent-${currentInstanceId}`);
+    if (container) {
+      const stage = container.querySelector('.el-hs-pin-stage');
+      const track = container.querySelector('.el-hs-track');
+      if (stage && wheelHandler) stage.removeEventListener('wheel', wheelHandler);
+      if (track && clickCaptureHandler) track.removeEventListener('click', clickCaptureHandler, true);
     }
   };
 
-  // Listen for live Elementor editor setting updates on both window and parent window
+  // Listen for live Elementor editor setting updates
   function handleUpdate(e) {
     if (e.detail && (e.detail.instanceId === currentInstanceId || !currentInstanceId)) {
       if (window.supercomponentCleanups && window.supercomponentCleanups[currentInstanceId]) {
         window.supercomponentCleanups[currentInstanceId]();
       }
-      loadGSAP(function() {
+      loadDependencies(function() {
         init(e.detail.settings);
       });
     }
@@ -150,12 +213,5 @@
     } catch (err) {}
   }
 
-  window.addEventListener('load', () => {
-    if (window.ScrollTrigger) ScrollTrigger.refresh();
-  });
-  window.addEventListener('resize', () => {
-    if (window.ScrollTrigger) ScrollTrigger.refresh();
-  });
-
-  loadGSAP(init);
+  loadDependencies(init);
 })();

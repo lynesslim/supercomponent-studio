@@ -11,18 +11,26 @@
   box-sizing: border-box;
 }
 
-/* Pin Stage Container */
+/* Stage Container */
 .el-hs-pin-stage {
   width: 100%;
   height: auto;
-  min-height: 100vh;
-  min-height: 100svh;
+  min-height: auto;
   display: flex;
   align-items: center;
   position: relative;
   padding-top: var(--stage_padding_y, 30px);
   padding-bottom: var(--stage_padding_y, 30px);
   overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
+}
+
+.el-hs-pin-stage:active,
+.el-hs-pin-stage.is-dragging {
+  cursor: grabbing;
 }
 
 /* Edge Fade Overlay Left */
@@ -61,6 +69,10 @@
   padding-bottom: 25px;
   padding-left: 5vw;
   padding-right: 5vw;
+  cursor: inherit;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
 }
 
 /* Base Card Styles */
@@ -80,6 +92,9 @@
   background-repeat: no-repeat;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
 }
 
 /* Dark Overlay for Text Readability */
@@ -97,11 +112,13 @@
   position: absolute;
   inset: 0;
   z-index: 5;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 /* Hover State for Desktop */
 @media (hover: hover) {
-  .el-hs-card:hover {
+  .el-hs-pin-stage:not(.is-dragging) .el-hs-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 20px 35px rgba(0, 0, 0, 0.4);
   }
@@ -117,6 +134,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 }
 
 .el-hs-icon svg {
@@ -139,6 +157,7 @@
 .el-hs-bottom {
   position: relative;
   z-index: 2;
+  pointer-events: none;
 }
 
 .el-hs-wrapper .el-hs-index,
@@ -180,7 +199,7 @@
   }
 }
 
-/* Tablet Layout: Keep Pinned Track or Smooth Flow */
+/* Tablet Layout */
 @media (min-width: 768px) and (max-width: 1024px) {
   .el-hs-card {
     width: var(--card_width, clamp(280px, 35vw, 360px));
@@ -188,13 +207,12 @@
   }
 }
 
-/* Mobile Touch Snap Scrolling (< 768px) */
+/* Mobile Screens (< 768px) */
 @media (max-width: 767px) {
   .el-hs-pin-stage {
     min-height: auto;
-    padding-top: calc(var(--stage_padding_y, 30px) * 0.5);
-    padding-bottom: calc(var(--stage_padding_y, 30px) * 0.5);
-    overflow-x: hidden;
+    padding-top: calc(var(--stage_padding_y, 30px) * 0.6);
+    padding-bottom: calc(var(--stage_padding_y, 30px) * 0.6);
   }
   
   .el-hs-wrapper[data-edge-fade="yes"] .el-hs-pin-stage::before,
@@ -203,24 +221,15 @@
   }
 
   .el-hs-track {
-    width: 100%;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 20px;
-  }
-
-  .el-hs-track::-webkit-scrollbar {
-    display: none;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
   }
 
   .el-hs-card {
     width: 78vw;
     max-width: 340px;
     height: 380px;
-    scroll-snap-align: center;
   }
 }
 
