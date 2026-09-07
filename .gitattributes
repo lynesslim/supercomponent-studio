@@ -1,0 +1,11 @@
+.gitattributes export-ignore
+.gitignore export-ignore
+.DS_Store export-ignore
+*.docx export-ignore
+SuperComponent-Studio-PRD.md export-ignore
+SUPERCOMPONENT_GENERATOR_PROMPT.md export-ignore
+CHILD_PLUGIN_INTEGRATION.md export-ignore
+docker-compose.yml export-ignore
+worker.sh export-ignore
+DEEPSEEK_FINISHED.txt export-ignore
+wp-uploads/ export-ignore

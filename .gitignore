@@ -13,3 +13,4 @@ DEEPSEEK_FINISHED.txt
 .idea/
 .vscode/
 *.log
+*.zip
