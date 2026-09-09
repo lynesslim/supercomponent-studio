@@ -1,0 +1,39 @@
+<section
+  class="push-timeline"
+  data-push-timeline
+  data-instance-id="{{instanceId}}"
+  data-trigger="{{scroll_trigger.size}}"
+  data-smoothing="{{smoothing.size}}"
+  data-start-offset="{{start_offset.size}}"
+>
+  {{#show_heading}}
+  <h2 class="push-timeline__heading sc-heading_typography">
+    {{heading_text}}
+  </h2>
+  {{/show_heading}}
+
+  <div class="push-timeline__body">
+    <div class="push-timeline__track" aria-hidden="true">
+      <div class="push-timeline__fill"></div>
+    </div>
+
+    {{#steps}}
+    <article class="push-timeline__step">
+      <span class="push-timeline__dot" aria-hidden="true"></span>
+
+      <div class="push-timeline__content">
+        {{#show_icon}}
+        <span class="push-timeline__icon" aria-hidden="true">
+          {{{step_icon}}}
+        </span>
+        {{/show_icon}}
+
+        <h3 class="push-timeline__title sc-step_title_typography">{{step_title}}</h3>
+        <p class="push-timeline__desc sc-step_desc_typography">
+          {{{step_description}}}
+        </p>
+      </div>
+    </article>
+    {{/steps}}
+  </div>
+</section>

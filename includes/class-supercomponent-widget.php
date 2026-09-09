@@ -886,10 +886,18 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 			if ( strpos( $val, '<svg' ) !== false || strpos( $val, '<img' ) !== false || strpos( $val, '<i' ) !== false ) {
 				return $val;
 			}
-			if ( strpos( $val, 'fa-' ) !== false && strpos( $val, 'fa ' ) === false && strpos( $val, 'fas ' ) === false && strpos( $val, 'far ' ) === false && strpos( $val, 'fab ' ) === false ) {
-				$val = 'fas ' . $val;
+			$is_icon_class = (
+				( strpos( $val, 'fa-' ) !== false || strpos( $val, 'eicon-' ) !== false || strpos( $val, 'dashicons-' ) !== false )
+				&& strlen( $val ) < 80
+				&& ! preg_match( '/[\r\n\t]|\.\s+|[<>{}]/', $val )
+			);
+			if ( $is_icon_class ) {
+				if ( strpos( $val, 'fa-' ) !== false && strpos( $val, 'fa ' ) === false && strpos( $val, 'fas ' ) === false && strpos( $val, 'far ' ) === false && strpos( $val, 'fab ' ) === false ) {
+					$val = 'fas ' . $val;
+				}
+				return '<i class="' . esc_attr( $val ) . '" aria-hidden="true"></i>';
 			}
-			return '<i class="' . esc_attr( $val ) . '" aria-hidden="true"></i>';
+			return '';
 		}
 		if ( is_array( $icon_data ) ) {
 			// 1. Try Elementor native Icons_Manager
@@ -943,7 +951,7 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 		// - If var is scalar -> conditional block (positive or negative)
 		$output = preg_replace_callback(
 			'/\{\{([#^])([\w\.]+)\}\}(.*?)\{\{\/\2\}\}/s',
-			function ( $matches ) use ( $values ) {
+			function ( $matches ) use ( $values, $settings ) {
 				$type = $matches[1]; // '#' (positive) or '^' (negative/inverted)
 				$expression = $matches[2]; // e.g. 'center_image.url' or 'nodes'
 				$inner = $matches[3];

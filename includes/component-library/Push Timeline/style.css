@@ -1,0 +1,217 @@
+.push-timeline {
+  background: var(--bg_color, #090909);
+  color: var(--text_color, #f2f2f2);
+  padding: var(--section_padding, 90px 28px 130px 28px);
+  font-family: inherit;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.push-timeline,
+.push-timeline * {
+  box-sizing: border-box;
+}
+
+.push-timeline__heading {
+  max-width: var(--heading_max_width, 900px);
+  margin: 0 auto var(--heading_margin_bottom, 80px);
+  text-align: center;
+  color: var(--text_color, #f2f2f2);
+  font-size: clamp(32px, 4vw, 54px);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.045em;
+}
+
+.push-timeline__body {
+  position: relative;
+  max-width: var(--container_max_width, 1120px);
+  margin: auto;
+  padding: 60px 0;
+}
+
+.push-timeline__track {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: var(--line_width, 2px);
+  transform: translateX(-50%);
+  background: var(--line_empty, #252525);
+  pointer-events: none;
+}
+
+.push-timeline__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--line_filled, #bcbcbc);
+  transform: scaleY(0);
+  transform-origin: center top;
+  will-change: transform;
+}
+
+.push-timeline__step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: var(--step_gap, 130px);
+}
+
+.push-timeline__step:last-child {
+  margin-bottom: 0;
+}
+
+.push-timeline__content {
+  grid-column: 2;
+  min-width: 0;
+  padding-left: var(--column_gap, 90px);
+}
+
+.push-timeline__step:nth-of-type(even) .push-timeline__content {
+  grid-column: 1;
+  padding-left: 0;
+  padding-right: var(--column_gap, 90px);
+}
+
+.push-timeline.is-enhanced .push-timeline__content {
+  opacity: var(--reveal, 0.16);
+  transform: translateY(var(--lift, 18px));
+  will-change: opacity, transform;
+}
+
+/* Icons (Elementor Icon Library, FontAwesome & SVG support) */
+.push-timeline__icon {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: var(--icon_box_size, 48px);
+  height: var(--icon_box_size, 48px);
+  margin-bottom: var(--icon_margin_bottom, 26px);
+  color: var(--accent_color, #ff891c);
+}
+
+.push-timeline__icon i {
+  font-size: var(--icon_size, 38px);
+  line-height: 1;
+  color: currentColor;
+}
+
+.push-timeline__icon svg {
+  display: block;
+  width: var(--icon_size, 38px);
+  height: var(--icon_size, 38px);
+  max-width: 100%;
+  max-height: 100%;
+  color: currentColor;
+  overflow: visible;
+}
+
+.push-timeline__icon svg:not([fill="none"]) {
+  fill: currentColor;
+}
+
+.push-timeline__icon img,
+.push-timeline__icon .sc-icon-svg {
+  display: block;
+  width: var(--icon_size, 38px);
+  height: var(--icon_size, 38px);
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.push-timeline__title {
+  margin: 0 0 18px;
+  color: var(--text_color, #f2f2f2);
+  font-size: clamp(25px, 2.5vw, 32px);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+}
+
+.push-timeline__desc {
+  margin: 0;
+  color: var(--muted_color, #909090);
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: -0.025em;
+}
+
+.push-timeline__desc strong {
+  color: var(--highlight_color, #f2f2f2);
+  font-weight: 500;
+}
+
+.push-timeline__dot {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 50%;
+  width: var(--circle_size, 32px);
+  height: var(--circle_size, 32px);
+  border: var(--dot_border_width, 8px) solid var(--dot_border_color, var(--bg_color, #090909));
+  border-radius: 50%;
+  background: var(--dot_idle, #444444);
+  transform: translate(-50%, var(--dot-y, 40px));
+  will-change: transform;
+  pointer-events: none;
+}
+
+.push-timeline__dot.is-active {
+  background: var(--dot_active, #eeeeee);
+}
+
+.push-timeline__dot.is-complete {
+  background: var(--line_filled, #bcbcbc);
+}
+
+@media (max-width: 767px) {
+  .push-timeline {
+    --step_gap: 90px;
+    padding: 65px 22px 90px 22px;
+  }
+
+  .push-timeline__heading {
+    margin-bottom: 55px;
+  }
+
+  .push-timeline__body {
+    padding: 35px 0;
+  }
+
+  .push-timeline__track,
+  .push-timeline__dot {
+    left: 16px;
+  }
+
+  .push-timeline__step {
+    display: block;
+  }
+
+  .push-timeline .push-timeline__content {
+    padding-left: 60px;
+    padding-right: 0;
+  }
+
+  .push-timeline__desc {
+    font-size: 16px;
+  }
+
+  .push-timeline__icon {
+    margin-bottom: 22px;
+  }
+
+  .push-timeline__icon svg,
+  .push-timeline__icon i {
+    width: 32px;
+    height: 32px;
+    font-size: 32px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .push-timeline.is-enhanced .push-timeline__content {
+    opacity: 1;
+    transform: none;
+  }
+}

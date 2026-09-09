@@ -1,0 +1,417 @@
+{
+  "id": "push-timeline",
+  "name": "Push Timeline",
+  "settings": [
+    {
+      "id": "show_heading",
+      "type": "switcher",
+      "label": "Show Main Heading",
+      "default": "yes",
+      "tab": "content",
+      "section": "Heading"
+    },
+    {
+      "id": "heading_text",
+      "type": "text",
+      "label": "Heading Text",
+      "default": "This is how our collaboration works",
+      "tab": "content",
+      "section": "Heading",
+      "condition": {
+        "show_heading": "yes"
+      }
+    },
+    {
+      "id": "steps",
+      "type": "repeater",
+      "label": "Timeline Steps",
+      "tab": "content",
+      "section": "Steps",
+      "title_field": "{{{ step_title }}}",
+      "fields": [
+        {
+          "id": "step_title",
+          "type": "text",
+          "label": "Step Title",
+          "default": "Step Title"
+        },
+        {
+          "id": "step_description",
+          "type": "textarea",
+          "label": "Step Description (HTML allowed)",
+          "default": "Description of this step."
+        },
+        {
+          "id": "show_icon",
+          "type": "switcher",
+          "label": "Show Icon",
+          "default": "yes"
+        },
+        {
+          "id": "step_icon",
+          "type": "icons",
+          "label": "Step Icon",
+          "default": {
+            "value": "fas fa-search",
+            "library": "fa-solid"
+          },
+          "condition": {
+            "show_icon": "yes"
+          }
+        }
+      ],
+      "default": [
+        {
+          "step_title": "We understand your business",
+          "step_description": "Every great project starts with clarity. <strong>We explore your goals, audience and challenges</strong> to understand where you are and where you want to go.",
+          "show_icon": "yes",
+          "step_icon": {
+            "value": "fas fa-search",
+            "library": "fa-solid"
+          }
+        },
+        {
+          "step_title": "A strategy built around your goals",
+          "step_description": "We translate our findings into <strong>a clear direction tailored to your business.</strong> Every decision connects your brand with the people who matter most.",
+          "show_icon": "yes",
+          "step_icon": {
+            "value": "fas fa-compass",
+            "library": "fa-solid"
+          }
+        },
+        {
+          "step_title": "Thoughtful design. Seamless execution.",
+          "step_description": "This is where the strategy takes shape. <strong>We bring design and development together</strong> to create an experience that looks exceptional and works beautifully.",
+          "show_icon": "yes",
+          "step_icon": {
+            "value": "fas fa-laptop-code",
+            "library": "fa-solid"
+          }
+        },
+        {
+          "step_title": "Support that goes beyond launch",
+          "step_description": "Launch is just the beginning. <strong>We help you maintain, refine and grow</strong> your website as your business moves forward.",
+          "show_icon": "yes",
+          "step_icon": {
+            "value": "fas fa-headset",
+            "library": "fa-solid"
+          }
+        }
+      ]
+    },
+    {
+      "id": "scroll_trigger",
+      "type": "slider",
+      "label": "Scroll Trigger Position (%)",
+      "default": {
+        "size": 65,
+        "unit": "%"
+      },
+      "min": 20,
+      "max": 95,
+      "step": 1,
+      "tab": "content",
+      "section": "Scroll & Animation Dynamics",
+      "description": "Viewport height percentage where line tracking begins (e.g. 65% triggers when top passes 65% down the screen)."
+    },
+    {
+      "id": "smoothing",
+      "type": "slider",
+      "label": "Motion Smoothing (%)",
+      "default": {
+        "size": 12,
+        "unit": "%"
+      },
+      "min": 2,
+      "max": 40,
+      "step": 1,
+      "tab": "content",
+      "section": "Scroll & Animation Dynamics",
+      "description": "Higher values track scrolling more tightly; lower values add inertia/lag."
+    },
+    {
+      "id": "start_offset",
+      "type": "slider",
+      "label": "Circle Start Offset",
+      "default": {
+        "size": 40,
+        "unit": "px"
+      },
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "tab": "content",
+      "section": "Scroll & Animation Dynamics",
+      "description": "Initial resting vertical position of the dot relative to the step."
+    },
+    {
+      "id": "bg_color",
+      "type": "color",
+      "label": "Section Background",
+      "default": "#090909",
+      "tab": "style",
+      "section": "Colors"
+    },
+    {
+      "id": "accent_color",
+      "type": "color",
+      "label": "Accent / Icon Color",
+      "default": "#ff891c",
+      "tab": "style",
+      "section": "Colors"
+    },
+    {
+      "id": "text_color",
+      "type": "color",
+      "label": "Heading & Step Title Color",
+      "default": "#f2f2f2",
+      "tab": "style",
+      "section": "Colors"
+    },
+    {
+      "id": "muted_color",
+      "type": "color",
+      "label": "Description Text Color",
+      "default": "#909090",
+      "tab": "style",
+      "section": "Colors"
+    },
+    {
+      "id": "highlight_color",
+      "type": "color",
+      "label": "Bold / Highlight Color",
+      "default": "#f2f2f2",
+      "tab": "style",
+      "section": "Colors"
+    },
+    {
+      "id": "line_empty",
+      "type": "color",
+      "label": "Empty Track Line Color",
+      "default": "#252525",
+      "tab": "style",
+      "section": "Timeline Track & Indicator"
+    },
+    {
+      "id": "line_filled",
+      "type": "color",
+      "label": "Filled Track Line Color",
+      "default": "#bcbcbc",
+      "tab": "style",
+      "section": "Timeline Track & Indicator"
+    },
+    {
+      "id": "dot_idle",
+      "type": "color",
+      "label": "Dot Idle Color",
+      "default": "#444444",
+      "tab": "style",
+      "section": "Timeline Track & Indicator"
+    },
+    {
+      "id": "dot_active",
+      "type": "color",
+      "label": "Dot Active Color",
+      "default": "#eeeeee",
+      "tab": "style",
+      "section": "Timeline Track & Indicator"
+    },
+    {
+      "id": "dot_border_color",
+      "type": "color",
+      "label": "Dot Border Color",
+      "default": "#090909",
+      "tab": "style",
+      "section": "Timeline Track & Indicator"
+    },
+    {
+      "id": "heading_typography",
+      "type": "typography",
+      "label": "Main Heading Typography",
+      "tab": "style",
+      "section": "Typography"
+    },
+    {
+      "id": "step_title_typography",
+      "type": "typography",
+      "label": "Step Title Typography",
+      "tab": "style",
+      "section": "Typography"
+    },
+    {
+      "id": "step_desc_typography",
+      "type": "typography",
+      "label": "Step Description Typography",
+      "tab": "style",
+      "section": "Typography"
+    },
+    {
+      "id": "section_padding",
+      "type": "dimensions",
+      "label": "Section Padding",
+      "default": {
+        "top": "90",
+        "right": "28",
+        "bottom": "130",
+        "left": "28",
+        "unit": "px"
+      },
+      "tab": "style",
+      "section": "Layout & Spacing"
+    },
+    {
+      "id": "container_max_width",
+      "type": "slider",
+      "label": "Container Max Width",
+      "default": {
+        "size": 1120,
+        "unit": "px"
+      },
+      "min": 600,
+      "max": 1600,
+      "step": 20,
+      "tab": "style",
+      "section": "Layout & Spacing"
+    },
+    {
+      "id": "heading_max_width",
+      "type": "slider",
+      "label": "Heading Max Width",
+      "default": {
+        "size": 900,
+        "unit": "px"
+      },
+      "min": 400,
+      "max": 1400,
+      "step": 20,
+      "tab": "style",
+      "section": "Layout & Spacing"
+    },
+    {
+      "id": "heading_margin_bottom",
+      "type": "slider",
+      "label": "Heading Bottom Spacing",
+      "default": {
+        "size": 80,
+        "unit": "px"
+      },
+      "min": 20,
+      "max": 160,
+      "step": 5,
+      "tab": "style",
+      "section": "Layout & Spacing"
+    },
+    {
+      "id": "step_gap",
+      "type": "slider",
+      "label": "Vertical Gap Between Steps",
+      "default": {
+        "size": 130,
+        "unit": "px"
+      },
+      "min": 40,
+      "max": 260,
+      "step": 5,
+      "tab": "style",
+      "section": "Layout & Spacing"
+    },
+    {
+      "id": "column_gap",
+      "type": "slider",
+      "label": "Column Gap (Center Offset)",
+      "default": {
+        "size": 90,
+        "unit": "px"
+      },
+      "min": 20,
+      "max": 200,
+      "step": 5,
+      "tab": "style",
+      "section": "Layout & Spacing"
+    },
+    {
+      "id": "circle_size",
+      "type": "slider",
+      "label": "Dot Size",
+      "default": {
+        "size": 32,
+        "unit": "px"
+      },
+      "min": 16,
+      "max": 64,
+      "step": 2,
+      "tab": "style",
+      "section": "Timeline Track & Indicator"
+    },
+    {
+      "id": "line_width",
+      "type": "slider",
+      "label": "Track Line Width",
+      "default": {
+        "size": 2,
+        "unit": "px"
+      },
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "tab": "style",
+      "section": "Timeline Track & Indicator"
+    },
+    {
+      "id": "dot_border_width",
+      "type": "slider",
+      "label": "Dot Ring Border Width",
+      "default": {
+        "size": 8,
+        "unit": "px"
+      },
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "tab": "style",
+      "section": "Timeline Track & Indicator"
+    },
+    {
+      "id": "icon_size",
+      "type": "slider",
+      "label": "Icon Glyph Size",
+      "default": {
+        "size": 38,
+        "unit": "px"
+      },
+      "min": 16,
+      "max": 72,
+      "step": 2,
+      "tab": "style",
+      "section": "Icon Styling"
+    },
+    {
+      "id": "icon_box_size",
+      "type": "slider",
+      "label": "Icon Box Size",
+      "default": {
+        "size": 48,
+        "unit": "px"
+      },
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "tab": "style",
+      "section": "Icon Styling"
+    },
+    {
+      "id": "icon_margin_bottom",
+      "type": "slider",
+      "label": "Icon Bottom Spacing",
+      "default": {
+        "size": 26,
+        "unit": "px"
+      },
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "tab": "style",
+      "section": "Icon Styling"
+    }
+  ]
+}
