@@ -1,0 +1,463 @@
+{
+  "id": "cursor-tracking-video",
+  "name": "Cursor Tracking Video",
+  "settings": [
+    {
+      "id": "video_source",
+      "type": "video",
+      "label": "Background Video",
+      "tab": "content",
+      "section": "Video Source",
+      "default": {
+        "url": "https://vjs.zencdn.net/v/oceans.mp4"
+      }
+    },
+    {
+      "id": "poster_image",
+      "type": "image",
+      "label": "Fallback Poster Image",
+      "tab": "content",
+      "section": "Video Source",
+      "default": {
+        "url": ""
+      }
+    },
+    {
+      "id": "tracking_scope",
+      "type": "select",
+      "label": "Mouse Tracking Area",
+      "tab": "content",
+      "section": "Cursor Tracking",
+      "options": {
+        "container": "Section Container Only",
+        "window": "Entire Screen / Viewport"
+      },
+      "default": "container"
+    },
+    {
+      "id": "default_position",
+      "type": "slider",
+      "label": "Rest Position (%)",
+      "tab": "content",
+      "section": "Cursor Tracking",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": {
+        "size": 50,
+        "unit": "%"
+      }
+    },
+    {
+      "id": "invert_direction",
+      "type": "switcher",
+      "label": "Invert Direction (Reverse Movement)",
+      "tab": "content",
+      "section": "Cursor Tracking",
+      "default": "no"
+    },
+    {
+      "id": "smoothing_speed",
+      "type": "slider",
+      "label": "Follow Responsiveness",
+      "tab": "content",
+      "section": "Cursor Tracking",
+      "min": 2,
+      "max": 30,
+      "step": 1,
+      "default": {
+        "size": 12,
+        "unit": "%"
+      }
+    },
+    {
+      "id": "return_speed",
+      "type": "slider",
+      "label": "Revert Speed (On Mouse Leave)",
+      "tab": "content",
+      "section": "Cursor Tracking",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": {
+        "size": 5,
+        "unit": "%"
+      }
+    },
+    {
+      "id": "enable_touch",
+      "type": "switcher",
+      "label": "Enable Touch Scrubbing (Mobile)",
+      "tab": "content",
+      "section": "Cursor Tracking",
+      "default": "yes"
+    },
+    {
+      "id": "enable_tilt",
+      "type": "switcher",
+      "label": "Enable Subtle 3D Tilt",
+      "tab": "content",
+      "section": "Cursor Tracking",
+      "default": "yes"
+    },
+    {
+      "id": "tilt_strength",
+      "type": "slider",
+      "label": "Tilt Strength",
+      "tab": "content",
+      "section": "Cursor Tracking",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": {
+        "size": 6,
+        "unit": "deg"
+      },
+      "condition": {
+        "enable_tilt": "yes"
+      }
+    },
+    {
+      "id": "show_content",
+      "type": "switcher",
+      "label": "Show Overlay Content",
+      "tab": "content",
+      "section": "Overlay Content",
+      "default": "yes"
+    },
+    {
+      "id": "show_badge",
+      "type": "switcher",
+      "label": "Show Badge",
+      "tab": "content",
+      "section": "Overlay Content",
+      "default": "yes",
+      "condition": {
+        "show_content": "yes"
+      }
+    },
+    {
+      "id": "badge_text",
+      "type": "text",
+      "label": "Badge Text",
+      "tab": "content",
+      "section": "Overlay Content",
+      "default": "Interactive Mascot",
+      "condition": {
+        "show_content": "yes",
+        "show_badge": "yes"
+      }
+    },
+    {
+      "id": "heading",
+      "type": "text",
+      "label": "Heading",
+      "tab": "content",
+      "section": "Overlay Content",
+      "default": "Watch Me Follow Your Move",
+      "condition": {
+        "show_content": "yes"
+      }
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": "Description",
+      "tab": "content",
+      "section": "Overlay Content",
+      "default": "Move your cursor horizontally across the screen to turn the mascot. When your cursor leaves, it gently relaxes back to the center.",
+      "condition": {
+        "show_content": "yes"
+      }
+    },
+    {
+      "id": "show_button",
+      "type": "switcher",
+      "label": "Show CTA Button",
+      "tab": "content",
+      "section": "Overlay Content",
+      "default": "yes",
+      "condition": {
+        "show_content": "yes"
+      }
+    },
+    {
+      "id": "button_text",
+      "type": "text",
+      "label": "Button Text",
+      "tab": "content",
+      "section": "Overlay Content",
+      "default": "Get Started",
+      "condition": {
+        "show_content": "yes",
+        "show_button": "yes"
+      }
+    },
+    {
+      "id": "button_link",
+      "type": "url",
+      "label": "Button Link",
+      "tab": "content",
+      "section": "Overlay Content",
+      "default": {
+        "url": "#",
+        "is_external": false
+      },
+      "condition": {
+        "show_content": "yes",
+        "show_button": "yes"
+      }
+    },
+    {
+      "id": "container_height",
+      "type": "slider",
+      "label": "Section Height",
+      "tab": "style",
+      "section": "Container Layout",
+      "min": 250,
+      "max": 1000,
+      "step": 10,
+      "default": {
+        "size": 560,
+        "unit": "px"
+      }
+    },
+    {
+      "id": "container_max_width",
+      "type": "slider",
+      "label": "Max Width",
+      "tab": "style",
+      "section": "Container Layout",
+      "min": 400,
+      "max": 1920,
+      "step": 20,
+      "default": {
+        "size": 1200,
+        "unit": "px"
+      }
+    },
+    {
+      "id": "corner_radius",
+      "type": "slider",
+      "label": "Border Radius",
+      "tab": "style",
+      "section": "Container Layout",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "default": {
+        "size": 28,
+        "unit": "px"
+      }
+    },
+    {
+      "id": "container_padding",
+      "type": "dimensions",
+      "label": "Padding",
+      "tab": "style",
+      "section": "Container Layout",
+      "default": {
+        "top": "40",
+        "right": "40",
+        "bottom": "40",
+        "left": "40",
+        "unit": "px"
+      }
+    },
+    {
+      "id": "content_alignment",
+      "type": "select",
+      "label": "Content Alignment",
+      "tab": "style",
+      "section": "Container Layout",
+      "options": {
+        "center": "Center",
+        "left": "Left",
+        "right": "Right"
+      },
+      "default": "center"
+    },
+    {
+      "id": "content_valign",
+      "type": "select",
+      "label": "Content Vertical Position",
+      "tab": "style",
+      "section": "Container Layout",
+      "options": {
+        "center": "Middle",
+        "flex-start": "Top",
+        "flex-end": "Bottom"
+      },
+      "default": "flex-end"
+    },
+    {
+      "id": "video_fit",
+      "type": "select",
+      "label": "Video Fit",
+      "tab": "style",
+      "section": "Video Styling",
+      "options": {
+        "cover": "Cover (Full Crop)",
+        "contain": "Contain (Original Proportions)"
+      },
+      "default": "cover"
+    },
+    {
+      "id": "video_position",
+      "type": "select",
+      "label": "Video Alignment",
+      "tab": "style",
+      "section": "Video Styling",
+      "options": {
+        "center center": "Center Center",
+        "center top": "Center Top",
+        "center bottom": "Center Bottom"
+      },
+      "default": "center center"
+    },
+    {
+      "id": "video_scale",
+      "type": "slider",
+      "label": "Video Scale (%)",
+      "tab": "style",
+      "section": "Video Styling",
+      "min": 50,
+      "max": 150,
+      "step": 1,
+      "default": {
+        "size": 100,
+        "unit": "%"
+      }
+    },
+    {
+      "id": "video_opacity",
+      "type": "slider",
+      "label": "Video Opacity",
+      "tab": "style",
+      "section": "Video Styling",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "default": {
+        "size": 100,
+        "unit": "%"
+      }
+    },
+    {
+      "id": "background_color",
+      "type": "color",
+      "label": "Background Color",
+      "tab": "style",
+      "section": "Video Styling",
+      "default": "#0b0f17"
+    },
+    {
+      "id": "overlay_color",
+      "type": "color",
+      "label": "Gradient Overlay Color",
+      "tab": "style",
+      "section": "Video Styling",
+      "default": "rgba(11, 15, 23, 0.45)"
+    },
+    {
+      "id": "border_color",
+      "type": "color",
+      "label": "Border Color",
+      "tab": "style",
+      "section": "Video Styling",
+      "default": "rgba(255, 255, 255, 0.12)"
+    },
+    {
+      "id": "border_width",
+      "type": "slider",
+      "label": "Border Width",
+      "tab": "style",
+      "section": "Video Styling",
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "default": {
+        "size": 1,
+        "unit": "px"
+      }
+    },
+    {
+      "id": "heading_typography",
+      "type": "typography",
+      "label": "Heading Typography",
+      "tab": "style",
+      "section": "Typography & Colors"
+    },
+    {
+      "id": "heading_color",
+      "type": "color",
+      "label": "Heading Color",
+      "tab": "style",
+      "section": "Typography & Colors",
+      "default": "#ffffff"
+    },
+    {
+      "id": "desc_typography",
+      "type": "typography",
+      "label": "Description Typography",
+      "tab": "style",
+      "section": "Typography & Colors"
+    },
+    {
+      "id": "desc_color",
+      "type": "color",
+      "label": "Description Color",
+      "tab": "style",
+      "section": "Typography & Colors",
+      "default": "rgba(255, 255, 255, 0.78)"
+    },
+    {
+      "id": "badge_bg",
+      "type": "color",
+      "label": "Badge Background",
+      "tab": "style",
+      "section": "Typography & Colors",
+      "default": "rgba(0, 240, 255, 0.12)"
+    },
+    {
+      "id": "badge_color",
+      "type": "color",
+      "label": "Badge Text Color",
+      "tab": "style",
+      "section": "Typography & Colors",
+      "default": "#00f0ff"
+    },
+    {
+      "id": "button_bg",
+      "type": "color",
+      "label": "Button Background",
+      "tab": "style",
+      "section": "Typography & Colors",
+      "default": "#ffffff"
+    },
+    {
+      "id": "button_color",
+      "type": "color",
+      "label": "Button Text Color",
+      "tab": "style",
+      "section": "Typography & Colors",
+      "default": "#0b0f17"
+    },
+    {
+      "id": "button_hover_bg",
+      "type": "color",
+      "label": "Button Hover Background",
+      "tab": "style",
+      "section": "Typography & Colors",
+      "default": "#00f0ff"
+    },
+    {
+      "id": "button_hover_color",
+      "type": "color",
+      "label": "Button Hover Text Color",
+      "tab": "style",
+      "section": "Typography & Colors",
+      "default": "#0b0f17"
+    }
+  ]
+}

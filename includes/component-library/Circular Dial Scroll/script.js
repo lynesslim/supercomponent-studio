@@ -48,32 +48,42 @@
     const defaultStages = [
       {
         number: '01',
-        title: 'Material selection',
-        body: 'We begin by choosing materials for performance, tactility and long-term durability.',
+        title: 'Brand Identity & Strategy',
+        body: 'We build meaningful brand identities — from strategic positioning to visual systems that bring your brand to life.',
+        tags: 'Positioning, Visual Identity, Design System',
+        link: { url: '', is_external: false },
         bg_image: { url: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=1600&auto=format&fit=crop' }
       },
       {
         number: '02',
         title: 'Precision shaping',
         body: 'Each component is formed with controlled tolerances to preserve the intended geometry.',
+        tags: 'Tooling, Tolerances, Form',
+        link: { url: '', is_external: false },
         bg_image: { url: 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?q=80&w=1600&auto=format&fit=crop' }
       },
       {
         number: '03',
         title: 'Surface refinement',
         body: 'Textures and finishes are developed to create depth, grip and a distinctive visual rhythm.',
+        tags: 'Textures, Finishes, Ergonomics',
+        link: { url: '', is_external: false },
         bg_image: { url: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1600&auto=format&fit=crop' }
       },
       {
         number: '04',
         title: 'System assembly',
         body: 'Individual parts are aligned and assembled into one coherent, high-performance structure.',
+        tags: 'Architecture, Integration, Performance',
+        link: { url: '', is_external: false },
         bg_image: { url: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1600&auto=format&fit=crop' }
       },
       {
         number: '05',
         title: 'Final validation',
         body: 'The complete product is tested, adjusted and approved before it reaches its final form.',
+        tags: 'Validation, Quality Assurance, Launch',
+        link: { url: '', is_external: false },
         bg_image: { url: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?q=80&w=1600&auto=format&fit=crop' }
       }
     ];
@@ -89,6 +99,8 @@
     const labelsWrap = container.querySelector('.dial__labels');
     const title = container.querySelector('.dial-content__title');
     const body = container.querySelector('.dial-content__body');
+    const tagsContainer = container.querySelector('.dial-content__tags');
+    const actionContainer = container.querySelector('.dial-content__action');
     const counterCurrent = container.querySelector('.dial-content__counter .current');
     const counterTotal = container.querySelector('.dial-content__counter .total');
     const counterSeparator = container.querySelector('.dial-content__counter .separator');
@@ -224,7 +236,83 @@
       const outgoing = [];
       if (title) outgoing.push(title);
       if (body) outgoing.push(body);
+      if (tagsContainer && tagsContainer.children.length > 0) outgoing.push(tagsContainer);
+      if (actionContainer && actionContainer.children.length > 0) outgoing.push(actionContainer);
       if (counterCurrent) outgoing.push(counterCurrent);
+
+      function renderStageContent() {
+        // 1. Title (with optional link)
+        if (title) {
+          const hasLink = next.link && next.link.url;
+          if (hasLink) {
+            const isExternal = next.link.is_external === true || next.link.is_external === 'yes' || next.link.is_external === '1' || next.link.is_external === 1;
+            const target = isExternal ? '_blank' : '_self';
+            const rel = isExternal ? ' rel="noopener noreferrer"' : '';
+            title.innerHTML = `<a href="${next.link.url}" target="${target}"${rel} class="dial-content__title-link">${next.title || ''}</a>`;
+          } else {
+            title.textContent = next.title || '';
+          }
+        }
+
+        // 2. Description
+        if (body) {
+          body.textContent = next.body || '';
+        }
+
+        // 3. Pill Tags
+        if (tagsContainer) {
+          tagsContainer.innerHTML = '';
+          const rawTags = next.tags || next.pill_tags || '';
+          if (rawTags && typeof rawTags === 'string' && rawTags.trim()) {
+            const tagList = rawTags.split(',').map(t => t.trim()).filter(Boolean);
+            if (tagList.length > 0) {
+              const hasLink = next.link && next.link.url;
+              const isExternal = hasLink && (next.link.is_external === true || next.link.is_external === 'yes' || next.link.is_external === '1' || next.link.is_external === 1);
+              const target = isExternal ? '_blank' : '_self';
+              const rel = isExternal ? ' rel="noopener noreferrer"' : '';
+
+              tagList.forEach(tagText => {
+                const tagEl = document.createElement(hasLink ? 'a' : 'span');
+                tagEl.className = 'dial-content__tag sc-pill_typography';
+                tagEl.textContent = tagText;
+                if (hasLink) {
+                  tagEl.href = next.link.url;
+                  tagEl.target = target;
+                  if (rel) tagEl.rel = 'noopener noreferrer';
+                }
+                tagsContainer.appendChild(tagEl);
+              });
+              tagsContainer.style.display = 'flex';
+            } else {
+              tagsContainer.style.display = 'none';
+            }
+          } else {
+            tagsContainer.style.display = 'none';
+          }
+        }
+
+        // 4. Action CTA Button (Optional)
+        if (actionContainer) {
+          actionContainer.innerHTML = '';
+          const hasLink = next.link && next.link.url;
+          const showButton = settings.show_link_button === 'yes' || settings.show_link_button === true;
+          if (hasLink && showButton) {
+            const isExternal = next.link.is_external === true || next.link.is_external === 'yes' || next.link.is_external === '1' || next.link.is_external === 1;
+            const target = isExternal ? '_blank' : '_self';
+            const rel = isExternal ? ' rel="noopener noreferrer"' : '';
+            const btnText = settings.link_button_text || 'Learn More';
+            actionContainer.innerHTML = `<a href="${next.link.url}" target="${target}"${rel} class="dial-content__btn"><span class="sc-link_btn_typography">${btnText}</span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>`;
+            actionContainer.style.display = 'flex';
+          } else {
+            actionContainer.style.display = 'none';
+          }
+        }
+
+        // 5. Counter Current
+        if (counterCurrent) {
+          counterCurrent.textContent = next.number || String(index + 1).padStart(2, '0');
+        }
+      }
 
       if (outgoing.length > 0) {
         gsap.to(outgoing, {
@@ -234,15 +322,23 @@
           stagger: .02,
           overwrite: true,
           onComplete: () => {
-            if (title) title.textContent = next.title || '';
-            if (body) body.textContent = next.body || '';
-            if (counterCurrent) counterCurrent.textContent = next.number || String(index + 1).padStart(2, '0');
-            gsap.fromTo(outgoing,
+            renderStageContent();
+
+            const incoming = [];
+            if (title) incoming.push(title);
+            if (body) incoming.push(body);
+            if (tagsContainer && tagsContainer.children.length > 0) incoming.push(tagsContainer);
+            if (actionContainer && actionContainer.children.length > 0) incoming.push(actionContainer);
+            if (counterCurrent) incoming.push(counterCurrent);
+
+            gsap.fromTo(incoming,
               { y: 16, opacity: 0 },
               { y: 0, opacity: 1, duration: .28, stagger: .035, ease: 'power2.out', overwrite: true }
             );
           }
         });
+      } else {
+        renderStageContent();
       }
     }
 

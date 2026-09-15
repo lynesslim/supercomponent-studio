@@ -1,0 +1,425 @@
+.framer-tab-section {
+    --bg: var(--section_bg, #080808);
+    --border: var(--panel_border_color, rgba(255,255,255,0.14));
+    --panel-bg: var(--panel_bg_color, rgba(255,255,255,0.015));
+    --border-active: var(--active_border_color, rgba(255,255,255,0.22));
+    --bg-active: var(--active_bg_color, rgba(255,255,255,0.025));
+    --heading-c: var(--heading_color, #f4f4f4);
+    --vert-c: var(--vertical_color, #f0f0f0);
+    --desc-c: var(--desc_color, #858585);
+    --tag-border: var(--tag_border_color, rgba(255,255,255,0.18));
+    --tag-text: var(--tag_text_color, #8d8d8d);
+    --tag-corner: var(--tag_corner_color, rgba(255,255,255,0.65));
+    --offer-c: var(--offer_label_color, #777777);
+    --img-col-w: var(--image_column_width, 48%);
+
+    position: relative;
+    width: 100%;
+    background: var(--bg);
+    color: var(--heading-c);
+    font-family: inherit;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.framer-tab-section *,
+.framer-tab-section *::before,
+.framer-tab-section *::after {
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   OUTER CONTAINER
+   ============================================================ */
+
+.framer-tab-section .framer-tabs {
+    width: calc(100% - 60px);
+    max-width: var(--tabs_max_width, 1520px);
+    height: var(--tabs_height, 520px);
+    margin: 0 auto;
+    display: flex;
+    gap: var(--tabs_gap, 10px);
+    overflow: hidden;
+}
+
+/* ============================================================
+   PANEL BASE & SMOOTH EXPANSION
+   ============================================================ */
+
+.framer-tab-section .framer-tab {
+    position: relative;
+    height: 100%;
+    flex: 0 0 var(--collapsed_width, 100px);
+    border: 1px solid var(--border);
+    background: var(--panel-bg);
+    overflow: hidden;
+    cursor: pointer;
+    will-change: flex-grow, flex-basis;
+    transition: 
+        flex 650ms cubic-bezier(0.16, 1, 0.3, 1),
+        background-color 400ms ease,
+        border-color 400ms ease;
+}
+
+.framer-tab-section .framer-tab.active {
+    flex: 1 1 0%;
+    cursor: default;
+    border-color: var(--border-active);
+    background: var(--bg-active);
+}
+
+.framer-tab-section .framer-tab.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background: rgba(255,255,255,0.06);
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* ============================================================
+   COLLAPSED VERTICAL TAB
+   ============================================================ */
+
+.framer-tab-section .tab-collapsed {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 28px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 250ms ease;
+}
+
+.framer-tab-section .framer-tab.active .tab-collapsed {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.framer-tab-section .tab-number {
+    font-size: 12px;
+    line-height: 1;
+    color: #888888;
+    font-style: italic;
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+}
+
+.framer-tab-section .tab-vertical-title {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    transform-origin: center center;
+    white-space: nowrap;
+    font-size: 20px;
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: -0.055em;
+    color: var(--vert-c);
+    transition: color 250ms ease;
+}
+
+.framer-tab-section .framer-tab:hover .tab-vertical-title {
+    color: #ffffff;
+}
+
+/* ============================================================
+   ACTIVE 2-COLUMN LAYOUT (ZERO OVERLAP)
+   ============================================================ */
+
+.framer-tab-section .tab-active {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: stretch;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 350ms ease;
+}
+
+.framer-tab-section .framer-tab.active .tab-active {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 450ms ease 120ms;
+}
+
+/* LEFT COLUMN: TEXT CONTENT */
+.framer-tab-section .tab-active-left {
+    flex: 1 1 0%;
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 32px 28px 32px 32px;
+    z-index: 5;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: opacity 450ms ease 180ms, transform 550ms cubic-bezier(0.16, 1, 0.3, 1) 180ms;
+}
+
+.framer-tab-section .framer-tab.active .tab-active-left {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.framer-tab-section .tab-intro {
+    width: 100%;
+    max-width: 440px;
+}
+
+.framer-tab-section .tab-intro-number {
+    margin-bottom: 22px;
+    font-size: 12px;
+    line-height: 1;
+    font-style: italic;
+    color: #858585;
+}
+
+.framer-tab-section .tab-heading {
+    margin: 0 0 12px;
+    padding: 0;
+    font-size: 26px;
+    line-height: 1.08;
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    text-transform: uppercase;
+    color: var(--heading-c);
+}
+
+.framer-tab-section .tab-description {
+    margin: 0;
+    font-size: 15.5px;
+    line-height: 1.4;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    color: var(--desc-c);
+}
+
+.framer-tab-section .tab-capabilities {
+    width: 100%;
+    margin-top: 24px;
+}
+
+.framer-tab-section .tab-capabilities:empty {
+    display: none;
+}
+
+.framer-tab-section .tab-offer {
+    margin-bottom: 14px;
+    font-size: 11px;
+    line-height: 1;
+    color: var(--offer-c);
+    text-transform: uppercase;
+    letter-spacing: -0.015em;
+    font-weight: 600;
+}
+
+.framer-tab-section .tab-offer:empty {
+    display: none;
+}
+
+/* RIGHT COLUMN: IMAGE CONTAINER */
+.framer-tab-section .tab-active-right {
+    flex: 0 0 var(--img-col-w);
+    max-width: var(--img-col-w);
+    height: 100%;
+    position: relative;
+    padding: 18px 20px 18px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateX(15px);
+    transition: opacity 500ms ease 160ms, transform 650ms cubic-bezier(0.16, 1, 0.3, 1) 160ms;
+}
+
+.framer-tab-section .framer-tab.active .tab-active-right {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.framer-tab-section .tab-image-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.framer-tab-section .tab-image-inner img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    border: 0;
+    transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.framer-tab-section .framer-tab:hover .tab-image-inner img {
+    transform: scale(1.02);
+}
+
+/* Subtle image depth overlay */
+.framer-tab-section .tab-image-inner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgba(8,8,8,0.3) 0%, rgba(8,8,8,0) 25%, rgba(8,8,8,0) 80%, rgba(8,8,8,0.2) 100%),
+                linear-gradient(0deg, rgba(8,8,8,0.2) 0%, transparent 35%);
+}
+
+/* ============================================================
+   CLEAN CORNER-NOTCH TAG BADGES
+   ============================================================ */
+
+.framer-tab-section .tab-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.framer-tab-section .tab-tags:empty {
+    display: none;
+}
+
+.framer-tab-section .tab-tag {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 29px;
+    padding: 0 12px;
+    border: 1px solid var(--tag-border);
+    color: var(--tag-text);
+    font-size: 10.5px;
+    line-height: 1;
+    font-weight: 500;
+    text-transform: uppercase;
+    white-space: nowrap;
+    background-color: transparent;
+    background-image:
+        linear-gradient(var(--tag-corner), var(--tag-corner)),
+        linear-gradient(var(--tag-corner), var(--tag-corner)),
+        linear-gradient(var(--tag-corner), var(--tag-corner)),
+        linear-gradient(var(--tag-corner), var(--tag-corner));
+    background-size: 5px 1px, 1px 5px, 5px 1px, 1px 5px;
+    background-position: left top, left top, right bottom, right bottom;
+    background-repeat: no-repeat;
+    transition: color 200ms ease, border-color 200ms ease, background-color 200ms ease;
+}
+
+.framer-tab-section .tab-tag:hover {
+    color: #f5f5f5;
+    border-color: rgba(255,255,255,0.45);
+    background-color: rgba(255,255,255,0.04);
+}
+
+/* ============================================================
+   RESPONSIVE (TABLET & MOBILE)
+   ============================================================ */
+
+@media (max-width: 1100px) {
+    .framer-tab-section {
+        --img-col-w: 42%;
+    }
+
+    .framer-tab-section .framer-tabs {
+        width: calc(100% - 36px);
+        height: calc(var(--tabs_height, 520px) * 0.94);
+    }
+
+    .framer-tab-section .tab-heading {
+        font-size: 22px;
+    }
+
+    .framer-tab-section .tab-active-left {
+        padding: 24px 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .framer-tab-section .framer-tabs {
+        width: 100%;
+        height: auto;
+        flex-direction: column;
+        gap: 6px;
+        padding: 0 16px;
+    }
+
+    .framer-tab-section .framer-tab {
+        width: 100%;
+        height: 62px;
+        flex: 0 0 62px;
+        transition: height 550ms cubic-bezier(0.16, 1, 0.3, 1), background-color 350ms ease;
+    }
+
+    .framer-tab-section .framer-tab.active {
+        height: auto;
+        min-height: 520px;
+        flex: 0 0 auto;
+    }
+
+    .framer-tab-section .tab-collapsed {
+        padding: 0 18px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .framer-tab-section .tab-vertical-title {
+        position: static;
+        transform: none;
+        font-size: 15px;
+        margin-left: auto;
+    }
+
+    .framer-tab-section .tab-active {
+        flex-direction: column;
+    }
+
+    .framer-tab-section .tab-active-left {
+        flex: 0 0 auto;
+        padding: 22px 18px 16px 18px;
+        transform: none;
+    }
+
+    .framer-tab-section .tab-heading {
+        font-size: 20px;
+    }
+
+    .framer-tab-section .tab-description {
+        font-size: 13.5px;
+    }
+
+    .framer-tab-section .tab-active-right {
+        flex: 0 0 200px;
+        max-width: 100%;
+        height: 200px;
+        padding: 0 18px 22px 18px;
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .framer-tab-section .framer-tab,
+    .framer-tab-section .tab-active,
+    .framer-tab-section .tab-collapsed,
+    .framer-tab-section .tab-active-left,
+    .framer-tab-section .tab-active-right {
+        transition: none !important;
+    }
+}

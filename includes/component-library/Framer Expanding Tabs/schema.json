@@ -1,0 +1,322 @@
+{
+  "id": "framer-expanding-tabs",
+  "name": "Framer Style Expanding Tabs (2-Column)",
+  "settings": [
+    {
+      "tab": "content",
+      "section": "Interaction & Layout",
+      "id": "expand_on_hover",
+      "type": "switcher",
+      "label": "Expand on Hover",
+      "default": "yes"
+    },
+    {
+      "tab": "content",
+      "section": "Tabs Content",
+      "id": "tabs_list",
+      "type": "repeater",
+      "label": "Tabs",
+      "title_field": "{{{ heading }}} ({{{ tab_number }}})",
+      "fields": [
+        {
+          "id": "tab_number",
+          "type": "text",
+          "label": "Number Badge",
+          "default": "/001/"
+        },
+        {
+          "id": "vertical_title",
+          "type": "text",
+          "label": "Vertical Title",
+          "default": "BRAND IDENTITY"
+        },
+        {
+          "id": "heading",
+          "type": "text",
+          "label": "Active Heading",
+          "default": "BRAND IDENTITY"
+        },
+        {
+          "id": "description",
+          "type": "textarea",
+          "label": "Description",
+          "default": "Distinct brand systems designed for clarity, consistency, and long-term recognition."
+        },
+        {
+          "id": "image",
+          "type": "image",
+          "label": "Tab Visual Image",
+          "default": {
+            "url": "https://framerusercontent.com/images/71ZZd2iJ38av0tQ15MIX30SJh0.jpg?width=5000&height=3338"
+          }
+        },
+        {
+          "id": "show_capabilities",
+          "type": "switcher",
+          "label": "Show Capabilities & Tags",
+          "default": "yes",
+          "description": "Toggle off to completely remove the capabilities section from this tab."
+        },
+        {
+          "id": "offer_label",
+          "type": "text",
+          "label": "Capabilities Label",
+          "default": "WHAT WE OFFER",
+          "description": "Leave blank to hide only the label.",
+          "condition": {
+            "show_capabilities": "yes"
+          }
+        },
+        {
+          "id": "tags",
+          "type": "textarea",
+          "label": "Tags (One per line or comma-separated)",
+          "default": "BRAND STRATEGY\nLOGO DESIGN\nBRAND VOICE\nCOLOR SYSTEMS",
+          "description": "Leave blank to hide tags.",
+          "condition": {
+            "show_capabilities": "yes"
+          }
+        }
+      ],
+      "default": [
+        {
+          "tab_number": "/001/",
+          "vertical_title": "BRAND IDENTITY",
+          "heading": "BRAND IDENTITY",
+          "description": "Distinct brand systems designed for clarity, consistency, and long-term recognition.",
+          "image": {
+            "url": "https://framerusercontent.com/images/71ZZd2iJ38av0tQ15MIX30SJh0.jpg?width=5000&height=3338"
+          },
+          "show_capabilities": "yes",
+          "offer_label": "WHAT WE OFFER",
+          "tags": "BRAND STRATEGY\nLOGO DESIGN\nBRAND VOICE\nCOLOR SYSTEMS"
+        },
+        {
+          "tab_number": "/002/",
+          "vertical_title": "WEB DESIGN",
+          "heading": "WEB DESIGN",
+          "description": "Digital experiences designed for clarity, usability and meaningful interaction.",
+          "image": {
+            "url": "https://framerusercontent.com/images/71ZZd2iJ38av0tQ15MIX30SJh0.jpg?width=5000&height=3338"
+          },
+          "show_capabilities": "yes",
+          "offer_label": "WHAT WE OFFER",
+          "tags": "UX DESIGN\nUI DESIGN\nRESPONSIVE"
+        },
+        {
+          "tab_number": "/003/",
+          "vertical_title": "DEVELOPMENT",
+          "heading": "DEVELOPMENT",
+          "description": "Flexible digital products engineered for performance, scalability and growth.",
+          "image": {
+            "url": "https://framerusercontent.com/images/71ZZd2iJ38av0tQ15MIX30SJh0.jpg?width=5000&height=3338"
+          },
+          "show_capabilities": "yes",
+          "offer_label": "WHAT WE OFFER",
+          "tags": "WORDPRESS\nELEMENTOR\nE-COMMERCE"
+        },
+        {
+          "tab_number": "/004/",
+          "vertical_title": "PRODUCT DESIGN",
+          "heading": "PRODUCT DESIGN",
+          "description": "Product experiences balancing usability, clarity and visual impact.",
+          "image": {
+            "url": "https://framerusercontent.com/images/71ZZd2iJ38av0tQ15MIX30SJh0.jpg?width=5000&height=3338"
+          },
+          "show_capabilities": "yes",
+          "offer_label": "WHAT WE OFFER",
+          "tags": "UX RESEARCH\nPROTOTYPING\nDESIGN SYSTEMS"
+        },
+        {
+          "tab_number": "/005/",
+          "vertical_title": "PARTNERSHIP",
+          "heading": "PARTNERSHIP",
+          "description": "Long-term creative partnerships built around strategy, execution and sustainable growth.",
+          "image": {
+            "url": "https://framerusercontent.com/images/71ZZd2iJ38av0tQ15MIX30SJh0.jpg?width=5000&height=3338"
+          },
+          "show_capabilities": "yes",
+          "offer_label": "WHAT WE OFFER",
+          "tags": "STRATEGY\nCONSULTING\nSUPPORT"
+        }
+      ]
+    },
+    {
+      "tab": "style",
+      "section": "Container & Dimensions",
+      "id": "section_bg",
+      "type": "color",
+      "label": "Section Background",
+      "default": "#080808"
+    },
+    {
+      "tab": "style",
+      "section": "Container & Dimensions",
+      "id": "tabs_height",
+      "type": "slider",
+      "label": "Tabs Container Height",
+      "min": 350,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "default": { "size": 520, "unit": "px" }
+    },
+    {
+      "tab": "style",
+      "section": "Container & Dimensions",
+      "id": "tabs_max_width",
+      "type": "slider",
+      "label": "Max Container Width",
+      "min": 600,
+      "max": 1920,
+      "step": 20,
+      "unit": "px",
+      "default": { "size": 1520, "unit": "px" }
+    },
+    {
+      "tab": "style",
+      "section": "Container & Dimensions",
+      "id": "tabs_gap",
+      "type": "slider",
+      "label": "Gap Between Tabs",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": { "size": 10, "unit": "px" }
+    },
+    {
+      "tab": "style",
+      "section": "Panels Style",
+      "id": "collapsed_width",
+      "type": "slider",
+      "label": "Collapsed Tab Width",
+      "min": 60,
+      "max": 180,
+      "step": 2,
+      "unit": "px",
+      "default": { "size": 100, "unit": "px" }
+    },
+    {
+      "tab": "style",
+      "section": "Panels Style",
+      "id": "image_column_width",
+      "type": "slider",
+      "label": "Image Column Width (%)",
+      "min": 30,
+      "max": 65,
+      "step": 1,
+      "unit": "%",
+      "default": { "size": 48, "unit": "%" }
+    },
+    {
+      "tab": "style",
+      "section": "Panels Style",
+      "id": "panel_border_color",
+      "type": "color",
+      "label": "Panel Border Color",
+      "default": "rgba(255,255,255,0.14)"
+    },
+    {
+      "tab": "style",
+      "section": "Panels Style",
+      "id": "panel_bg_color",
+      "type": "color",
+      "label": "Panel Background",
+      "default": "rgba(255,255,255,0.015)"
+    },
+    {
+      "tab": "style",
+      "section": "Panels Style",
+      "id": "active_border_color",
+      "type": "color",
+      "label": "Active Panel Border",
+      "default": "rgba(255,255,255,0.22)"
+    },
+    {
+      "tab": "style",
+      "section": "Panels Style",
+      "id": "active_bg_color",
+      "type": "color",
+      "label": "Active Panel Background",
+      "default": "rgba(255,255,255,0.025)"
+    },
+    {
+      "tab": "style",
+      "section": "Typography & Colors",
+      "id": "heading_typography",
+      "type": "typography",
+      "label": "Active Heading Typography"
+    },
+    {
+      "tab": "style",
+      "section": "Typography & Colors",
+      "id": "heading_color",
+      "type": "color",
+      "label": "Heading Color",
+      "default": "#f4f4f4"
+    },
+    {
+      "tab": "style",
+      "section": "Typography & Colors",
+      "id": "vertical_typography",
+      "type": "typography",
+      "label": "Collapsed Title Typography"
+    },
+    {
+      "tab": "style",
+      "section": "Typography & Colors",
+      "id": "vertical_color",
+      "type": "color",
+      "label": "Collapsed Title Color",
+      "default": "#f0f0f0"
+    },
+    {
+      "tab": "style",
+      "section": "Typography & Colors",
+      "id": "desc_typography",
+      "type": "typography",
+      "label": "Description Typography"
+    },
+    {
+      "tab": "style",
+      "section": "Typography & Colors",
+      "id": "desc_color",
+      "type": "color",
+      "label": "Description Color",
+      "default": "#858585"
+    },
+    {
+      "tab": "style",
+      "section": "Tags & Badges",
+      "id": "tag_border_color",
+      "type": "color",
+      "label": "Tag Border Color",
+      "default": "rgba(255,255,255,0.18)"
+    },
+    {
+      "tab": "style",
+      "section": "Tags & Badges",
+      "id": "tag_text_color",
+      "type": "color",
+      "label": "Tag Text Color",
+      "default": "#8d8d8d"
+    },
+    {
+      "tab": "style",
+      "section": "Tags & Badges",
+      "id": "tag_corner_color",
+      "type": "color",
+      "label": "Tag Corner Marks Color",
+      "default": "rgba(255,255,255,0.65)"
+    },
+    {
+      "tab": "style",
+      "section": "Tags & Badges",
+      "id": "offer_label_color",
+      "type": "color",
+      "label": "Capabilities Label Color",
+      "default": "#777777"
+    }
+  ]
+}

@@ -1,0 +1,214 @@
+/* ============================================================
+   SUPERCOMPONENT: CURSOR TRACKING VIDEO
+   ============================================================ */
+
+.cursor-tracking-video-wrapper {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: visible;
+    perspective: 1000px;
+}
+
+.cursor-tracking-video-wrapper *,
+.cursor-tracking-video-wrapper *::before,
+.cursor-tracking-video-wrapper *::after {
+    box-sizing: border-box;
+}
+
+/* Card Container with 3D context */
+.cursor-tracking-video-wrapper .ctv-card {
+    position: relative;
+    width: 100%;
+    max-width: var(--container_max_width, 1200px);
+    height: var(--container_height, 560px);
+    border-radius: var(--corner_radius, 28px);
+    background-color: var(--background_color, #0b0f17);
+    border: var(--border_width, 1px) solid var(--border_color, rgba(255, 255, 255, 0.12));
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.45);
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.cursor-tracking-video-wrapper:hover .ctv-card {
+    border-color: rgba(255, 255, 255, 0.22);
+    box-shadow: 0 32px 80px -16px rgba(0, 0, 0, 0.6);
+}
+
+/* Video Layer */
+.cursor-tracking-video-wrapper .ctv-video-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.cursor-tracking-video-wrapper .ctv-video {
+    width: 100%;
+    height: 100%;
+    object-fit: var(--video_fit, cover);
+    object-position: var(--video_position, center center);
+    transform: scale(calc(var(--video_scale, 100) / 100));
+    opacity: calc(var(--video_opacity, 100) / 100);
+    display: block;
+    pointer-events: none;
+    user-select: none;
+    will-change: transform;
+}
+
+/* Gradient Overlay */
+.cursor-tracking-video-wrapper .ctv-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        180deg, 
+        rgba(0, 0, 0, 0.1) 0%, 
+        var(--overlay_color, rgba(11, 15, 23, 0.45)) 100%
+    );
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Content Layer */
+.cursor-tracking-video-wrapper .ctv-content-layer {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    padding: var(--container_padding, 40px);
+    display: flex;
+    flex-direction: column;
+    justify-content: var(--content_valign, flex-end);
+    pointer-events: none; /* Let cursor tracking feel uninterrupted */
+}
+
+.cursor-tracking-video-wrapper .ctv-content-inner {
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    text-align: var(--content_alignment, center);
+    margin: 0 auto;
+    pointer-events: auto; /* Allow buttons and links to be clicked */
+}
+
+/* Badge */
+.cursor-tracking-video-wrapper .ctv-badge {
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    background-color: var(--badge_bg, rgba(0, 240, 255, 0.12));
+    color: var(--badge_color, #00f0ff);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cursor-tracking-video-wrapper .ctv-badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: currentColor;
+    box-shadow: 0 0 10px currentColor;
+    animation: ctv-pulse 2s infinite ease-in-out;
+}
+
+@keyframes ctv-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+/* Heading */
+.cursor-tracking-video-wrapper .ctv-heading {
+    margin: 0 0 12px 0;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--heading_color, #ffffff);
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Description */
+.cursor-tracking-video-wrapper .ctv-description {
+    margin: 0 0 24px 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--desc_color, rgba(255, 255, 255, 0.78));
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* Button */
+.cursor-tracking-video-wrapper .ctv-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.cursor-tracking-video-wrapper .ctv-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 26px;
+    border-radius: 9999px;
+    background-color: var(--button_bg, #ffffff);
+    color: var(--button_color, #0b0f17);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.3);
+}
+
+.cursor-tracking-video-wrapper .ctv-btn:hover {
+    background-color: var(--button_hover_bg, #00f0ff);
+    color: var(--button_hover_color, #0b0f17);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px -4px rgba(0, 240, 255, 0.4);
+}
+
+.cursor-tracking-video-wrapper .ctv-btn-icon {
+    transition: transform 0.3s ease;
+}
+
+.cursor-tracking-video-wrapper .ctv-btn:hover .ctv-btn-icon {
+    transform: translateX(3px);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .cursor-tracking-video-wrapper .ctv-card {
+        height: auto;
+        min-height: 440px;
+    }
+
+    .cursor-tracking-video-wrapper .ctv-content-layer {
+        padding: 28px 20px;
+    }
+
+    .cursor-tracking-video-wrapper .ctv-heading {
+        font-size: 26px;
+    }
+
+    .cursor-tracking-video-wrapper .ctv-description {
+        font-size: 14px;
+    }
+}

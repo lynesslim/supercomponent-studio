@@ -964,6 +964,8 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 					$key = $parts[1];
 					if ( isset( $values[ $var_id ] ) && is_array( $values[ $var_id ] ) && isset( $values[ $var_id ][ $key ] ) ) {
 						$val = $values[ $var_id ][ $key ];
+					} elseif ( isset( $values[ $var_id ] ) && is_string( $values[ $var_id ] ) && 'url' === $key ) {
+						$val = $values[ $var_id ];
 					}
 				} else {
 					$val = isset( $values[ $expression ] ) ? $values[ $expression ] : null;
@@ -973,6 +975,7 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 				if ( '#' === $type && is_array( $val ) && ! empty( $val ) && isset( $val[0] ) && is_array( $val[0] ) ) {
 					// Collect field defaults and row defaults for this repeater from schema settings
 					$field_defaults = [];
+					$field_types    = [];
 					$repeater_defaults = [];
 					if ( is_array( $settings ) ) {
 						foreach ( $settings as $ctrl ) {
@@ -981,6 +984,9 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 									foreach ( $ctrl['fields'] as $fld ) {
 										if ( isset( $fld['id'], $fld['default'] ) ) {
 											$field_defaults[ $fld['id'] ] = $fld['default'];
+										}
+										if ( isset( $fld['id'], $fld['type'] ) ) {
+											$field_types[ $fld['id'] ] = $fld['type'];
 										}
 									}
 								}
@@ -999,10 +1005,21 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 							if ( isset( $repeater_defaults[ $item_index ][ $f_id ] ) && ! empty( $repeater_defaults[ $item_index ][ $f_id ] ) ) {
 								$fallback = $repeater_defaults[ $item_index ][ $f_id ];
 							}
-							if ( ! isset( $item[ $f_id ] ) || '' === $item[ $f_id ] || ( is_array( $item[ $f_id ] ) && empty( $item[ $f_id ] ) ) ) {
-								$item[ $f_id ] = $fallback;
-							} elseif ( is_array( $item[ $f_id ] ) && ( ! isset( $item[ $f_id ]['value'] ) || empty( $item[ $f_id ]['value'] ) ) && ! isset( $item[ $f_id ]['url'] ) ) {
-								$item[ $f_id ] = $fallback;
+							$f_type = isset( $field_types[ $f_id ] ) ? $field_types[ $f_id ] : '';
+							if ( 'switcher' === $f_type ) {
+								// In Elementor, an unchecked switcher saves an empty string ''.
+								// Only apply default fallback if the key is completely missing.
+								if ( ! array_key_exists( $f_id, $item ) ) {
+									$item[ $f_id ] = $fallback;
+								}
+							} else {
+								if ( ! array_key_exists( $f_id, $item ) ) {
+									$item[ $f_id ] = $fallback;
+								} elseif ( is_array( $item[ $f_id ] ) && empty( $item[ $f_id ] ) ) {
+									$item[ $f_id ] = $fallback;
+								} elseif ( is_array( $item[ $f_id ] ) && ( ! isset( $item[ $f_id ]['value'] ) || empty( $item[ $f_id ]['value'] ) ) && ! isset( $item[ $f_id ]['url'] ) ) {
+									$item[ $f_id ] = $fallback;
+								}
 							}
 						}
 
@@ -1019,48 +1036,53 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 
 						$item_output = $inner;
 						
-						// 1. Process nested conditional/inverted blocks inside this repeater item
-						$item_output = preg_replace_callback(
-							'/\{\{([#^])([\w\.]+)\}\}(.*?)\{\{\/\2\}\}/s',
-							// Use $item instead of $values for context inside the repeater item
-							function ( $sub_matches ) use ( $item ) {
-								$sub_type = $sub_matches[1];
-								$sub_expr = $sub_matches[2];
-								$sub_inner = $sub_matches[3];
+						// 1. Process nested conditional/inverted blocks inside this repeater item (supports nesting)
+						$render_blocks = function ( $content, $data ) use ( &$render_blocks ) {
+							return preg_replace_callback(
+								'/\{\{([#^])([\w\.]+)\}\}(.*?)\{\{\/\2\}\}/s',
+								function ( $sub_matches ) use ( $data, $render_blocks ) {
+									$sub_type = $sub_matches[1];
+									$sub_expr = $sub_matches[2];
+									$sub_inner = $sub_matches[3];
 
-								$sub_val = null;
-								if ( strpos( $sub_expr, '.' ) !== false ) {
-									$parts = explode( '.', $sub_expr );
-									$var_id = $parts[0];
-									$key = $parts[1];
-									if ( isset( $item[ $var_id ] ) && is_array( $item[ $var_id ] ) && isset( $item[ $var_id ][ $key ] ) ) {
-										$sub_val = $item[ $var_id ][ $key ];
+									$sub_val = null;
+									if ( strpos( $sub_expr, '.' ) !== false ) {
+										$parts = explode( '.', $sub_expr );
+										$var_id = $parts[0];
+										$key = $parts[1];
+										if ( isset( $data[ $var_id ] ) && is_array( $data[ $var_id ] ) && isset( $data[ $var_id ][ $key ] ) ) {
+											$sub_val = $data[ $var_id ][ $key ];
+										}
+									} else {
+										$sub_val = isset( $data[ $sub_expr ] ) ? $data[ $sub_expr ] : null;
 									}
-								} else {
-									$sub_val = isset( $item[ $sub_expr ] ) ? $item[ $sub_expr ] : null;
-								}
 
-								$is_truthy = ! empty( $sub_val );
-								if ( is_scalar( $sub_val ) && in_array( strtolower( (string) $sub_val ), [ 'false', 'no', 'off', '0' ], true ) ) {
-									$is_truthy = false;
-								}
-								if ( is_array( $sub_val ) ) {
-									if ( empty( $sub_val ) ) {
-										$is_truthy = false;
-									} elseif ( isset( $sub_val['value'] ) && empty( $sub_val['value'] ) ) {
-										$is_truthy = false;
-									} elseif ( isset( $sub_val['url'] ) && empty( $sub_val['url'] ) ) {
-										$is_truthy = false;
-									} elseif ( ! isset( $sub_val['value'] ) && ! isset( $sub_val['url'] ) ) {
+									$is_truthy = ! empty( $sub_val );
+									if ( is_scalar( $sub_val ) && in_array( strtolower( (string) $sub_val ), [ 'false', 'no', 'off', '0' ], true ) ) {
 										$is_truthy = false;
 									}
-								}
+									if ( is_array( $sub_val ) ) {
+										if ( empty( $sub_val ) ) {
+											$is_truthy = false;
+										} elseif ( isset( $sub_val['value'] ) && empty( $sub_val['value'] ) ) {
+											$is_truthy = false;
+										} elseif ( isset( $sub_val['url'] ) && empty( $sub_val['url'] ) ) {
+											$is_truthy = false;
+										} elseif ( ! isset( $sub_val['value'] ) && ! isset( $sub_val['url'] ) ) {
+											$is_truthy = false;
+										}
+									}
 
-								$show = ( '#' === $sub_type ) ? $is_truthy : ! $is_truthy;
-								return $show ? $sub_inner : '';
-							},
-							$item_output
-						);
+									$show = ( '#' === $sub_type ) ? $is_truthy : ! $is_truthy;
+									if ( ! $show ) {
+										return '';
+									}
+									return $render_blocks( $sub_inner, $data );
+								},
+								$content
+							);
+						};
+						$item_output = $render_blocks( $item_output, $item );
 
 						// 2. Replace unescaped {{{variable}}} inside repeater item
 						$item_output = preg_replace_callback(
@@ -1151,6 +1173,8 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 					if ( isset( $values[ $var_id ] ) && is_array( $values[ $var_id ] ) && isset( $values[ $var_id ][ $key ] ) ) {
 						$val = $values[ $var_id ][ $key ];
 						return ( is_string( $val ) || is_numeric( $val ) ) ? $val : '';
+					} elseif ( isset( $values[ $var_id ] ) && is_string( $values[ $var_id ] ) && 'url' === $key ) {
+						return esc_url( $values[ $var_id ] );
 					}
 					return '';
 				}
@@ -1196,6 +1220,8 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 							return esc_html( $val );
 						}
 						return esc_html( $val );
+					} elseif ( isset( $values[ $var_id ] ) && is_string( $values[ $var_id ] ) && 'url' === $key ) {
+						return esc_url( $values[ $var_id ] );
 					}
 					return '';
 				}

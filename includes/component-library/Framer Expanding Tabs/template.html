@@ -1,0 +1,39 @@
+<section class="framer-tab-section" data-instance-id="{{instanceId}}" data-hover="{{expand_on_hover}}">
+    <div class="framer-tabs">
+        {{#tabs_list}}
+        <article class="framer-tab" data-tags="{{tags}}" data-show-capabilities="{{show_capabilities}}">
+            <!-- Collapsed Vertical Bar -->
+            <div class="tab-collapsed">
+                <span class="tab-number">{{tab_number}}</span>
+                <span class="tab-vertical-title sc-vertical_typography">{{vertical_title}}</span>
+            </div>
+
+            <!-- Active Content Container (Clean 2-Column Split) -->
+            <div class="tab-active">
+                <!-- Left Content Column -->
+                <div class="tab-active-left">
+                    <div class="tab-intro">
+                        <div class="tab-intro-number">{{tab_number}}</div>
+                        <h3 class="tab-heading sc-heading_typography">{{heading}}</h3>
+                        <p class="tab-description sc-desc_typography">{{description}}</p>
+                    </div>
+
+                    {{#show_capabilities}}
+                    <div class="tab-capabilities">
+                        <div class="tab-offer">{{offer_label}}</div>
+                        <div class="tab-tags"></div>
+                    </div>
+                    {{/show_capabilities}}
+                </div>
+
+                <!-- Right Image Column (Never overlaps text) -->
+                <div class="tab-active-right">
+                    <div class="tab-image-inner">
+                        <img src="{{image.url}}" alt="{{heading}}" draggable="false">
+                    </div>
+                </div>
+            </div>
+        </article>
+        {{/tabs_list}}
+    </div>
+</section>

@@ -48,6 +48,23 @@
           "default": "Stage description content goes here."
         },
         {
+          "id": "tags",
+          "type": "textarea",
+          "label": "Pill Tags (comma-separated)",
+          "default": "",
+          "description": "Optional pill tags shown under description (e.g. Positioning, Visual Identity, Design System)"
+        },
+        {
+          "id": "link",
+          "type": "url",
+          "label": "Stage Link",
+          "default": {
+            "url": "",
+            "is_external": false
+          },
+          "description": "Optional link: when provided, the stage title and pill tags become clickable."
+        },
+        {
           "id": "bg_image",
           "type": "image",
           "label": "Stage Background Image"
@@ -56,8 +73,13 @@
       "default": [
         {
           "number": "01",
-          "title": "Material selection",
-          "body": "We begin by choosing materials for performance, tactility and long-term durability.",
+          "title": "Brand Identity & Strategy",
+          "body": "We build meaningful brand identities — from strategic positioning to visual systems that bring your brand to life.",
+          "tags": "Positioning, Visual Identity, Design System",
+          "link": {
+            "url": "",
+            "is_external": false
+          },
           "bg_image": {
             "url": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=1600&auto=format&fit=crop"
           }
@@ -66,6 +88,11 @@
           "number": "02",
           "title": "Precision shaping",
           "body": "Each component is formed with controlled tolerances to preserve the intended geometry.",
+          "tags": "Tooling, Tolerances, Form",
+          "link": {
+            "url": "",
+            "is_external": false
+          },
           "bg_image": {
             "url": "https://images.unsplash.com/photo-1581092335397-9583fe92d232?q=80&w=1600&auto=format&fit=crop"
           }
@@ -74,6 +101,11 @@
           "number": "03",
           "title": "Surface refinement",
           "body": "Textures and finishes are developed to create depth, grip and a distinctive visual rhythm.",
+          "tags": "Textures, Finishes, Ergonomics",
+          "link": {
+            "url": "",
+            "is_external": false
+          },
           "bg_image": {
             "url": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1600&auto=format&fit=crop"
           }
@@ -82,6 +114,11 @@
           "number": "04",
           "title": "System assembly",
           "body": "Individual parts are aligned and assembled into one coherent, high-performance structure.",
+          "tags": "Architecture, Integration, Performance",
+          "link": {
+            "url": "",
+            "is_external": false
+          },
           "bg_image": {
             "url": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1600&auto=format&fit=crop"
           }
@@ -90,6 +127,11 @@
           "number": "05",
           "title": "Final validation",
           "body": "The complete product is tested, adjusted and approved before it reaches its final form.",
+          "tags": "Validation, Quality Assurance, Launch",
+          "link": {
+            "url": "",
+            "is_external": false
+          },
           "bg_image": {
             "url": "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?q=80&w=1600&auto=format&fit=crop"
           }
@@ -113,6 +155,25 @@
       "section": "Counter Settings",
       "condition": {
         "show_counter": "yes"
+      }
+    },
+    {
+      "id": "show_link_button",
+      "type": "switcher",
+      "label": "Show CTA Button When Link Set",
+      "default": "no",
+      "tab": "content",
+      "section": "Link & Action Settings"
+    },
+    {
+      "id": "link_button_text",
+      "type": "text",
+      "label": "CTA Button Text",
+      "default": "Learn More",
+      "tab": "content",
+      "section": "Link & Action Settings",
+      "condition": {
+        "show_link_button": "yes"
       }
     },
     {
@@ -252,6 +313,20 @@
       "section": "Typography"
     },
     {
+      "id": "pill_typography",
+      "type": "typography",
+      "label": "Pill Tags Typography",
+      "tab": "style",
+      "section": "Typography"
+    },
+    {
+      "id": "link_btn_typography",
+      "type": "typography",
+      "label": "Link Button Typography",
+      "tab": "style",
+      "section": "Typography"
+    },
+    {
       "id": "counter_typography",
       "type": "typography",
       "label": "Counter Typography",
@@ -296,6 +371,99 @@
       "default": "rgba(255, 255, 255, 0.48)",
       "tab": "style",
       "section": "Content Colors"
+    },
+    {
+      "id": "pill_bg_color",
+      "type": "color",
+      "label": "Pill Background Color",
+      "default": "#ffffff",
+      "tab": "style",
+      "section": "Pill Tags Style"
+    },
+    {
+      "id": "pill_text_color",
+      "type": "color",
+      "label": "Pill Text Color",
+      "default": "#1a1a1a",
+      "tab": "style",
+      "section": "Pill Tags Style"
+    },
+    {
+      "id": "pill_border_color",
+      "type": "color",
+      "label": "Pill Border Color",
+      "default": "rgba(0, 0, 0, 0.08)",
+      "tab": "style",
+      "section": "Pill Tags Style"
+    },
+    {
+      "id": "pill_hover_bg_color",
+      "type": "color",
+      "label": "Pill Hover Background",
+      "default": "#f0f0f0",
+      "tab": "style",
+      "section": "Pill Tags Style"
+    },
+    {
+      "id": "pill_hover_text_color",
+      "type": "color",
+      "label": "Pill Hover Text Color",
+      "default": "#000000",
+      "tab": "style",
+      "section": "Pill Tags Style"
+    },
+    {
+      "id": "pill_hover_border_color",
+      "type": "color",
+      "label": "Pill Hover Border Color",
+      "default": "rgba(0, 0, 0, 0.18)",
+      "tab": "style",
+      "section": "Pill Tags Style"
+    },
+    {
+      "id": "pill_radius",
+      "type": "slider",
+      "label": "Pill Border Radius (px)",
+      "unit": "px",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "default": {
+        "size": 9999,
+        "unit": "px"
+      },
+      "tab": "style",
+      "section": "Pill Tags Style"
+    },
+    {
+      "id": "pill_gap",
+      "type": "slider",
+      "label": "Pill Gap (px)",
+      "unit": "px",
+      "min": 4,
+      "max": 30,
+      "step": 1,
+      "default": {
+        "size": 8,
+        "unit": "px"
+      },
+      "tab": "style",
+      "section": "Pill Tags Style"
+    },
+    {
+      "id": "pill_margin_top",
+      "type": "slider",
+      "label": "Pills Top Spacing (px)",
+      "unit": "px",
+      "min": 6,
+      "max": 60,
+      "step": 2,
+      "default": {
+        "size": 22,
+        "unit": "px"
+      },
+      "tab": "style",
+      "section": "Pill Tags Style"
     },
     {
       "id": "active_label_color",

@@ -263,6 +263,8 @@
                                     'textarea': 'textarea',
                                     'richtext': 'wysiwyg',
                                     'image': 'media',
+                                    'video': 'media',
+                                    'media': 'media',
                                     'url': 'url',
                                     'color': 'color',
                                     'slider': 'slider',
@@ -294,6 +296,10 @@
                                     'default': control['default'] !== undefined ? control['default'] : '',
                                     render_type: 'template' // Force all controls to re-render
                                 };
+
+                                if (control.type === 'video') {
+                                    controlDef.media_type = 'video';
+                                }
 
                                 if (control.description) controlDef.description = control.description;
                                 

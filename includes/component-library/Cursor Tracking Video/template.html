@@ -1,0 +1,58 @@
+<section class="cursor-tracking-video-wrapper" 
+         data-instance-id="{{instanceId}}" 
+         data-scope="{{tracking_scope}}" 
+         data-default-pos="{{default_position.size}}" 
+         data-invert="{{invert_direction}}" 
+         data-smooth="{{smoothing_speed.size}}" 
+         data-return="{{return_speed.size}}" 
+         data-touch="{{enable_touch}}" 
+         data-tilt="{{enable_tilt}}" 
+         data-tilt-strength="{{tilt_strength.size}}">
+
+    <div class="ctv-card">
+        <!-- Background Video Canvas / Video Player -->
+        <div class="ctv-video-container">
+            <video class="ctv-video" 
+                   src="{{video_source.url}}{{^video_source.url}}{{video_source}}{{/video_source.url}}"
+                   data-src="{{video_source.url}}{{^video_source.url}}{{video_source}}{{/video_source.url}}"
+                   playsinline 
+                   webkit-playsinline 
+                   muted 
+                   preload="auto" 
+                   {{#poster_image.url}}poster="{{poster_image.url}}"{{/poster_image.url}}>
+                <source src="{{video_source.url}}{{^video_source.url}}{{video_source}}{{/video_source.url}}">
+            </video>
+            <!-- Gradient Overlay for Contrast -->
+            <div class="ctv-overlay"></div>
+        </div>
+
+        <!-- Optional Interactive / Hero Overlay Content -->
+        {{#show_content}}
+        <div class="ctv-content-layer">
+            <div class="ctv-content-inner">
+                {{#show_badge}}
+                <div class="ctv-badge">
+                    <span class="ctv-badge-dot"></span>
+                    <span class="ctv-badge-text">{{badge_text}}</span>
+                </div>
+                {{/show_badge}}
+
+                <h2 class="ctv-heading sc-heading_typography">{{heading}}</h2>
+                <p class="ctv-description sc-desc_typography">{{description}}</p>
+
+                {{#show_button}}
+                <div class="ctv-actions">
+                    <a class="ctv-btn" href="{{button_link.url}}" target="{{button_link.is_external ? '_blank' : '_self'}}">
+                        <span>{{button_text}}</span>
+                        <svg class="ctv-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+                {{/show_button}}
+            </div>
+        </div>
+        {{/show_content}}
+    </div>
+</section>

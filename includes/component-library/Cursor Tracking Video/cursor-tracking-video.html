@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cursor Tracking Video - SuperComponent Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 50% 20%, #151b28 0%, #080b11 100%);
+      color: #f1f5f9;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 40px 20px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Top Demo Header */
+    .demo-header {
+      text-align: center;
+      max-width: 800px;
+      margin-bottom: 30px;
+    }
+
+    .demo-title {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .demo-subtitle {
+      font-size: 15px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    /* Controls Bar */
+    .demo-toolbar {
+      width: 100%;
+      max-width: 1200px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 16px 24px;
+      margin-bottom: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .demo-controls-group {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .demo-control-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #cbd5e1;
+    }
+
+    .demo-control-item label {
+      font-weight: 600;
+      color: #94a3b8;
+    }
+
+    .demo-control-item select,
+    .demo-control-item input[type="text"] {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      color: #ffffff;
+      padding: 6px 12px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .demo-file-btn {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #00f0ff 0%, #0070f3 100%);
+      color: #080b11;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .demo-file-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(0, 240, 255, 0.4);
+    }
+
+    .demo-file-btn input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    /* Live HUD Telemetry */
+    .demo-hud {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-family: monospace;
+      color: #38bdf8;
+    }
+
+    .hud-indicator {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #00f0ff;
+      box-shadow: 0 0 8px #00f0ff;
+    }
+
+    .hud-indicator.returning {
+      background: #f59e0b;
+      box-shadow: 0 0 8px #f59e0b;
+    }
+
+    /* Elementor Scoped Wrapper Simulation */
+    .elementor-element-preview-demo {
+      width: 100%;
+      max-width: 1200px;
+      --container_height: 560px;
+      --container_max_width: 1200px;
+      --corner_radius: 28px;
+      --container_padding: 40px 40px 40px 40px;
+      --content_alignment: center;
+      --content_valign: flex-end;
+      --video_fit: cover;
+      --video_position: center center;
+      --video_scale: 100;
+      --video_opacity: 100;
+      --background_color: #0b0f17;
+      --overlay_color: rgba(11, 15, 23, 0.45);
+      --border_color: rgba(255, 255, 255, 0.12);
+      --border_width: 1px;
+      --heading_color: #ffffff;
+      --desc_color: rgba(255, 255, 255, 0.78);
+      --badge_bg: rgba(0, 240, 255, 0.12);
+      --badge_color: #00f0ff;
+      --button_bg: #ffffff;
+      --button_color: #0b0f17;
+      --button_hover_bg: #00f0ff;
+      --button_hover_color: #0b0f17;
+    }
+
+    /* CSS From style.css */
+    .cursor-tracking-video-wrapper {
+        position: relative;
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: visible;
+        perspective: 1000px;
+    }
+
+    .cursor-tracking-video-wrapper *,
+    .cursor-tracking-video-wrapper *::before,
+    .cursor-tracking-video-wrapper *::after {
+        box-sizing: border-box;
+    }
+
+    .cursor-tracking-video-wrapper .ctv-card {
+        position: relative;
+        width: 100%;
+        max-width: var(--container_max_width, 1200px);
+        height: var(--container_height, 560px);
+        border-radius: var(--corner_radius, 28px);
+        background-color: var(--background_color, #0b0f17);
+        border: var(--border_width, 1px) solid var(--border_color, rgba(255, 255, 255, 0.12));
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.45);
+        transform-style: preserve-3d;
+        will-change: transform;
+        transition: box-shadow 0.4s ease, border-color 0.4s ease;
+    }
+
+    .cursor-tracking-video-wrapper:hover .ctv-card {
+        border-color: rgba(255, 255, 255, 0.22);
+        box-shadow: 0 32px 80px -16px rgba(0, 0, 0, 0.6);
+    }
+
+    .cursor-tracking-video-wrapper .ctv-video-container {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .cursor-tracking-video-wrapper .ctv-video {
+        width: 100%;
+        height: 100%;
+        object-fit: var(--video_fit, cover);
+        object-position: var(--video_position, center center);
+        transform: scale(calc(var(--video_scale, 100) / 100));
+        opacity: calc(var(--video_opacity, 100) / 100);
+        display: block;
+        pointer-events: none;
+        user-select: none;
+        will-change: transform;
+    }
+
+    .cursor-tracking-video-wrapper .ctv-overlay {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            180deg, 
+            rgba(0, 0, 0, 0.1) 0%, 
+            var(--overlay_color, rgba(11, 15, 23, 0.45)) 100%
+        );
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    .cursor-tracking-video-wrapper .ctv-content-layer {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        height: 100%;
+        padding: var(--container_padding, 40px);
+        display: flex;
+        flex-direction: column;
+        justify-content: var(--content_valign, flex-end);
+        pointer-events: none;
+    }
+
+    .cursor-tracking-video-wrapper .ctv-content-inner {
+        max-width: 680px;
+        display: flex;
+        flex-direction: column;
+        text-align: var(--content_alignment, center);
+        margin: 0 auto;
+        pointer-events: auto;
+    }
+
+    .cursor-tracking-video-wrapper .ctv-badge {
+        align-self: center;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px;
+        border-radius: 9999px;
+        background-color: var(--badge_bg, rgba(0, 240, 255, 0.12));
+        color: var(--badge_color, #00f0ff);
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .cursor-tracking-video-wrapper .ctv-badge-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background-color: currentColor;
+        box-shadow: 0 0 10px currentColor;
+        animation: ctv-pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes ctv-pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    .cursor-tracking-video-wrapper .ctv-heading {
+        margin: 0 0 12px 0;
+        font-size: 38px;
+        font-weight: 700;
+        line-height: 1.2;
+        color: var(--heading_color, #ffffff);
+        letter-spacing: -0.02em;
+        text-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .cursor-tracking-video-wrapper .ctv-description {
+        margin: 0 0 24px 0;
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--desc_color, rgba(255, 255, 255, 0.78));
+        text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+    }
+
+    .cursor-tracking-video-wrapper .ctv-actions {
+        display: flex;
+        justify-content: center;
+    }
+
+    .cursor-tracking-video-wrapper .ctv-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 13px 26px;
+        border-radius: 9999px;
+        background-color: var(--button_bg, #ffffff);
+        color: var(--button_color, #0b0f17);
+        font-size: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.3);
+    }
+
+    .cursor-tracking-video-wrapper .ctv-btn:hover {
+        background-color: var(--button_hover_bg, #00f0ff);
+        color: var(--button_hover_color, #0b0f17);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px -4px rgba(0, 240, 255, 0.4);
+    }
+
+    .cursor-tracking-video-wrapper .ctv-btn-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .cursor-tracking-video-wrapper .ctv-btn:hover .ctv-btn-icon {
+        transform: translateX(3px);
+    }
+
+    @media (max-width: 768px) {
+        .cursor-tracking-video-wrapper .ctv-card {
+            height: auto;
+            min-height: 440px;
+        }
+        .cursor-tracking-video-wrapper .ctv-content-layer {
+            padding: 28px 20px;
+        }
+        .cursor-tracking-video-wrapper .ctv-heading {
+            font-size: 26px;
+        }
+        .cursor-tracking-video-wrapper .ctv-description {
+            font-size: 14px;
+        }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="demo-header">
+    <h1 class="demo-title">Cursor Tracking Video SuperComponent</h1>
+    <p class="demo-subtitle">
+      Hover horizontally to scrub through the video timeline. When you leave, the mascot video smoothly returns to the 50% center rest point.
+    </p>
+  </div>
+
+  <!-- Interactive Controls Toolbar -->
+  <div class="demo-toolbar">
+    <div class="demo-controls-group">
+      <label class="demo-file-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Select Mascot Video (MP4)
+        <input type="file" id="videoFileInput" accept="video/mp4,video/webm">
+      </label>
+
+      <div class="demo-control-item">
+        <label for="scopeSelect">Scope:</label>
+        <select id="scopeSelect">
+          <option value="container" selected>Section Container</option>
+          <option value="window">Full Viewport</option>
+        </select>
+      </div>
+
+      <div class="demo-control-item">
+        <label for="invertCheckbox">Invert:</label>
+        <input type="checkbox" id="invertCheckbox">
+      </div>
+
+      <div class="demo-control-item">
+        <label for="tiltCheckbox">3D Tilt:</label>
+        <input type="checkbox" id="tiltCheckbox" checked>
+      </div>
+    </div>
+
+    <!-- Live Telemetry HUD -->
+    <div class="demo-hud">
+      <span class="hud-indicator" id="hudIndicator"></span>
+      <span id="hudProgress">Progress: 50.0%</span>
+      <span>|</span>
+      <span id="hudTime">Time: 0.00s</span>
+      <span>|</span>
+      <span id="hudStatus">Resting at Center</span>
+    </div>
+  </div>
+
+  <!-- SuperComponent Wrapper -->
+  <div class="elementor-element-preview-demo">
+    <section class="cursor-tracking-video-wrapper" 
+             data-instance-id="preview-demo" 
+             data-scope="container" 
+             data-default-pos="50" 
+             data-invert="no" 
+             data-smooth="12" 
+             data-return="5" 
+             data-touch="yes" 
+             data-tilt="yes" 
+             data-tilt-strength="6">
+
+        <div class="ctv-card">
+            <!-- Background Video Player -->
+            <div class="ctv-video-container">
+                <video class="ctv-video" 
+                       id="previewVideo"
+                       playsinline 
+                       webkit-playsinline 
+                       muted 
+                       preload="auto"
+                       src="https://vjs.zencdn.net/v/oceans.mp4">
+                </video>
+                <div class="ctv-overlay"></div>
+            </div>
+
+            <!-- Overlay Content -->
+            <div class="ctv-content-layer">
+                <div class="ctv-content-inner">
+                    <div class="ctv-badge">
+                        <span class="ctv-badge-dot"></span>
+                        <span class="ctv-badge-text">Interactive Mascot</span>
+                    </div>
+
+                    <h2 class="ctv-heading">Watch Me Follow Your Move</h2>
+                    <p class="ctv-description">
+                      Move your cursor horizontally across the screen to turn the mascot. When your cursor leaves, it gently relaxes back to the center.
+                    </p>
+
+                    <div class="ctv-actions">
+                        <a class="ctv-btn" href="#">
+                            <span>Explore Showcase</span>
+                            <svg class="ctv-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+  </div>
+
+  <script>
+    // Component JS Scoped Implementation with Live Demo Telemetry
+    (function() {
+        var instanceId = 'preview-demo';
+
+        // 1. Memory leak cleanup registration
+        if (window.supercomponentCleanups && window.supercomponentCleanups[instanceId]) {
+            window.supercomponentCleanups[instanceId]();
+        }
+
+        var animationFrameId = null;
+        var activeEventListeners = [];
+
+        function init() {
+            var wrapper = document.querySelector('[data-instance-id="' + instanceId + '"]');
+            if (!wrapper) return;
+
+            var video = wrapper.querySelector('.ctv-video');
+            var card = wrapper.querySelector('.ctv-card') || wrapper;
+            if (!video) return;
+
+            var hudProgress = document.getElementById('hudProgress');
+            var hudTime = document.getElementById('hudTime');
+            var hudStatus = document.getElementById('hudStatus');
+            var hudIndicator = document.getElementById('hudIndicator');
+
+            var scope = wrapper.getAttribute('data-scope') || 'container';
+            var defaultPosPct = parseFloat(wrapper.getAttribute('data-default-pos')) || 50;
+            var defaultPos = Math.max(0, Math.min(1, defaultPosPct / 100)); // Default 0.5 (middle)
+            var invertDirection = wrapper.getAttribute('data-invert') === 'yes';
+            
+            var smoothVal = parseFloat(wrapper.getAttribute('data-smooth')) || 12;
+            var returnVal = parseFloat(wrapper.getAttribute('data-return')) || 5;
+            var smoothSpeed = Math.max(0.01, Math.min(0.5, smoothVal / 100));
+            var returnSpeed = Math.max(0.005, Math.min(0.3, returnVal / 100));
+
+            var enableTouch = wrapper.getAttribute('data-touch') !== 'no';
+            var enableTilt = wrapper.getAttribute('data-tilt') === 'yes';
+            var tiltStrength = parseFloat(wrapper.getAttribute('data-tilt-strength')) || 6;
+
+            var targetProgress = defaultPos;
+            var currentProgress = defaultPos;
+            var isTracking = false;
+            var pendingSeekTime = null;
+
+            var targetTiltX = 0;
+            var targetTiltY = 0;
+            var currentTiltX = 0;
+            var currentTiltY = 0;
+
+            function addManagedListener(target, event, handler, options) {
+                target.addEventListener(event, handler, options);
+                activeEventListeners.push({ target: target, event: event, handler: handler });
+            }
+
+            // Force muted properties (mandatory for browsers to allow preloading & scrubbing)
+            video.muted = true;
+            video.defaultMuted = true;
+            video.playsInline = true;
+            video.setAttribute('muted', '');
+            video.setAttribute('playsinline', '');
+            video.setAttribute('webkit-playsinline', '');
+
+            var videoSrc = video.getAttribute('src') || video.getAttribute('data-src') || '';
+            if (!videoSrc) {
+                var sourceTag = video.querySelector('source');
+                if (sourceTag) {
+                    videoSrc = sourceTag.getAttribute('src') || '';
+                }
+            }
+
+            if (videoSrc && video.src !== videoSrc) {
+                video.src = videoSrc;
+            }
+
+            function setRestPosition() {
+                if (video.duration && !isNaN(video.duration) && video.duration > 0) {
+                    var restTime = defaultPos * video.duration;
+                    try {
+                        video.currentTime = restTime;
+                    } catch (e) {}
+                }
+            }
+
+            try {
+                video.load();
+            } catch (e) {}
+
+            var primePromise = video.play();
+            if (primePromise !== undefined) {
+                primePromise.then(function() {
+                    video.pause();
+                    setRestPosition();
+                }).catch(function() {
+                    setRestPosition();
+                });
+            } else {
+                video.pause();
+                setRestPosition();
+            }
+
+            addManagedListener(video, 'loadedmetadata', setRestPosition);
+            addManagedListener(video, 'loadeddata', setRestPosition);
+            addManagedListener(video, 'canplay', setRestPosition);
+
+            addManagedListener(video, 'seeked', function() {
+                if (pendingSeekTime !== null && video.duration && !isNaN(video.duration)) {
+                    var nextTime = pendingSeekTime;
+                    pendingSeekTime = null;
+                    try {
+                        video.currentTime = Math.max(0, Math.min(video.duration, nextTime));
+                    } catch (e) {}
+                }
+            });
+
+            function calculateProgress(clientX, clientY) {
+                var progress = defaultPos;
+                var rect = card.getBoundingClientRect();
+
+                if (scope === 'window') {
+                    var winW = window.innerWidth || document.documentElement.clientWidth;
+                    progress = clientX / (winW || 1);
+                } else {
+                    progress = (clientX - rect.left) / (rect.width || 1);
+                }
+
+                progress = Math.max(0, Math.min(1, progress));
+
+                if (invertDirection) {
+                    progress = 1 - progress;
+                }
+
+                if (enableTilt) {
+                    var relativeX = (clientX - rect.left) / (rect.width || 1) - 0.5;
+                    var relativeY = (clientY - rect.top) / (rect.height || 1) - 0.5;
+                    targetTiltY = relativeX * tiltStrength;
+                    targetTiltX = -relativeY * tiltStrength;
+                }
+
+                return progress;
+            }
+
+            var onMouseMove = function(e) {
+                if (scope === 'window') {
+                    isTracking = true;
+                    targetProgress = calculateProgress(e.clientX, e.clientY);
+                } else {
+                    var rect = card.getBoundingClientRect();
+                    var inside = e.clientX >= rect.left && e.clientX <= rect.right &&
+                                 e.clientY >= rect.top && e.clientY <= rect.bottom;
+                    if (inside) {
+                        isTracking = true;
+                        targetProgress = calculateProgress(e.clientX, e.clientY);
+                    } else if (isTracking) {
+                        onMouseLeave();
+                    }
+                }
+            };
+
+            var onMouseEnter = function() {
+                isTracking = true;
+            };
+
+            var onMouseLeave = function() {
+                isTracking = false;
+                targetProgress = defaultPos;
+                targetTiltX = 0;
+                targetTiltY = 0;
+            };
+
+            if (scope === 'window') {
+                addManagedListener(window, 'mousemove', onMouseMove, { passive: true });
+                addManagedListener(document, 'mouseleave', onMouseLeave);
+                addManagedListener(window, 'blur', onMouseLeave);
+            } else {
+                addManagedListener(card, 'mouseenter', onMouseEnter);
+                addManagedListener(card, 'mousemove', onMouseMove, { passive: true });
+                addManagedListener(card, 'mouseleave', onMouseLeave);
+            }
+
+            if (enableTouch) {
+                var onTouchMove = function(e) {
+                    if (!e.touches || !e.touches.length) return;
+                    var touch = e.touches[0];
+                    isTracking = true;
+                    targetProgress = calculateProgress(touch.clientX, touch.clientY);
+                };
+
+                addManagedListener(card, 'touchstart', onMouseEnter, { passive: true });
+                addManagedListener(card, 'touchmove', onTouchMove, { passive: true });
+                addManagedListener(card, 'touchend', onMouseLeave);
+                addManagedListener(card, 'touchcancel', onMouseLeave);
+            }
+
+            function tick() {
+                var ease = isTracking ? smoothSpeed : returnSpeed;
+                var diff = targetProgress - currentProgress;
+
+                if (Math.abs(diff) > 0.0002) {
+                    currentProgress += diff * ease;
+                } else if (currentProgress !== targetProgress) {
+                    currentProgress = targetProgress;
+                }
+
+                if (video && video.duration && !isNaN(video.duration) && video.duration > 0) {
+                    var targetTime = currentProgress * video.duration;
+                    targetTime = Math.max(0, Math.min(video.duration, targetTime));
+
+                    if (!video.seeking) {
+                        if (Math.abs(video.currentTime - targetTime) > 0.012) {
+                            try {
+                                video.currentTime = targetTime;
+                            } catch (e) {}
+                        }
+                    } else {
+                        pendingSeekTime = targetTime;
+                    }
+
+                    if (hudTime) {
+                        hudTime.textContent = 'Time: ' + video.currentTime.toFixed(2) + 's / ' + video.duration.toFixed(2) + 's';
+                    }
+                }
+
+                if (hudProgress) {
+                    hudProgress.textContent = 'Progress: ' + (currentProgress * 100).toFixed(1) + '%';
+                }
+
+                if (hudStatus && hudIndicator) {
+                    if (isTracking) {
+                        hudStatus.textContent = 'Tracking Cursor';
+                        hudIndicator.className = 'hud-indicator';
+                    } else if (Math.abs(currentProgress - defaultPos) > 0.005) {
+                        hudStatus.textContent = 'Reverting to 50% Center...';
+                        hudIndicator.className = 'hud-indicator returning';
+                    } else {
+                        hudStatus.textContent = 'Resting at Center (50%)';
+                        hudIndicator.className = 'hud-indicator';
+                    }
+                }
+
+                if (enableTilt && card) {
+                    currentTiltX += (targetTiltX - currentTiltX) * 0.1;
+                    currentTiltY += (targetTiltY - currentTiltY) * 0.1;
+                    card.style.transform = 'perspective(1000px) rotateX(' + currentTiltX.toFixed(2) + 'deg) rotateY(' + currentTiltY.toFixed(2) + 'deg)';
+                }
+
+                animationFrameId = requestAnimationFrame(tick);
+            }
+
+            animationFrameId = requestAnimationFrame(tick);
+        }
+
+        window.supercomponentCleanups = window.supercomponentCleanups || {};
+        window.supercomponentCleanups[instanceId] = function() {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            for (var i = 0; i < activeEventListeners.length; i++) {
+                var item = activeEventListeners[i];
+                try {
+                    item.target.removeEventListener(item.event, item.handler);
+                } catch (e) {}
+            }
+            activeEventListeners = [];
+        };
+
+        init();
+
+        // Toolbar Interactive Binding
+        var fileInput = document.getElementById('videoFileInput');
+        if (fileInput) {
+            fileInput.addEventListener('change', function(e) {
+                var file = e.target.files[0];
+                if (file) {
+                    var vid = document.getElementById('previewVideo');
+                    var url = URL.createObjectURL(file);
+                    vid.src = url;
+                    vid.load();
+                }
+            });
+        }
+
+        var scopeSelect = document.getElementById('scopeSelect');
+        if (scopeSelect) {
+            scopeSelect.addEventListener('change', function(e) {
+                var wrapper = document.querySelector('[data-instance-id="' + instanceId + '"]');
+                wrapper.setAttribute('data-scope', e.target.value);
+                window.supercomponentCleanups[instanceId]();
+                init();
+            });
+        }
+
+        var invertCheckbox = document.getElementById('invertCheckbox');
+        if (invertCheckbox) {
+            invertCheckbox.addEventListener('change', function(e) {
+                var wrapper = document.querySelector('[data-instance-id="' + instanceId + '"]');
+                wrapper.setAttribute('data-invert', e.target.checked ? 'yes' : 'no');
+                window.supercomponentCleanups[instanceId]();
+                init();
+            });
+        }
+
+        var tiltCheckbox = document.getElementById('tiltCheckbox');
+        if (tiltCheckbox) {
+            tiltCheckbox.addEventListener('change', function(e) {
+                var wrapper = document.querySelector('[data-instance-id="' + instanceId + '"]');
+                wrapper.setAttribute('data-tilt', e.target.checked ? 'yes' : 'no');
+                window.supercomponentCleanups[instanceId]();
+                init();
+            });
+        }
+    })();
+  </script>
+</body>
+</html>

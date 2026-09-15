@@ -160,7 +160,7 @@
 
 .dial-content__title {
   margin: 0;
-  max-width: 11ch;
+  max-width: 100%;
   font-family: Georgia, 'Times New Roman', serif;
   font-size: clamp(42px, 6vw, 92px);
   line-height: .95;
@@ -169,12 +169,103 @@
   color: var(--title_color, #ffffff);
 }
 
+.dial-content__title-link {
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.dial-content__title-link:hover {
+  opacity: 0.82;
+}
+
 .dial-content__body {
   margin: 28px 0 0;
-  max-width: 39ch;
+  max-width: 100%;
   color: var(--body_color, rgba(255, 255, 255, 0.7));
   font-size: 15px;
   line-height: 1.7;
+}
+
+/* Pill Tags */
+.dial-content__tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--pill_gap, 8px);
+  margin-top: var(--pill_margin_top, 22px);
+  position: relative;
+  z-index: 6;
+}
+
+.dial-content__tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px;
+  border-radius: var(--pill_radius, 9999px);
+  background-color: var(--pill_bg_color, #ffffff);
+  color: var(--pill_text_color, #1a1a1a);
+  border: 1px solid var(--pill_border_color, rgba(0, 0, 0, 0.08));
+  font-size: 13px;
+  line-height: 1.25;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  user-select: none;
+}
+
+a.dial-content__tag {
+  cursor: pointer;
+}
+
+a.dial-content__tag:hover {
+  background-color: var(--pill_hover_bg_color, #f0f0f0);
+  border-color: var(--pill_hover_border_color, rgba(0, 0, 0, 0.18));
+  color: var(--pill_hover_text_color, #000000);
+  transform: translateY(-1px);
+}
+
+/* Action CTA Button */
+.dial-content__action {
+  margin-top: 24px;
+  position: relative;
+  z-index: 6;
+}
+
+.dial-content__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--title_color, #ffffff);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: gap 0.2s ease, opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.dial-content__btn:hover {
+  gap: 12px;
+  opacity: 0.85;
+}
+
+.dial-content__btn svg {
+  transition: transform 0.2s ease;
+}
+
+.dial-content__btn:hover svg {
+  transform: translateX(3px);
 }
 
 .dial-content__counter {
@@ -233,9 +324,25 @@
   .dial-content__body {
     order: 3;
     margin-top: 12px;
-    max-width: 48ch;
+    max-width: 100%;
     font-size: clamp(13px, 1.7vw, 16px);
     line-height: 1.55;
+  }
+
+  .dial-content__tags {
+    order: 4;
+    margin-top: 14px;
+    gap: 6px;
+  }
+
+  .dial-content__tag {
+    font-size: 12px;
+    padding: 5px 12px;
+  }
+
+  .dial-content__action {
+    order: 5;
+    margin-top: 18px;
   }
 
   .dial__label {
@@ -273,9 +380,25 @@
 
   .dial-content__body {
     margin-top: 10px;
-    max-width: 34ch;
+    max-width: 100%;
     font-size: clamp(12px, 3.5vw, 15px);
     line-height: 1.5;
+  }
+
+  .dial-content__tags {
+    order: 4;
+    margin-top: 12px;
+    gap: 6px;
+  }
+
+  .dial-content__tag {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .dial-content__action {
+    order: 5;
+    margin-top: 14px;
   }
 
   .dial__label {
@@ -325,7 +448,9 @@
   .dial__dot,
   .dial-bg,
   .dial-content__title,
-  .dial-content__body {
+  .dial-content__body,
+  .dial-content__tags,
+  .dial-content__action {
     animation: none !important;
     transition: none !important;
   }
