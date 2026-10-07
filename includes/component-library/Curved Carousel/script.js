@@ -153,12 +153,20 @@
     targetOffset = nearestIndex * spacing;
   }
 
-  // 6. Pointer & Drag Interaction
+  // 6. Pointer & Drag Interaction (Clean drag vs click separation)
+  var isPointerCaptured = false;
+  var dragPointerId = null;
+  var isPointerDown = false;
+  var dragThreshold = 8; // Pixels of movement required before treating as a drag
+
   function onPointerDown(e) {
     if (e.pointerType === "mouse" && e.button !== 0) return;
 
-    isDragging = true;
+    isPointerDown = true;
+    isDragging = false;
     isClickPrevented = false;
+    isPointerCaptured = false;
+    dragPointerId = e.pointerId;
     movedDistance = 0;
     startX = e.clientX;
     currentX = e.clientX;
@@ -166,21 +174,17 @@
     lastTime = Date.now();
     velocity = 0;
 
-    stage.classList.add("is-dragging");
     pauseAutoplay();
-
-    if (stage.setPointerCapture) {
-      try {
-        stage.setPointerCapture(e.pointerId);
-      } catch (err) {}
-    }
+    // Do NOT capture pointer here: capturing on pointerdown prevents the browser
+    // from dispatching native click events to child <a> links.
   }
 
   function onPointerMove(e) {
-    if (!isDragging) return;
+    if (!isPointerDown) return;
 
     var x = e.clientX;
     var dx = x - currentX;
+    var totalMove = Math.abs(x - startX);
     var now = Date.now();
     var dt = now - lastTime;
 
@@ -193,9 +197,22 @@
     currentX = x;
 
     movedDistance += Math.abs(dx);
-    if (movedDistance > 6) {
+
+    // Only engage drag mode and pointer capture once movement exceeds threshold
+    if (!isDragging && totalMove > dragThreshold) {
+      isDragging = true;
       isClickPrevented = true;
+      stage.classList.add("is-dragging");
+
+      if (stage.setPointerCapture && dragPointerId !== null && !isPointerCaptured) {
+        try {
+          stage.setPointerCapture(dragPointerId);
+          isPointerCaptured = true;
+        } catch (err) {}
+      }
     }
+
+    if (!isDragging) return;
 
     // Drag directly
     currentOffset -= dx;
@@ -214,33 +231,56 @@
   }
 
   function onPointerUp(e) {
-    if (!isDragging) return;
+    if (!isPointerDown) return;
 
+    var wasDragging = isDragging;
+    isPointerDown = false;
     isDragging = false;
     stage.classList.remove("is-dragging");
 
-    if (stage.releasePointerCapture) {
+    if (isPointerCaptured && stage.releasePointerCapture && dragPointerId !== null) {
       try {
-        stage.releasePointerCapture(e.pointerId);
+        stage.releasePointerCapture(dragPointerId);
       } catch (err) {}
+      isPointerCaptured = false;
     }
+    dragPointerId = null;
 
-    // Apply inertia on release
-    if (Math.abs(velocity) > 0.25) {
-      targetOffset -= velocity * 130;
-    }
+    if (wasDragging) {
+      // Apply inertia on release
+      if (Math.abs(velocity) > 0.25) {
+        targetOffset -= velocity * 130;
+      }
 
-    snapToNearest();
-    startAutoplay();
+      snapToNearest();
+      startAutoplay();
 
-    // Reset click prevention after brief delay
-    setTimeout(function () {
+      // Suppress any trailing click event triggered by releasing a drag
+      isClickPrevented = true;
+      setTimeout(function () {
+        isClickPrevented = false;
+      }, 120);
+    } else {
+      // Pure click - never prevent click
       isClickPrevented = false;
-    }, 50);
+      startAutoplay();
+    }
   }
 
-  // 7. Click to Center Card
+  // 7. Click Handling (Allow links to open on clean click; animate to center if no link or if off-center without valid URL)
   function setupCardClicks() {
+    // Intercept click on the stage in capture phase if user was dragging
+    stage.addEventListener(
+      "click",
+      function (e) {
+        if (isClickPrevented) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      },
+      true
+    );
+
     cards.forEach(function (card, index) {
       card.addEventListener("click", function (e) {
         if (isClickPrevented) {
@@ -248,6 +288,14 @@
           e.stopPropagation();
           return;
         }
+
+        var link = card.querySelector(".sc-curved-carousel__link");
+        var href = link ? link.getAttribute("href") : "";
+        var hasValidUrl =
+          href &&
+          href !== "#" &&
+          href.trim() !== "" &&
+          !href.startsWith("javascript:");
 
         var totalWidth = cardCount * spacing;
         var basePos = index * spacing;
@@ -259,8 +307,21 @@
         }
 
         var u = diff / spacing;
-        if (Math.abs(u) >= 0.5) {
-          // If clicking an off-center card, animate it to center
+        var isCenter = Math.abs(u) < 0.5;
+
+        if (hasValidUrl) {
+          // If the card has a valid link:
+          // Ensure click navigates naturally!
+          if (e.target !== link && link) {
+            // Clicked an inner element; trigger the link
+            link.click();
+          }
+          // Do NOT preventDefault! Allow normal navigation.
+          return;
+        }
+
+        // If card does not have a real link (or is '#') and is off-center, rotate to center
+        if (!isCenter) {
           e.preventDefault();
           e.stopPropagation();
           targetOffset += diff;

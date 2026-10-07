@@ -1127,6 +1127,10 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 								}
 								if ( isset( $item_val['url'] ) ) {
 									$item_output = str_replace( '{{' . $key . '.url}}', esc_url( $item_val['url'] ), $item_output );
+									$is_ext = ! empty( $item_val['is_external'] ) && 'no' !== $item_val['is_external'] && 'false' !== $item_val['is_external'];
+									$target = $is_ext ? '_blank' : '_self';
+									$item_output = str_replace( '{{' . $key . '.is_external ? \'_blank\' : \'_self\'}}', $target, $item_output );
+									$item_output = str_replace( '{{' . $key . '.target}}', $target, $item_output );
 								}
 								if ( isset( $item_val['alt'] ) ) {
 									$item_output = str_replace( '{{' . $key . '.alt}}', esc_attr( $item_val['alt'] ), $item_output );
