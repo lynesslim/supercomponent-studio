@@ -678,8 +678,8 @@ class SuperComponent_Widget extends \Elementor\Widget_Base {
 		}
 
 		$html_template = isset( $settings['html'] ) ? $settings['html'] : '';
-		$css_code      = isset( $settings['css'] ) ? $settings['css'] : '';
-		$js_code       = isset( $settings['js'] ) ? $settings['js'] : '';
+		$css_code      = isset( $settings['css'] ) ? html_entity_decode( $settings['css'], ENT_QUOTES | ENT_HTML5, 'UTF-8' ) : '';
+		$js_code       = isset( $settings['js'] ) ? html_entity_decode( $settings['js'], ENT_QUOTES | ENT_HTML5, 'UTF-8' ) : '';
 
 		$id = 'supercomponent-' . $this->get_id();
 
